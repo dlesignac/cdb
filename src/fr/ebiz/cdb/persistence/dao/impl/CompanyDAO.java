@@ -36,7 +36,7 @@ public class CompanyDAO extends DAO<Company> {
 	@Override
 	public boolean create(Company obj) {
 		try {
-			String query = "INSERT INTO " + SQL_TABLE_COMPANY + " VALUES (?)";
+			String query = "INSERT INTO " + SQL_TABLE_COMPANY + "(" + SQL_COLUMN_NAME + ") VALUES (?)";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, obj.getName());
 

@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.test;
+package fr.ebiz.cdb.persistence.dao.impl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,32 +6,30 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.dao.DAO;
 import fr.ebiz.cdb.persistence.dao.DAOFactory;
 
-public class Test {
+public class ComputerDAOTest {
 	
-	private static Logger logger = LoggerFactory.getLogger(Test.class);
-
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAOTest.class);
+	
 	public static void main(String[] args) {
 		
 	}
 	
-	
 	@SuppressWarnings({ "unused", "unchecked" })
-	private static void testCompanies() {
-		DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
-		List<Company> companies = companyDAO.fetch();
+	private static void testCreate() {
+		DAO<Computer> computerDAO = DAOFactory.getComputerDAO();
 		
-		for (Company company : companies) {
-			logger.info(company.getName());
-		}
+		Computer computer = new Computer();
+		computer.setName("MySuperComputer");
+		
+		computerDAO.create(computer);
 	}
-	
+
 	@SuppressWarnings({ "unused", "unchecked" })
-	private static void testComputers() {
+	private static void testFetch() {
 		DAO<Computer> computerDAO = DAOFactory.getComputerDAO();
 		List<Computer> computers = computerDAO.fetch();
 		
@@ -45,5 +43,5 @@ public class Test {
 			logger.info(discontinued == null ? "null" : discontinued.toString());
 		}
 	}
-
+	
 }
