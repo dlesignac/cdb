@@ -112,9 +112,29 @@ public class ComputerDAO extends DAO<Computer> {
 					+ SQL_COLUMN_ID + " = ?";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, obj.getName());
-			statement.setDate(2, Date.valueOf(obj.getIntroduced()));
-			statement.setDate(3, Date.valueOf(obj.getDiscontinued()));
-			statement.setInt(4, obj.getManufacturer().getId());
+			
+			LocalDate introduced = obj.getIntroduced();
+			LocalDate discontinued = obj.getDiscontinued();
+			Company company = obj.getManufacturer();
+
+			if (introduced == null) {
+				statement.setNull(2, Types.DATE);
+			} else {
+				statement.setDate(2, Date.valueOf(introduced));
+			}
+
+			if (discontinued == null) {
+				statement.setNull(3, Types.DATE);
+			} else {
+				statement.setDate(3, Date.valueOf(discontinued));
+			}
+
+			if (company == null) {
+				statement.setInt(4, Types.INTEGER);
+			} else {
+				statement.setInt(4, company.getId());
+			}
+			
 			statement.setInt(5, obj.getId());
 
 			statement.executeUpdate();

@@ -28,6 +28,36 @@ public class CompanyDAOTest {
 	}
 	
 	@SuppressWarnings({ "unused", "unchecked" })
+	private static void testDelete() {
+		DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
+		
+		Company company = new Company();
+		company.setId(44);
+		
+		companyDAO.delete(company);
+	}
+	
+	@SuppressWarnings({ "unused", "unchecked" })
+	private static void testUpdate() {
+		DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
+		
+		Company company = new Company();
+		company.setId(45);
+		company.setName("SuperCompanyName");
+		
+		companyDAO.update(company);
+	}
+	
+	@SuppressWarnings({ "unused", "unchecked" })
+	private static void testFind() {
+		DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
+		
+		Company company = companyDAO.find(2);
+		
+		logger.info(company.getName());
+	}
+	
+	@SuppressWarnings({ "unused", "unchecked" })
 	private static void testFetch() {
 		DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
 		List<Company> companies = companyDAO.fetch();
