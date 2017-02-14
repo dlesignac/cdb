@@ -4,7 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DBConnection {
+	
+	private Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
 	private static Connection connection = null;
 	private String url = "jdbc:mysql://localhost:3306/computer-database-db";
@@ -17,12 +22,10 @@ public class DBConnection {
 			DBConnection.connection = DriverManager.getConnection(url, user, password);
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("could not open connection with database", e);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+			logger.error("did not find jdbc driver", e);
+		}
 	}
 	
 	public static Connection getInstance() {

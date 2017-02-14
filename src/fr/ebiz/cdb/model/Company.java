@@ -1,5 +1,9 @@
 package fr.ebiz.cdb.model;
 
+/**
+ * Company bean.
+ * Describes a company.
+ */
 public class Company {
 	
 	private int id;

@@ -2,6 +2,10 @@ package fr.ebiz.cdb.model;
 
 import java.time.LocalDate;
 
+/**
+ * Computer bean.
+ * Describes a computer.
+ */
 public class Computer {
 
 	private int id;

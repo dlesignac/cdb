@@ -3,6 +3,10 @@ package fr.ebiz.cdb.persistence.dao;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * DAO interface.
+ * Abstracts interactions with a data source through an SQL connection.
+ */
 public abstract class DAO<T> {
 
 	protected Connection connection = null;
