@@ -3,41 +3,41 @@ package fr.ebiz.cdb.persistence.dao.impl;
 import java.sql.Connection;
 import java.util.List;
 
-import fr.ebiz.cdb.model.Manufacturer;
+import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.dao.DAO;
 
-public class ManufacturerDAO extends DAO<Manufacturer> {
+public class CompanyDAO extends DAO<Company> {
 
-	public ManufacturerDAO(Connection connection) {
+	public CompanyDAO(Connection connection) {
 		super(connection);
 	}
 
 	@Override
-	public boolean create(Manufacturer obj) {
+	public boolean create(Company obj) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean delete(Manufacturer obj) {
+	public boolean delete(Company obj) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean update(Manufacturer obj) {
+	public boolean update(Company obj) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public Manufacturer find(int id) {
+	public Company find(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Manufacturer> fetch() {
+	public List<Company> fetch() {
 		// TODO Auto-generated method stub
 		return null;
 	}

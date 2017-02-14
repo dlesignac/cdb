@@ -7,14 +7,19 @@ import java.sql.SQLException;
 public class DBConnection {
 
 	private static Connection connection = null;
-	private String url; // TODO
-	private String user; // TODO
-	private String password; // TODO
+	private String url = "jdbc:mysql://localhost:3306/computer-database-db";
+	private String user = "admincdb";
+	private String password = "qwerty1234";
 	
 	private DBConnection() {
 		try {
+			Class.forName("com.mysql.jdbc.Driver");
 			DBConnection.connection = DriverManager.getConnection(url, user, password);
+			connection.setAutoCommit(false);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
