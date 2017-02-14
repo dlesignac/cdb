@@ -76,7 +76,8 @@ public class CompanyDAO extends DAO<Company> {
 	@Override
 	public boolean update(Company obj) {
 		try {
-			String query = "UPDATE " + SQL_TABLE_COMPANY + " SET " + SQL_COLUMN_NAME + " = ? WHERE " + SQL_COLUMN_ID + " = ?";
+			String query = "UPDATE " + SQL_TABLE_COMPANY + " SET " + SQL_COLUMN_NAME + " = ? WHERE " + SQL_COLUMN_ID
+					+ " = ?";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, obj.getName());
 			statement.setInt(2, obj.getId());
@@ -104,9 +105,12 @@ public class CompanyDAO extends DAO<Company> {
 			statement.setInt(1, id);
 
 			ResultSet rs = statement.executeQuery();
-			company = new Company();
-			company.setId(rs.getInt(SQL_COLUMN_ID));
-			company.setName(rs.getString(SQL_COLUMN_NAME));
+
+			if (rs.first()) {
+				company = new Company();
+				company.setId(rs.getInt(SQL_COLUMN_ID));
+				company.setName(rs.getString(SQL_COLUMN_NAME));
+			}
 		} catch (SQLException e) {
 			logger.error("could not find Company object", e);
 		}

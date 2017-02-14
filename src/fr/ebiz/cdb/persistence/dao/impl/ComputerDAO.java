@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.dao.DAO;
+import fr.ebiz.cdb.persistence.dao.DAOFactory;
 
 /**
  * Computer DAO. Interacts with a data source to persist and retrieve Computer
@@ -43,37 +44,33 @@ public class ComputerDAO extends DAO<Computer> {
 	@Override
 	public boolean create(Computer obj) {
 		try {
-			String query = "INSERT INTO " + SQL_TABLE_COMPUTER + "(" + 
-					SQL_COLUMN_NAME + ", " +
-					SQL_COLUMN_INTRODUCED + "," +
-					SQL_COLUMN_DISCONTINUED + "," +
-					SQL_COLUMN_COMPANY_ID +
-					") VALUES (?, ?, ?, ?)";
+			String query = "INSERT INTO " + SQL_TABLE_COMPUTER + "(" + SQL_COLUMN_NAME + ", " + SQL_COLUMN_INTRODUCED
+					+ "," + SQL_COLUMN_DISCONTINUED + "," + SQL_COLUMN_COMPANY_ID + ") VALUES (?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, obj.getName());
-			
+
 			LocalDate introduced = obj.getIntroduced();
 			LocalDate discontinued = obj.getDiscontinued();
 			Company company = obj.getManufacturer();
-			
+
 			if (introduced == null) {
 				statement.setNull(2, Types.DATE);
 			} else {
 				statement.setDate(2, Date.valueOf(introduced));
 			}
-			
+
 			if (discontinued == null) {
 				statement.setNull(3, Types.DATE);
 			} else {
 				statement.setDate(3, Date.valueOf(discontinued));
 			}
-			
+
 			if (company == null) {
 				statement.setInt(4, Types.INTEGER);
 			} else {
 				statement.setInt(4, company.getId());
 			}
-			
+
 			statement.executeUpdate();
 			this.connection.commit();
 		} catch (SQLException e) {
@@ -138,19 +135,32 @@ public class ComputerDAO extends DAO<Computer> {
 		Computer computer = null;
 
 		try {
-			String query = "SELECT * FROM " + SQL_TABLE_COMPUTER +
-					" WHERE " + SQL_COLUMN_ID + " = ?";
+			String query = "SELECT * FROM " + SQL_TABLE_COMPUTER + " WHERE " + SQL_COLUMN_ID + " = ?";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, id);
 
 			ResultSet rs = statement.executeQuery();
-			computer = new Computer();
-			computer.setId(rs.getInt(SQL_COLUMN_ID));
-			computer.setName(rs.getString(SQL_COLUMN_NAME));
-			computer.setIntroduced(rs.getDate(SQL_COLUMN_INTRODUCED).toLocalDate());
-			computer.setDiscontinued(rs.getDate(SQL_COLUMN_DISCONTINUED).toLocalDate());
-			// TODO company
-
+			
+			if (rs.first()) {
+				computer = new Computer();
+				computer.setId(rs.getInt(SQL_COLUMN_ID));
+				computer.setName(rs.getString(SQL_COLUMN_NAME));
+	
+				Date introduced = rs.getDate(SQL_COLUMN_INTRODUCED);
+				Date discontinued = rs.getDate(SQL_COLUMN_DISCONTINUED);
+	
+				computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
+				computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
+	
+				Integer company_id = rs.getInt(SQL_COLUMN_COMPANY_ID);
+	
+				if (company_id != null) {
+					DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
+	
+					Company company = companyDAO.find(company_id);
+					computer.setManufaturer(company);
+				}
+			}
 		} catch (SQLException e) {
 			logger.error("could not find Computer object", e);
 		}
@@ -182,7 +192,15 @@ public class ComputerDAO extends DAO<Computer> {
 
 				computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
 				computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
-				// TODO company
+
+				int company_id = rs.getInt(SQL_COLUMN_COMPANY_ID);
+				
+				if (company_id != 0) {
+					DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
+
+					Company company = companyDAO.find(company_id);
+					computer.setManufaturer(company);
+				}
 
 				computers.add(computer);
 			}

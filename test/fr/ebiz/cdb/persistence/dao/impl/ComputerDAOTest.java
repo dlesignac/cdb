@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.dao.DAO;
 import fr.ebiz.cdb.persistence.dao.DAOFactory;
@@ -15,7 +16,7 @@ public class ComputerDAOTest {
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAOTest.class);
 	
 	public static void main(String[] args) {
-		
+		testFetch();
 	}
 	
 	@SuppressWarnings({ "unused", "unchecked" })
@@ -38,9 +39,11 @@ public class ComputerDAOTest {
 			
 			LocalDate introduced = computer.getIntroduced();
 			LocalDate discontinued = computer.getDiscontinued();
+			Company manufacturer = computer.getManufacturer();
 			
 			logger.info(introduced == null ? "null" : introduced.toString());
 			logger.info(discontinued == null ? "null" : discontinued.toString());
+			logger.info(manufacturer == null ? "null" : manufacturer.getName());
 		}
 	}
 	
