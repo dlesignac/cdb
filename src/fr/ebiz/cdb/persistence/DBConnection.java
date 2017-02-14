@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Database connection holder.
+ * Holds unique connection to database.
+ */
 public class DBConnection {
 	
 	private Logger logger = LoggerFactory.getLogger(DBConnection.class);
@@ -28,6 +32,9 @@ public class DBConnection {
 		}
 	}
 	
+	/**
+	 * Returns unique instance of connection to database.
+	 */
 	public static Connection getInstance() {
 		if (DBConnection.connection == null) {
 			new DBConnection();
