@@ -1,47 +1,56 @@
 package fr.ebiz.cdb.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Computer {
 
+	private int id;
 	private String name;
-	private Date introduction;
-	private Date discontinuation;
-	private Manufacturer manufacturer;
+	private LocalDate introduced;
+	private LocalDate discontinued;
+	private Company manufacturer;
 
-	public Computer(String name) {
-		this.name = name;
+	public Computer() {
+		
+	}
+
+	public int getId() {
+		return this.id;
 	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public Date getIntroduction() {
-		return this.introduction;
+	public LocalDate getIntroduced() {
+		return this.introduced;
 	}
 
-	public Date getDiscontinuation() {
-		return this.discontinuation;
+	public LocalDate getDiscontinued() {
+		return this.discontinued;
 	}
 
-	public Manufacturer getManufacturer() {
+	public Company getManufacturer() {
 		return this.manufacturer;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setIntroduction(Date introduction) {
-		this.introduction = introduction;
+	public void setIntroduced(LocalDate introduced) {
+		this.introduced = introduced;
 	}
 
-	public void setDiscontinuation(Date discontinuation) {
-		this.discontinuation = discontinuation;
+	public void setDiscontinued(LocalDate discontinued) {
+		this.discontinued = discontinued;
 	}
 
-	public void setManufaturer(Manufacturer manufacturer) {
+	public void setManufaturer(Company manufacturer) {
 		this.manufacturer = manufacturer;
 	}
 
