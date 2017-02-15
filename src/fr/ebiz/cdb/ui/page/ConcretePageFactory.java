@@ -18,4 +18,9 @@ public class ConcretePageFactory implements PageFactory {
 		return new ConcreteListPage(CONCRETE_HEADER, options, entities);
 	}
 
+	@Override
+	public Page getDetailPage(Map<String, String> options, Map<String, String> details) {
+		return new ConcreteDetailPage(CONCRETE_HEADER, options, details);
+	}
+
 }

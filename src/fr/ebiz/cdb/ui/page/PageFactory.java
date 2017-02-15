@@ -9,4 +9,6 @@ public interface PageFactory {
 
 	Page getListPage(Map<String, String> options, List entities);
 
+	Page getDetailPage(Map<String, String> options, Map<String, String> details);
+
 }

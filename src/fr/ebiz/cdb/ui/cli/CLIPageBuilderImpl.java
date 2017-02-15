@@ -14,6 +14,7 @@ public class CLIPageBuilderImpl implements CLIPageBuilder {
 		Map<String, String> options = new HashMap<>();
 		options.put(CLIMenu.INDEX_COMPANY_LIST, "List companies");
 		options.put(CLIMenu.INDEX_COMPUTER_LIST, "List computers");
+		options.put(CLIMenu.INDEX_COMPUTER_CREATE, "Create computer");
 		options.put(CLIMenu.INDEX_QUIT, "Quit");
 
 		return new ConcretePageFactory().getInfoPage(options, "");
@@ -22,9 +23,17 @@ public class CLIPageBuilderImpl implements CLIPageBuilder {
 	@Override
 	public Page getListPage(List entities) {
 		Map<String, String> options = new HashMap<>();
-		options.put(CLIMenu.LISTPAGE_BACK, "Back");
+		options.put(CLIMenu.GENERAL_BACK, "Back");
 
 		return new ConcretePageFactory().getListPage(options, entities);
+	}
+
+	@Override
+	public Page getDetailPage(Map<String, String> details) {
+		Map<String, String> options = new HashMap<>();
+		options.put(CLIMenu.GENERAL_BACK, "Back");
+
+		return new ConcretePageFactory().getDetailPage(options, details);
 	}
 
 }
