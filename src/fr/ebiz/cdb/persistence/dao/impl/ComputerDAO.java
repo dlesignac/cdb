@@ -112,7 +112,7 @@ public class ComputerDAO extends DAO<Computer> {
 					+ SQL_COLUMN_ID + " = ?";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, obj.getName());
-			
+
 			LocalDate introduced = obj.getIntroduced();
 			LocalDate discontinued = obj.getDiscontinued();
 			Company company = obj.getManufacturer();
@@ -134,7 +134,7 @@ public class ComputerDAO extends DAO<Computer> {
 			} else {
 				statement.setInt(4, company.getId());
 			}
-			
+
 			statement.setInt(5, obj.getId());
 
 			statement.executeUpdate();
@@ -160,23 +160,23 @@ public class ComputerDAO extends DAO<Computer> {
 			statement.setInt(1, id);
 
 			ResultSet rs = statement.executeQuery();
-			
+
 			if (rs.first()) {
 				computer = new Computer();
 				computer.setId(rs.getInt(SQL_COLUMN_ID));
 				computer.setName(rs.getString(SQL_COLUMN_NAME));
-	
+
 				Date introduced = rs.getDate(SQL_COLUMN_INTRODUCED);
 				Date discontinued = rs.getDate(SQL_COLUMN_DISCONTINUED);
-	
+
 				computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
 				computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
-	
+
 				Integer company_id = rs.getInt(SQL_COLUMN_COMPANY_ID);
-	
+
 				if (company_id != null) {
-					DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
-	
+					DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
+
 					Company company = companyDAO.find(company_id);
 					computer.setManufaturer(company);
 				}
@@ -214,9 +214,9 @@ public class ComputerDAO extends DAO<Computer> {
 				computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
 
 				int company_id = rs.getInt(SQL_COLUMN_COMPANY_ID);
-				
+
 				if (company_id != 0) {
-					DAO<Company> companyDAO = DAOFactory.getCompanyDAO();
+					DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
 
 					Company company = companyDAO.find(company_id);
 					computer.setManufaturer(company);

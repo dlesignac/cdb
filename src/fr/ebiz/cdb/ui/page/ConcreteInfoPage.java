@@ -4,14 +4,14 @@ import java.util.Map;
 
 class ConcreteInfoPage extends InfoPage {
 
-	public ConcreteInfoPage(String header, String info) {
-		super(header, info);
+	public ConcreteInfoPage(String header, Map<String, String> options, String info) {
+		super(header, options, info);
 	}
 
 	@Override
 	public void display() {
 		String display = this.header;
-		
+
 		display += "\n";
 
 		for (Map.Entry<String, String> option : options.entrySet()) {
@@ -29,7 +29,7 @@ class ConcreteInfoPage extends InfoPage {
 
 		display += "  >> ";
 
-		System.out.println(display);
+		System.out.print(display);
 
 	}
 

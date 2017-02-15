@@ -8,8 +8,9 @@ public abstract class Page {
 	protected String error;
 	protected Map<String, String> options;
 
-	public Page(String header) {
+	public Page(String header, Map<String, String> options) {
 		this.header = header;
+		this.options = options;
 	}
 
 	public void setError(String error) {

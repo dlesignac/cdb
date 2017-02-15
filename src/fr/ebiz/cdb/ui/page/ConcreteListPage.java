@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 
 class ConcreteListPage extends ListPage {
 
-	ConcreteListPage(String header, List entities) {
-		super(header, entities);
+	ConcreteListPage(String header, Map<String, String> options, List entities) {
+		super(header, options, entities);
 	}
 
 	@Override
@@ -35,16 +35,16 @@ class ConcreteListPage extends ListPage {
 			display += option.getValue();
 			display += "\n";
 		}
-
+		
 		display += "\n";
 
 		if (this.error != null) {
 			display += this.error + "\n\n";
 		}
 
-		display += "  >>";
+		display += "  >> ";
 
-		System.out.println(display);
+		System.out.print(display);
 	}
 
 }

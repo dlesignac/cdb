@@ -1,22 +1,21 @@
 package fr.ebiz.cdb.ui.page;
 
 import java.util.List;
+import java.util.Map;
 
 public class ConcretePageFactory implements PageFactory {
 
-	private static final String CONCRETE_HEADER =
-			"------------------------------\n" +
-			"       COMPUTER DATABASE\n" +
-			"------------------------------\n";
+	private static final String CONCRETE_HEADER = "------------------------------\n" + "       COMPUTER DATABASE\n"
+			+ "------------------------------\n";
 
 	@Override
-	public Page getInfoPage(String info) {
-		return new ConcreteInfoPage(CONCRETE_HEADER, info);
+	public Page getInfoPage(Map<String, String> options, String info) {
+		return new ConcreteInfoPage(CONCRETE_HEADER, options, info);
 	}
 
 	@Override
-	public Page getListPage(List entities) {
-		return new ConcreteListPage(CONCRETE_HEADER, entities);
+	public Page getListPage(Map<String, String> options, List entities) {
+		return new ConcreteListPage(CONCRETE_HEADER, options, entities);
 	}
 
 }
