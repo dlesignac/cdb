@@ -16,7 +16,7 @@ public class ComputerDAOTest {
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAOTest.class);
 
 	public static void main(String[] args) {
-		
+		testFetch();
 	}
 
 	@SuppressWarnings({ "unused", "unchecked" })

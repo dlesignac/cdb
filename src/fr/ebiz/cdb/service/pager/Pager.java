@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class Pager<T> {
 
 	private List<T> entities;
-	private int limit = 10;
+	private int limit = 5;
 	private int offset = -1;
 	
 	public Pager(List<T> entities) {
