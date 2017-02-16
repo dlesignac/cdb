@@ -1,14 +1,16 @@
 package fr.ebiz.cdb.ui.page;
 
-import java.util.Map;
+public class InfoPage extends ContentPage {
 
-abstract class InfoPage extends Page {
+	private String info;
 
-	protected String info;
-
-	public InfoPage(String header, Map<String, String> options, String info) {
-		super(header, options);
+	public InfoPage(String info) {
 		this.info = info;
+	}
+
+	@Override
+	public String toDisplay() {
+		return info;
 	}
 
 }
