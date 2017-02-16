@@ -21,6 +21,7 @@ public class PageBuilder {
 		List<Option> optionsList = new ArrayList<>();
 		optionsList.add(new Option("1", "List computers"));
 		optionsList.add(new Option("2", "List companies"));
+		optionsList.add(new Option("3", "Create computer"));
 		optionsList.add(new Option("q", "Quit"));
 		OptionsPage options = new OptionsPage(optionsList);
 
@@ -99,6 +100,28 @@ public class PageBuilder {
 		optionsList.add(new Option("2 <new>", "Introduced"));
 		optionsList.add(new Option("3 <new>", "Discontinued"));
 		optionsList.add(new Option("4 <new>", "Manufacturer"));
+		optionsList.add(new Option("c", "Cancel"));
+		OptionsPage options = new OptionsPage(optionsList);
+
+		ErrorPage error = new ErrorPage(null);
+
+		return new FullPage(header, content, options, error);
+	}
+
+	public Page buildComputerCreate(Computer computer) {
+		List<String> levels = new ArrayList<>();
+		levels.add("CDB");
+		levels.add("new computer");
+		HeaderPage header = new HeaderPage(levels);
+
+		ContentPage content = new ComputerCreatePage(computer);
+
+		List<Option> optionsList = new ArrayList<>();
+		optionsList.add(new Option("1 <new>", "Name"));
+		optionsList.add(new Option("2 <new>", "Introduced"));
+		optionsList.add(new Option("3 <new>", "Discontinued"));
+		optionsList.add(new Option("4 <new>", "Manufacturer"));
+		optionsList.add(new Option("s", "Save"));
 		optionsList.add(new Option("c", "Cancel"));
 		OptionsPage options = new OptionsPage(optionsList);
 

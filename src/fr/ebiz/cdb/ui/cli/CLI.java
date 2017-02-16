@@ -86,13 +86,16 @@ public class CLI {
 		case COMPUTER_EDIT:
 			doComputerEdit(input);
 			break;
+		case COMPUTER_CREATE:
+			doComputerCreate(input);
+			break;
 		default:
 			break;
 		}
 	}
 
 	/**
-	 * Call functions. Manages user inputs based on the CLI status.
+	 * Do functions. Manages user inputs based on the CLI status.
 	 */
 
 	private void doIndex(String[] input) {
@@ -102,6 +105,8 @@ public class CLI {
 			callComputers();
 		} else if ("2".equals(input[0])) {
 			callCompanies();
+		} else if ("3".equals(input[0])) {
+			callComputerCreate(new Computer());
 		} else {
 			callErrorInvalidInput();
 		}
@@ -162,8 +167,7 @@ public class CLI {
 				String name = input[1]; // TODO validation
 				computer.setName(name);
 				this.computerDAO.update(computer);
-				this.nextPage = new PageBuilder().buildComputer(computer);
-				this.status = CLIStatus.COMPUTER;
+				callComputer(computer);
 			}
 		} else if ("2".equals(input[0])) {
 			if (input.length < 2) {
@@ -174,8 +178,7 @@ public class CLI {
 				LocalDate introduced = LocalDate.parse(input[1]);
 				computer.setIntroduced(introduced);
 				this.computerDAO.update(computer);
-				this.nextPage = new PageBuilder().buildComputer(computer);
-				this.status = CLIStatus.COMPUTER;
+				callComputer(computer);
 			}
 		} else if ("3".equals(input[0])) {
 			if (input.length < 2) {
@@ -184,15 +187,82 @@ public class CLI {
 				// TODO validation
 				Computer computer = getComputerFromPage();
 				LocalDate discontinued = LocalDate.parse(input[1]);
-				computer.setIntroduced(discontinued);
+				computer.setDiscontinued(discontinued);
 				this.computerDAO.update(computer);
-				this.nextPage = new PageBuilder().buildComputer(computer);
-				this.status = CLIStatus.COMPUTER;
+				callComputer(computer);
+			}
+		} else if ("4".equals(input[0])) {
+			if (input.length < 2) {
+				callErrorMissingParameter();
+			} else {
+				// TODO validation
+				Computer computer = getComputerFromPage();
+				int companyId = Integer.parseInt(input[1]);
+				computer.setManufacturer(this.companyDAO.find(companyId));
+				this.computerDAO.update(computer);
+				callComputer(computer);
 			}
 		} else {
 			callErrorInvalidInput();
 		}
 	}
+
+	private void doComputerCreate(String[] input) {
+		if ("c".equals(input[0])) {
+			callIndex();
+		} else if ("s".equals(input[0])) {
+			// TODO validation
+			Computer computer = getComputerFromPage();
+			this.computerDAO.create(computer);
+			callIndex();
+		} else if ("1".equals(input[0])) {
+			if (input.length < 2) {
+				callErrorMissingParameter();
+			} else {
+				Computer computer = getComputerFromPage();
+				String name = input[1]; // TODO validation
+				computer.setName(name);
+				this.computerDAO.update(computer);
+			}
+		} else if ("2".equals(input[0])) {
+			if (input.length < 2) {
+				callErrorMissingParameter();
+			} else {
+				// TODO validation
+				Computer computer = getComputerFromPage();
+				LocalDate introduced = LocalDate.parse(input[1]);
+				computer.setIntroduced(introduced);
+				this.computerDAO.update(computer);
+			}
+		} else if ("3".equals(input[0])) {
+			if (input.length < 2) {
+				callErrorMissingParameter();
+			} else {
+				// TODO validation
+				Computer computer = getComputerFromPage();
+				LocalDate discontinued = LocalDate.parse(input[1]);
+				computer.setDiscontinued(discontinued);
+				this.computerDAO.update(computer);
+			}
+		} else if ("4".equals(input[0])) {
+			if (input.length < 2) {
+				callErrorMissingParameter();
+			} else {
+				// TODO validation
+				Computer computer = getComputerFromPage();
+				int companyId = Integer.parseInt(input[1]);
+				computer.setManufacturer(this.companyDAO.find(companyId));
+				this.computerDAO.update(computer);
+			}
+		} else {
+			callErrorInvalidInput();
+		}
+	}
+
+	/**
+	 * Call functions. Call page builder to create next page and update CLI
+	 * status.
+	 */
 
 	private void callIndex() {
 		this.nextPage = new PageBuilder().buildIndex();
@@ -217,8 +287,7 @@ public class CLI {
 	}
 
 	private void callComputerEdit() {
-		ComputerPage page = (ComputerPage) ((FullPage) this.nextPage).getContentPage();
-		Computer computer = page.getComputer();
+		Computer computer = getComputerFromPage();
 		this.nextPage = new PageBuilder().buildComputerEdit(computer);
 		this.status = CLIStatus.COMPUTER_EDIT;
 	}
@@ -226,6 +295,11 @@ public class CLI {
 	private void callComputerBack() {
 		Computer computer = getComputerFromPage();
 		callComputer(computer);
+	}
+
+	private void callComputerCreate(Computer computer) {
+		this.nextPage = new PageBuilder().buildComputerCreate(computer);
+		this.status = CLIStatus.COMPUTER_CREATE;
 	}
 
 	private void callErrorInvalidInput() {
@@ -240,16 +314,25 @@ public class CLI {
 		this.nextPage.setError("Invalid parameter");
 	}
 
+	/**
+	 * Deletes computer.
+	 */
 	private void deleteComputer() {
 		ComputerPage page = (ComputerPage) ((FullPage) this.nextPage).getContentPage();
 		Computer computer = page.getComputer();
 		this.computerDAO.delete(computer);
 	}
 
+	/**
+	 * Gets computer by id using DAO.
+	 */
 	private Computer getComputerById(int id) {
 		return this.computerDAO.find(id);
 	}
 
+	/**
+	 * Gets computers held by last page.
+	 */
 	private Computer getComputerFromPage() {
 		ComputerHolderPage page = (ComputerHolderPage) ((FullPage) this.nextPage).getContentPage();
 		return page.getComputer();

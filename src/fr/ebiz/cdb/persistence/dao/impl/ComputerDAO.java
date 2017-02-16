@@ -66,7 +66,7 @@ public class ComputerDAO extends DAO<Computer> {
 			}
 
 			if (company == null) {
-				statement.setInt(4, Types.INTEGER);
+				statement.setNull(4, Types.INTEGER);
 			} else {
 				statement.setInt(4, company.getId());
 			}
@@ -178,7 +178,7 @@ public class ComputerDAO extends DAO<Computer> {
 					DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
 
 					Company company = companyDAO.find(company_id);
-					computer.setManufaturer(company);
+					computer.setManufacturer(company);
 				}
 			}
 		} catch (SQLException e) {
@@ -219,7 +219,7 @@ public class ComputerDAO extends DAO<Computer> {
 					DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
 
 					Company company = companyDAO.find(company_id);
-					computer.setManufaturer(company);
+					computer.setManufacturer(company);
 				}
 
 				computers.add(computer);

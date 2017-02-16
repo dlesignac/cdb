@@ -33,6 +33,11 @@ public enum CLIStatus {
 	/**
 	 * CLI is currently running the Computer Edit page.
 	 */
-	COMPUTER_EDIT;
+	COMPUTER_EDIT,
+
+	/**
+	 * CLI is currently running the Computer Create page.
+	 */
+	COMPUTER_CREATE;
 
 }

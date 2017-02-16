@@ -3,8 +3,7 @@ package fr.ebiz.cdb.model;
 import java.time.LocalDate;
 
 /**
- * Computer bean.
- * Describes a computer.
+ * Computer bean. Describes a computer.
  */
 public class Computer {
 
@@ -15,7 +14,7 @@ public class Computer {
 	private Company manufacturer;
 
 	public Computer() {
-		
+
 	}
 
 	public int getId() {
@@ -54,7 +53,7 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public void setManufaturer(Company manufacturer) {
+	public void setManufacturer(Company manufacturer) {
 		this.manufacturer = manufacturer;
 	}
 
