@@ -1,6 +1,7 @@
 package fr.ebiz.cdb.ui.cli;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,8 +18,14 @@ import fr.ebiz.cdb.ui.page.FullPage;
 import fr.ebiz.cdb.ui.page.Page;
 import fr.ebiz.cdb.ui.page.PageBuilder;
 
+/**
+ * Command Line Interface.
+ */
 public class CLI {
 
+	/**
+	 * CLI entry point.
+	 */
 	public static void main(String[] args) {
 		new CLI().loop();
 	}
@@ -39,6 +46,9 @@ public class CLI {
 		this.status = CLIStatus.INDEX;
 	}
 
+	/**
+	 * Main loop. Prints pages and waits for user inputs.
+	 */
 	public void loop() {
 		while (this.status != CLIStatus.EXIT) {
 			this.nextPage.display();
@@ -54,6 +64,9 @@ public class CLI {
 		}
 	}
 
+	/**
+	 * Waits for and manages user inputs.
+	 */
 	private void listen() {
 		String[] input = this.in.nextLine().split(" ");
 
@@ -78,6 +91,10 @@ public class CLI {
 		}
 	}
 
+	/**
+	 * Call functions. Manages user inputs based on the CLI status.
+	 */
+
 	private void doIndex(String[] input) {
 		if ("q".equals(input[0])) {
 			this.status = CLIStatus.EXIT;
@@ -101,7 +118,12 @@ public class CLI {
 			} else {
 				int id = Integer.parseInt(input[1]);
 				Computer computer = getComputerById(id);
-				callComputer(computer);
+
+				if (computer == null) {
+					callErrorInvalidInput();
+				} else {
+					callComputer(computer);
+				}
 			}
 		} else {
 			callErrorInvalidInput();
@@ -133,11 +155,10 @@ public class CLI {
 		if ("c".equals(input[0])) {
 			callComputerBack();
 		} else if ("1".equals(input[0])) {
-			Computer computer = getComputerFromPage();
-
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
+				Computer computer = getComputerFromPage();
 				String name = input[1]; // TODO validation
 				computer.setName(name);
 				this.computerDAO.update(computer);
@@ -148,13 +169,25 @@ public class CLI {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
-
+				// TODO validation
+				Computer computer = getComputerFromPage();
+				LocalDate introduced = LocalDate.parse(input[1]);
+				computer.setIntroduced(introduced);
+				this.computerDAO.update(computer);
+				this.nextPage = new PageBuilder().buildComputer(computer);
+				this.status = CLIStatus.COMPUTER;
 			}
 		} else if ("3".equals(input[0])) {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
-
+				// TODO validation
+				Computer computer = getComputerFromPage();
+				LocalDate discontinued = LocalDate.parse(input[1]);
+				computer.setIntroduced(discontinued);
+				this.computerDAO.update(computer);
+				this.nextPage = new PageBuilder().buildComputer(computer);
+				this.status = CLIStatus.COMPUTER;
 			}
 		} else {
 			callErrorInvalidInput();

@@ -6,6 +6,9 @@ import java.util.List;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 
+/**
+ * Page Builder. Builds pages for the CLI.
+ */
 public class PageBuilder {
 
 	public Page buildIndex() {
@@ -13,7 +16,7 @@ public class PageBuilder {
 		levels.add("CDB");
 		HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new InfoPage("");
+		ContentPage content = new InfoPage("Manage computers");
 
 		List<Option> optionsList = new ArrayList<>();
 		optionsList.add(new Option("1", "List computers"));

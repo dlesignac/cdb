@@ -1,5 +1,9 @@
 package fr.ebiz.cdb.ui.page;
 
+/**
+ * Full Built Page. Container for multiple page components that can be displayed
+ * by the CLI.
+ */
 public class FullPage implements Page {
 
 	private HeaderPage header;
@@ -14,8 +18,20 @@ public class FullPage implements Page {
 		this.error = error;
 	}
 
+	/**
+	 * Returns the ContentPage component so that the controller can get info
+	 * from it.
+	 */
 	public ContentPage getContentPage() {
 		return this.content;
+	}
+
+	/**
+	 * Sets error that will be displayed at next display() call.
+	 */
+	@Override
+	public void setError(String error) {
+		this.error.setError(error);
 	}
 
 	@Override
@@ -24,11 +40,6 @@ public class FullPage implements Page {
 				+ error.toDisplay() + " >> ";
 
 		System.out.print(display);
-	}
-
-	@Override
-	public void setError(String error) {
-		this.error.setError(error);
 	}
 
 }

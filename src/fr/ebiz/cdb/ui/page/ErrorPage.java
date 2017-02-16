@@ -1,5 +1,9 @@
 package fr.ebiz.cdb.ui.page;
 
+/**
+ * Error Page Component. Component holding an error that can be printed at next
+ * full built page display.
+ */
 public class ErrorPage implements PageComponent {
 
 	private String error;

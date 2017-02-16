@@ -1,5 +1,9 @@
 package fr.ebiz.cdb.ui.page;
 
+/**
+ * Navigation Option. Describes a CLI navigation option that can be passed to a
+ * OptionsPage in order to be displayed.
+ */
 public class Option {
 
 	private String id;

@@ -2,6 +2,10 @@ package fr.ebiz.cdb.ui.page;
 
 import java.util.List;
 
+/**
+ * Header Page Component. Computes data into a string to be printed for
+ * navigation tracking.
+ */
 public class HeaderPage implements PageComponent {
 
 	private List<String> levels;

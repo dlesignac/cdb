@@ -6,6 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.ebiz.cdb.model.Computer;
 
+/**
+ * Computers List Page. Computes data into a string to be printed for Computer
+ * listing.
+ */
 public class ComputersPage implements ContentPage {
 
 	private List<Computer> computers;

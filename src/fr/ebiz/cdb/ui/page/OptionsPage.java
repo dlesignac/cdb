@@ -2,6 +2,10 @@ package fr.ebiz.cdb.ui.page;
 
 import java.util.List;
 
+/**
+ * Options Page Component. Computes data into a string to be printed for
+ * navigation options.
+ */
 public class OptionsPage implements PageComponent {
 
 	private List<Option> options;

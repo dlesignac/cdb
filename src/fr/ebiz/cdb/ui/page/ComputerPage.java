@@ -2,6 +2,10 @@ package fr.ebiz.cdb.ui.page;
 
 import fr.ebiz.cdb.model.Computer;
 
+/**
+ * Computer Details Page. Computes data into a string to be printed for Computer
+ * details. Also holds computer object that can be got by the controller.
+ */
 public class ComputerPage implements ComputerHolderPage {
 
 	private Computer computer;

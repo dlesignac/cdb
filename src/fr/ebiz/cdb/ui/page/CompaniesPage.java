@@ -6,6 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.ebiz.cdb.model.Company;
 
+/**
+ * Companies List Page. Computes data into a string to be printed for Company
+ * listing.
+ */
 public class CompaniesPage implements ContentPage {
 
 	private List<Company> companies;
