@@ -1,7 +1,6 @@
 package fr.ebiz.cdb.ui.page;
 
 import java.util.List;
-import java.util.Map;
 
 public class OptionsPage implements PageComponent {
 

@@ -14,6 +14,10 @@ public class FullPage implements Page {
 		this.error = error;
 	}
 
+	public ContentPage getContentPage() {
+		return this.content;
+	}
+
 	@Override
 	public void display() {
 		String display = header.toDisplay() + "\n" + content.toDisplay() + "\n" + options.toDisplay() + "\n"

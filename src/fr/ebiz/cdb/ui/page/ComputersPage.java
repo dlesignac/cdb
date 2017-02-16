@@ -21,7 +21,7 @@ public class ComputersPage extends ContentPage {
 		for (Computer computer : this.computers) {
 			display += StringUtils.leftPad(String.valueOf(computer.getId()), 6);
 			display += ". ";
-			display += computer.toString();
+			display += computer.getName();
 			display += "\n";
 		}
 

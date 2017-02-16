@@ -21,6 +21,8 @@ public class HeaderPage implements PageComponent {
 			display += this.levels.get(i);
 		}
 
+		display += "\n";
+
 		return display;
 	}
 
