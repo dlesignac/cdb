@@ -39,6 +39,7 @@ public class FullPage implements Page {
 		String display = header.toDisplay() + "\n" + content.toDisplay() + "\n" + options.toDisplay() + "\n"
 				+ error.toDisplay() + " >> ";
 
+		setError(null);
 		System.out.print(display);
 	}
 

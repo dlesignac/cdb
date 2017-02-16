@@ -2,11 +2,11 @@ package fr.ebiz.cdb.ui.page;
 
 import fr.ebiz.cdb.model.Computer;
 
-public class ComputerCreatePage implements ComputerHolderPage {
+public class ComputerChangePage implements ComputerHolderPage {
 
 	private Computer computer;
 
-	public ComputerCreatePage(Computer computer) {
+	public ComputerChangePage(Computer computer) {
 		this.computer = computer;
 	}
 

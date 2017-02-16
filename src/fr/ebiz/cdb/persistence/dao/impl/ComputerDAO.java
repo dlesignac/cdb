@@ -130,7 +130,7 @@ public class ComputerDAO extends DAO<Computer> {
 			}
 
 			if (company == null) {
-				statement.setInt(4, Types.INTEGER);
+				statement.setNull(4, Types.INTEGER);
 			} else {
 				statement.setInt(4, company.getId());
 			}

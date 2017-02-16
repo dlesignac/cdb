@@ -93,7 +93,7 @@ public class PageBuilder {
 		levels.add("edit");
 		HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputerEditPage(computer);
+		ContentPage content = new ComputerChangePage(computer);
 
 		List<Option> optionsList = new ArrayList<>();
 		optionsList.add(new Option("1 <new>", "Name"));
@@ -108,13 +108,13 @@ public class PageBuilder {
 		return new FullPage(header, content, options, error);
 	}
 
-	public Page buildComputerCreate(Computer computer) {
+	public Page buildComputerChange(Computer computer) {
 		List<String> levels = new ArrayList<>();
 		levels.add("CDB");
 		levels.add("new computer");
 		HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputerCreatePage(computer);
+		ContentPage content = new ComputerChangePage(computer);
 
 		List<Option> optionsList = new ArrayList<>();
 		optionsList.add(new Option("1 <new>", "Name"));

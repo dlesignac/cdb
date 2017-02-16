@@ -1,17 +1,19 @@
 package fr.ebiz.cdb.ui.cli;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.DBConnection;
 import fr.ebiz.cdb.persistence.dao.DAO;
 import fr.ebiz.cdb.persistence.dao.DAOFactory;
+import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.ui.page.ComputerHolderPage;
 import fr.ebiz.cdb.ui.page.ComputerPage;
 import fr.ebiz.cdb.ui.page.FullPage;
@@ -22,6 +24,8 @@ import fr.ebiz.cdb.ui.page.PageBuilder;
  * Command Line Interface.
  */
 public class CLI {
+
+	private static Logger logger = LoggerFactory.getLogger(CLI.class);
 
 	/**
 	 * CLI entry point.
@@ -52,15 +56,21 @@ public class CLI {
 	public void loop() {
 		while (this.status != CLIStatus.EXIT) {
 			this.nextPage.display();
-			listen();
+
+			try {
+				listen();
+			} catch (Exception e) {
+				this.nextPage.setError("An error occurred");
+				logger.error("caught exception while running CLI", e);
+			}
 		}
 
 		this.in.close();
 
 		try {
 			DBConnection.getInstance().close();
-		} catch (SQLException e) {
-			// TODO
+		} catch (Exception e) {
+			logger.error("caught exception while closing db connection");
 		}
 	}
 
@@ -159,51 +169,12 @@ public class CLI {
 	private void doComputerEdit(String[] input) {
 		if ("c".equals(input[0])) {
 			callComputerBack();
-		} else if ("1".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				Computer computer = getComputerFromPage();
-				String name = input[1]; // TODO validation
-				computer.setName(name);
-				this.computerDAO.update(computer);
-				callComputer(computer);
-			}
-		} else if ("2".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				// TODO validation
-				Computer computer = getComputerFromPage();
-				LocalDate introduced = LocalDate.parse(input[1]);
-				computer.setIntroduced(introduced);
-				this.computerDAO.update(computer);
-				callComputer(computer);
-			}
-		} else if ("3".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				// TODO validation
-				Computer computer = getComputerFromPage();
-				LocalDate discontinued = LocalDate.parse(input[1]);
-				computer.setDiscontinued(discontinued);
-				this.computerDAO.update(computer);
-				callComputer(computer);
-			}
-		} else if ("4".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				// TODO validation
-				Computer computer = getComputerFromPage();
-				int companyId = Integer.parseInt(input[1]);
-				computer.setManufacturer(this.companyDAO.find(companyId));
-				this.computerDAO.update(computer);
-				callComputer(computer);
-			}
+		} else if ("s".equals(input[0])) {
+			Computer computer = getComputerFromPage();
+			this.computerDAO.update(computer);
+			callComputer(computer);
 		} else {
-			callErrorInvalidInput();
+			doComputerChange(input);
 		}
 	}
 
@@ -211,38 +182,50 @@ public class CLI {
 		if ("c".equals(input[0])) {
 			callIndex();
 		} else if ("s".equals(input[0])) {
-			// TODO validation
 			Computer computer = getComputerFromPage();
 			this.computerDAO.create(computer);
-			callIndex();
-		} else if ("1".equals(input[0])) {
+			callComputer(computer);
+		} else {
+			doComputerChange(input);
+		}
+	}
+
+	private void doComputerChange(String[] input) {
+		if ("1".equals(input[0])) {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
-				Computer computer = getComputerFromPage();
-				String name = input[1]; // TODO validation
-				computer.setName(name);
-				this.computerDAO.update(computer);
+				if (ComputerValidator.validateName(input[1])) {
+					Computer computer = getComputerFromPage();
+					computer.setName(input[1]);
+				} else {
+					this.nextPage.setError("Incorrect name specified");
+				}
 			}
 		} else if ("2".equals(input[0])) {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
-				// TODO validation
-				Computer computer = getComputerFromPage();
-				LocalDate introduced = LocalDate.parse(input[1]);
-				computer.setIntroduced(introduced);
-				this.computerDAO.update(computer);
+				if (ComputerValidator.validateIntroduced(input[1])) {
+					Computer computer = getComputerFromPage();
+					LocalDate introduced = LocalDate.parse(input[1]);
+					computer.setIntroduced(introduced);
+				} else {
+					this.nextPage.setError("Incorrect introduction date specified");
+				}
 			}
 		} else if ("3".equals(input[0])) {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
-				// TODO validation
 				Computer computer = getComputerFromPage();
-				LocalDate discontinued = LocalDate.parse(input[1]);
-				computer.setDiscontinued(discontinued);
-				this.computerDAO.update(computer);
+
+				if (ComputerValidator.validateDiscontinued(input[1], computer)) {
+					LocalDate discontinued = LocalDate.parse(input[1]);
+					computer.setDiscontinued(discontinued);
+				} else {
+					this.nextPage.setError("Incorrect discontinuation date specified");
+				}
 			}
 		} else if ("4".equals(input[0])) {
 			if (input.length < 2) {
@@ -288,7 +271,7 @@ public class CLI {
 
 	private void callComputerEdit() {
 		Computer computer = getComputerFromPage();
-		this.nextPage = new PageBuilder().buildComputerEdit(computer);
+		this.nextPage = new PageBuilder().buildComputerChange(computer);
 		this.status = CLIStatus.COMPUTER_EDIT;
 	}
 
@@ -298,7 +281,7 @@ public class CLI {
 	}
 
 	private void callComputerCreate(Computer computer) {
-		this.nextPage = new PageBuilder().buildComputerCreate(computer);
+		this.nextPage = new PageBuilder().buildComputerChange(computer);
 		this.status = CLIStatus.COMPUTER_CREATE;
 	}
 
