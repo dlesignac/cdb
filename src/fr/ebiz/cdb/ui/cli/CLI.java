@@ -1,5 +1,6 @@
 package fr.ebiz.cdb.ui.cli;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,7 +11,7 @@ import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.DBConnection;
 import fr.ebiz.cdb.persistence.dao.DAO;
 import fr.ebiz.cdb.persistence.dao.DAOFactory;
-import fr.ebiz.cdb.ui.page.ComputerEditPage;
+import fr.ebiz.cdb.ui.page.ComputerHolderPage;
 import fr.ebiz.cdb.ui.page.ComputerPage;
 import fr.ebiz.cdb.ui.page.FullPage;
 import fr.ebiz.cdb.ui.page.Page;
@@ -42,6 +43,14 @@ public class CLI {
 		while (this.status != CLIStatus.EXIT) {
 			this.nextPage.display();
 			listen();
+		}
+
+		this.in.close();
+
+		try {
+			DBConnection.getInstance().close();
+		} catch (SQLException e) {
+			// TODO
 		}
 	}
 
@@ -86,9 +95,13 @@ public class CLI {
 			callIndex();
 		} else if ("s".equals(input[0])) {
 			if (input.length < 2) {
-				this.nextPage.setError("Missing parameter");
+				callErrorMissingParameter();
+			} else if (!StringUtils.isNumeric(input[1])) {
+				callErrorInvalidParameter();
 			} else {
-				callComputer(input[1]);
+				int id = Integer.parseInt(input[1]);
+				Computer computer = getComputerById(id);
+				callComputer(computer);
 			}
 		} else {
 			callErrorInvalidInput();
@@ -120,10 +133,16 @@ public class CLI {
 		if ("c".equals(input[0])) {
 			callComputerBack();
 		} else if ("1".equals(input[0])) {
+			Computer computer = getComputerFromPage();
+
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
-
+				String name = input[1]; // TODO validation
+				computer.setName(name);
+				this.computerDAO.update(computer);
+				this.nextPage = new PageBuilder().buildComputer(computer);
+				this.status = CLIStatus.COMPUTER;
 			}
 		} else if ("2".equals(input[0])) {
 			if (input.length < 2) {
@@ -153,14 +172,9 @@ public class CLI {
 		this.status = CLIStatus.COMPUTERS;
 	}
 
-	private void callComputer(String id) {
-		if (!StringUtils.isNumeric(id)) {
-			callErrorMissingParameter();
-		} else {
-			Computer computer = this.computerDAO.find(Integer.parseInt(id));
-			this.nextPage = new PageBuilder().buildComputer(computer);
-			this.status = CLIStatus.COMPUTER;
-		}
+	private void callComputer(Computer computer) {
+		this.nextPage = new PageBuilder().buildComputer(computer);
+		this.status = CLIStatus.COMPUTER;
 	}
 
 	private void callCompanies() {
@@ -172,13 +186,13 @@ public class CLI {
 	private void callComputerEdit() {
 		ComputerPage page = (ComputerPage) ((FullPage) this.nextPage).getContentPage();
 		Computer computer = page.getComputer();
-		this.nextPage = new PageBuilder().buildComputerEdit(String.valueOf(computer.getId()));
+		this.nextPage = new PageBuilder().buildComputerEdit(computer);
 		this.status = CLIStatus.COMPUTER_EDIT;
 	}
 
 	private void callComputerBack() {
-		ComputerEditPage page = (ComputerEditPage) ((FullPage) this.nextPage).getContentPage();
-		callComputer(page.getComputerId());
+		Computer computer = getComputerFromPage();
+		callComputer(computer);
 	}
 
 	private void callErrorInvalidInput() {
@@ -189,10 +203,23 @@ public class CLI {
 		this.nextPage.setError("Invalid parameter");
 	}
 
+	private void callErrorInvalidParameter() {
+		this.nextPage.setError("Invalid parameter");
+	}
+
 	private void deleteComputer() {
 		ComputerPage page = (ComputerPage) ((FullPage) this.nextPage).getContentPage();
 		Computer computer = page.getComputer();
 		this.computerDAO.delete(computer);
+	}
+
+	private Computer getComputerById(int id) {
+		return this.computerDAO.find(id);
+	}
+
+	private Computer getComputerFromPage() {
+		ComputerHolderPage page = (ComputerHolderPage) ((FullPage) this.nextPage).getContentPage();
+		return page.getComputer();
 	}
 
 }

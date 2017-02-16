@@ -1,15 +1,18 @@
 package fr.ebiz.cdb.ui.page;
 
-public class ComputerEditPage extends ContentPage {
+import fr.ebiz.cdb.model.Computer;
 
-	private String computerId;
+public class ComputerEditPage implements ComputerHolderPage {
 
-	public ComputerEditPage(String computerId) {
-		this.computerId = computerId;
+	private Computer computer;
+
+	public ComputerEditPage(Computer computer) {
+		this.computer = computer;
 	}
 
-	public String getComputerId() {
-		return this.computerId;
+	@Override
+	public Computer getComputer() {
+		return this.computer;
 	}
 
 	@Override

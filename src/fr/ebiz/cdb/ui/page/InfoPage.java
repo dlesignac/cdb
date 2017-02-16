@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.ui.page;
 
-public class InfoPage extends ContentPage {
+public class InfoPage implements ContentPage {
 
 	private String info;
 

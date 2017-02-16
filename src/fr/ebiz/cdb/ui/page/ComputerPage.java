@@ -2,7 +2,7 @@ package fr.ebiz.cdb.ui.page;
 
 import fr.ebiz.cdb.model.Computer;
 
-public class ComputerPage extends ContentPage {
+public class ComputerPage implements ComputerHolderPage {
 
 	private Computer computer;
 

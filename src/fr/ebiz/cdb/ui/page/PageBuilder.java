@@ -81,15 +81,15 @@ public class PageBuilder {
 		return new FullPage(header, content, options, error);
 	}
 
-	public Page buildComputerEdit(String id) {
+	public Page buildComputerEdit(Computer computer) {
 		List<String> levels = new ArrayList<>();
 		levels.add("CDB");
 		levels.add("Computers");
-		levels.add(id);
+		levels.add(String.valueOf(computer.getId()));
 		levels.add("edit");
 		HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputerEditPage(id);
+		ContentPage content = new ComputerEditPage(computer);
 
 		List<Option> optionsList = new ArrayList<>();
 		optionsList.add(new Option("1 <new>", "Name"));

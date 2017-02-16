@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.ebiz.cdb.model.Company;
 
-public class CompaniesPage extends ContentPage {
+public class CompaniesPage implements ContentPage {
 
 	private List<Company> companies;
 

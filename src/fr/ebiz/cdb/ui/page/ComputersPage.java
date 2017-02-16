@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.ebiz.cdb.model.Computer;
 
-public class ComputersPage extends ContentPage {
+public class ComputersPage implements ContentPage {
 
 	private List<Computer> computers;
 
