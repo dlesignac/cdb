@@ -13,13 +13,13 @@ public class ComputerValidator {
 	}
 
 	public static boolean validateIntroduced(String str) {
-		return isValidDate(str) && LocalDate.parse(str).isBefore(LocalDate.now());
+		return str == null || (isValidDate(str) && LocalDate.parse(str).isBefore(LocalDate.now()));
 	}
 
 	public static boolean validateDiscontinued(String str, Computer computer) {
 		LocalDate date = LocalDate.parse(str);
-		return computer.getIntroduced() != null && isValidDate(str) && date.isBefore(LocalDate.now())
-				&& date.isAfter(computer.getIntroduced());
+		return str == null || (computer.getIntroduced() != null && isValidDate(str) && date.isBefore(LocalDate.now())
+				&& date.isAfter(computer.getIntroduced()));
 	}
 
 	public static boolean isValidDate(String text) {

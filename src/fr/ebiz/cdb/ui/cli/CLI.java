@@ -135,7 +135,7 @@ public class CLI {
 				Computer computer = getComputerById(id);
 
 				if (computer == null) {
-					callErrorInvalidInput();
+					callErrorInvalidParameter();
 				} else {
 					callComputer(computer);
 				}
@@ -203,40 +203,53 @@ public class CLI {
 				}
 			}
 		} else if ("2".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				if (ComputerValidator.validateIntroduced(input[1])) {
-					Computer computer = getComputerFromPage();
-					LocalDate introduced = LocalDate.parse(input[1]);
+			Computer computer = getComputerFromPage();
+
+			if (input.length >= 2) {
+				String date = input[1];
+
+				if (ComputerValidator.validateIntroduced(date)) {
+
+					LocalDate introduced = LocalDate.parse(date);
 					computer.setIntroduced(introduced);
 				} else {
 					this.nextPage.setError("Incorrect introduction date specified");
 				}
+			} else {
+				computer.setIntroduced(null);
+				computer.setDiscontinued(null);
+				this.nextPage.setError("Discontinuation date was automatically removed");
 			}
 		} else if ("3".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				Computer computer = getComputerFromPage();
+			Computer computer = getComputerFromPage();
 
-				if (ComputerValidator.validateDiscontinued(input[1], computer)) {
-					LocalDate discontinued = LocalDate.parse(input[1]);
+			if (input.length >= 2) {
+				String date = input[1];
+
+				if (ComputerValidator.validateDiscontinued(date, computer)) {
+					LocalDate discontinued = LocalDate.parse(date);
 					computer.setDiscontinued(discontinued);
 				} else {
 					this.nextPage.setError("Incorrect discontinuation date specified");
 				}
+			} else {
+				computer.setDiscontinued(null);
 			}
 		} else if ("4".equals(input[0])) {
-			if (input.length < 2) {
-				callErrorMissingParameter();
-			} else {
-				// TODO validation
-				Computer computer = getComputerFromPage();
+			Company manufacturer = null;
+
+			if (input.length >= 2) {
 				int companyId = Integer.parseInt(input[1]);
-				computer.setManufacturer(this.companyDAO.find(companyId));
-				this.computerDAO.update(computer);
+				manufacturer = this.companyDAO.find(companyId);
+
+				if (manufacturer == null) {
+					this.nextPage.setError("No company found for this id");
+				}
 			}
+
+			Computer computer = getComputerFromPage();
+			computer.setManufacturer(manufacturer);
+			this.computerDAO.update(computer);
 		} else {
 			callErrorInvalidInput();
 		}
@@ -290,7 +303,7 @@ public class CLI {
 	}
 
 	private void callErrorMissingParameter() {
-		this.nextPage.setError("Invalid parameter");
+		this.nextPage.setError("Missing parameter");
 	}
 
 	private void callErrorInvalidParameter() {
