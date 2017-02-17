@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.ui.cli.CLIOptions;
 
 /**
  * Page Builder. Builds pages for the CLI.
@@ -19,10 +20,10 @@ public class PageBuilder {
 		ContentPage content = new InfoPage("Manage computers");
 
 		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option("1", "List computers"));
-		optionsList.add(new Option("2", "List companies"));
-		optionsList.add(new Option("3", "Create computer"));
-		optionsList.add(new Option("q", "Quit"));
+		optionsList.add(new Option(CLIOptions.LIST_COMPUTERS, "List computers"));
+		optionsList.add(new Option(CLIOptions.LIST_COMPANIES, "List companies"));
+		optionsList.add(new Option(CLIOptions.CREATE_COMPUTER, "Create computer"));
+		optionsList.add(new Option(CLIOptions.QUIT, "Quit"));
 		OptionsPage options = new OptionsPage(optionsList);
 
 		ErrorPage error = new ErrorPage(null);
@@ -39,8 +40,8 @@ public class PageBuilder {
 		ContentPage content = new ComputersPage(computers);
 
 		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option("s <id>", "Show computer identified by <id>"));
-		optionsList.add(new Option("b", "Back"));
+		optionsList.add(new Option(CLIOptions.SHOW + " <id>", "Show computer identified by <id>"));
+		optionsList.add(new Option(CLIOptions.BACK, "Back"));
 		OptionsPage options = new OptionsPage(optionsList);
 
 		ErrorPage error = new ErrorPage(null);
@@ -58,9 +59,9 @@ public class PageBuilder {
 		ContentPage content = new ComputerPage(computer);
 
 		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option("e", "Edit"));
-		optionsList.add(new Option("d", "Delete"));
-		optionsList.add(new Option("b", "Back"));
+		optionsList.add(new Option(CLIOptions.EDIT, "Edit"));
+		optionsList.add(new Option(CLIOptions.DELETE, "Delete"));
+		optionsList.add(new Option(CLIOptions.BACK, "Back"));
 		OptionsPage options = new OptionsPage(optionsList);
 
 		ErrorPage error = new ErrorPage(null);
@@ -77,7 +78,7 @@ public class PageBuilder {
 		ContentPage content = new CompaniesPage(companies);
 
 		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option("b", "Back"));
+		optionsList.add(new Option(CLIOptions.BACK, "Back"));
 		OptionsPage options = new OptionsPage(optionsList);
 
 		ErrorPage error = new ErrorPage(null);
@@ -96,11 +97,12 @@ public class PageBuilder {
 		ContentPage content = new ComputerChangePage(computer);
 
 		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option("1 <new>", "Name"));
-		optionsList.add(new Option("2 <new>", "Introduced"));
-		optionsList.add(new Option("3 <new>", "Discontinued"));
-		optionsList.add(new Option("4 <new>", "Manufacturer"));
-		optionsList.add(new Option("c", "Cancel"));
+		optionsList.add(new Option(CLIOptions.NEW_NAME + " <new>", "Name"));
+		optionsList.add(new Option(CLIOptions.NEW_INTRODUCED + " <new>", "Introduced"));
+		optionsList.add(new Option(CLIOptions.NEW_DISCONTINUED + " <new>", "Discontinued"));
+		optionsList.add(new Option(CLIOptions.NEW_MANUFACTURER + " <new>", "Manufacturer"));
+		optionsList.add(new Option(CLIOptions.SAVE, "Save"));
+		optionsList.add(new Option(CLIOptions.CANCEL, "Cancel"));
 		OptionsPage options = new OptionsPage(optionsList);
 
 		ErrorPage error = new ErrorPage(null);
@@ -108,7 +110,7 @@ public class PageBuilder {
 		return new FullPage(header, content, options, error);
 	}
 
-	public Page buildComputerChange(Computer computer) {
+	public Page buildComputerCreate(Computer computer) {
 		List<String> levels = new ArrayList<>();
 		levels.add("CDB");
 		levels.add("new computer");
@@ -117,12 +119,12 @@ public class PageBuilder {
 		ContentPage content = new ComputerChangePage(computer);
 
 		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option("1 <new>", "Name"));
-		optionsList.add(new Option("2 <new>", "Introduced"));
-		optionsList.add(new Option("3 <new>", "Discontinued"));
-		optionsList.add(new Option("4 <new>", "Manufacturer"));
-		optionsList.add(new Option("s", "Save"));
-		optionsList.add(new Option("c", "Cancel"));
+		optionsList.add(new Option(CLIOptions.NEW_NAME + " <new>", "Name"));
+		optionsList.add(new Option(CLIOptions.NEW_INTRODUCED + " <new>", "Introduced"));
+		optionsList.add(new Option(CLIOptions.NEW_DISCONTINUED + " <new>", "Discontinued"));
+		optionsList.add(new Option(CLIOptions.NEW_MANUFACTURER + " <new>", "Manufacturer"));
+		optionsList.add(new Option(CLIOptions.SAVE, "Save"));
+		optionsList.add(new Option(CLIOptions.CANCEL, "Cancel"));
 		OptionsPage options = new OptionsPage(optionsList);
 
 		ErrorPage error = new ErrorPage(null);

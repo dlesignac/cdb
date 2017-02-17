@@ -109,13 +109,13 @@ public class CLI {
 	 */
 
 	private void doIndex(String[] input) {
-		if ("q".equals(input[0])) {
+		if (CLIOptions.QUIT.equals(input[0])) {
 			this.status = CLIStatus.EXIT;
-		} else if ("1".equals(input[0])) {
+		} else if (CLIOptions.LIST_COMPUTERS.equals(input[0])) {
 			callComputers();
-		} else if ("2".equals(input[0])) {
+		} else if (CLIOptions.LIST_COMPANIES.equals(input[0])) {
 			callCompanies();
-		} else if ("3".equals(input[0])) {
+		} else if (CLIOptions.CREATE_COMPUTER.equals(input[0])) {
 			callComputerCreate(new Computer());
 		} else {
 			callErrorInvalidInput();
@@ -123,9 +123,9 @@ public class CLI {
 	}
 
 	private void doComputers(String input[]) {
-		if ("b".equals(input[0])) {
+		if (CLIOptions.BACK.equals(input[0])) {
 			callIndex();
-		} else if ("s".equals(input[0])) {
+		} else if (CLIOptions.SHOW.equals(input[0])) {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else if (!StringUtils.isNumeric(input[1])) {
@@ -146,12 +146,12 @@ public class CLI {
 	}
 
 	private void doComputer(String[] input) {
-		if ("b".equals(input[0])) {
+		if (CLIOptions.BACK.equals(input[0])) {
 			callComputers();
-		} else if ("d".equals(input[0])) {
+		} else if (CLIOptions.DELETE.equals(input[0])) {
 			deleteComputer();
 			callComputers();
-		} else if ("e".equals(input[0])) {
+		} else if (CLIOptions.EDIT.equals(input[0])) {
 			callComputerEdit();
 		} else {
 			callErrorInvalidInput();
@@ -159,7 +159,7 @@ public class CLI {
 	}
 
 	private void doCompanies(String[] input) {
-		if ("b".equals(input[0])) {
+		if (CLIOptions.BACK.equals(input[0])) {
 			callIndex();
 		} else {
 			callErrorInvalidInput();
@@ -167,9 +167,9 @@ public class CLI {
 	}
 
 	private void doComputerEdit(String[] input) {
-		if ("c".equals(input[0])) {
+		if (CLIOptions.CANCEL.equals(input[0])) {
 			callComputerBack();
-		} else if ("s".equals(input[0])) {
+		} else if (CLIOptions.SAVE.equals(input[0])) {
 			Computer computer = getComputerFromPage();
 			this.computerDAO.update(computer);
 			callComputer(computer);
@@ -179,9 +179,9 @@ public class CLI {
 	}
 
 	private void doComputerCreate(String[] input) {
-		if ("c".equals(input[0])) {
+		if (CLIOptions.CANCEL.equals(input[0])) {
 			callIndex();
-		} else if ("s".equals(input[0])) {
+		} else if (CLIOptions.SAVE.equals(input[0])) {
 			Computer computer = getComputerFromPage();
 			this.computerDAO.create(computer);
 			callComputer(computer);
@@ -191,7 +191,7 @@ public class CLI {
 	}
 
 	private void doComputerChange(String[] input) {
-		if ("1".equals(input[0])) {
+		if (CLIOptions.NEW_NAME.equals(input[0])) {
 			if (input.length < 2) {
 				callErrorMissingParameter();
 			} else {
@@ -202,7 +202,7 @@ public class CLI {
 					this.nextPage.setError("Incorrect name specified");
 				}
 			}
-		} else if ("2".equals(input[0])) {
+		} else if (CLIOptions.NEW_INTRODUCED.equals(input[0])) {
 			Computer computer = getComputerFromPage();
 
 			if (input.length >= 2) {
@@ -220,7 +220,7 @@ public class CLI {
 				computer.setDiscontinued(null);
 				this.nextPage.setError("Discontinuation date was automatically removed");
 			}
-		} else if ("3".equals(input[0])) {
+		} else if (CLIOptions.NEW_DISCONTINUED.equals(input[0])) {
 			Computer computer = getComputerFromPage();
 
 			if (input.length >= 2) {
@@ -235,7 +235,7 @@ public class CLI {
 			} else {
 				computer.setDiscontinued(null);
 			}
-		} else if ("4".equals(input[0])) {
+		} else if (CLIOptions.NEW_MANUFACTURER.equals(input[0])) {
 			Company manufacturer = null;
 
 			if (input.length >= 2) {
@@ -284,17 +284,18 @@ public class CLI {
 
 	private void callComputerEdit() {
 		Computer computer = getComputerFromPage();
-		this.nextPage = new PageBuilder().buildComputerChange(computer);
+		this.nextPage = new PageBuilder().buildComputerEdit(computer);
 		this.status = CLIStatus.COMPUTER_EDIT;
 	}
 
 	private void callComputerBack() {
 		Computer computer = getComputerFromPage();
+		computer = this.getComputerById(computer.getId());
 		callComputer(computer);
 	}
 
 	private void callComputerCreate(Computer computer) {
-		this.nextPage = new PageBuilder().buildComputerChange(computer);
+		this.nextPage = new PageBuilder().buildComputerCreate(computer);
 		this.status = CLIStatus.COMPUTER_CREATE;
 	}
 
