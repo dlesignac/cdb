@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 import fr.ebiz.cdb.model.Computer;
 

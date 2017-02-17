@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 import java.util.ArrayList;
 import java.util.List;

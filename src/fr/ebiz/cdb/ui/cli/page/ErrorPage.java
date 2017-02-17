@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 /**
  * Error Page Component. Component holding an error that can be printed at next

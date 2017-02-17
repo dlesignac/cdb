@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 /**
  * Page Component interface. Abstracts a page component that must be computed

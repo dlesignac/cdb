@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 /**
  * Page interface. Abstracts a CLI Page.

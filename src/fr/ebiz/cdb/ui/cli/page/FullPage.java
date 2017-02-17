@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 /**
  * Full Built Page. Container for multiple page components that can be displayed

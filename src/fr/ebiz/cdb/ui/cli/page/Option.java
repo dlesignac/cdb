@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.ui.page;
+package fr.ebiz.cdb.ui.cli.page;
 
 /**
  * Navigation Option. Describes a CLI navigation option that can be passed to a

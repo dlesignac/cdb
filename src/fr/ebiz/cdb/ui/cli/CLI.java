@@ -14,11 +14,11 @@ import fr.ebiz.cdb.persistence.DBConnection;
 import fr.ebiz.cdb.persistence.dao.DAO;
 import fr.ebiz.cdb.persistence.dao.DAOFactory;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
-import fr.ebiz.cdb.ui.page.ComputerHolderPage;
-import fr.ebiz.cdb.ui.page.ComputerPage;
-import fr.ebiz.cdb.ui.page.FullPage;
-import fr.ebiz.cdb.ui.page.Page;
-import fr.ebiz.cdb.ui.page.PageBuilder;
+import fr.ebiz.cdb.ui.cli.page.ComputerHolderPage;
+import fr.ebiz.cdb.ui.cli.page.ComputerPage;
+import fr.ebiz.cdb.ui.cli.page.FullPage;
+import fr.ebiz.cdb.ui.cli.page.Page;
+import fr.ebiz.cdb.ui.cli.page.PageBuilder;
 
 /**
  * Command Line Interface.
