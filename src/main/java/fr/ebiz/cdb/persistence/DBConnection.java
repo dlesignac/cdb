@@ -8,21 +8,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Database connection holder.
- * Holds unique connection to database.
+ * Database connection holder. Holds unique connection to database.
  */
 public class DBConnection {
-	
+
 	private Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
 	private static Connection connection = null;
 	private String url = "jdbc:mysql://localhost:3306/computer-database-db";
 	private String user = "admincdb";
 	private String password = "qwerty1234";
-	
+
 	private DBConnection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			DBConnection.connection = DriverManager.getConnection(url, user, password);
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
@@ -31,7 +30,7 @@ public class DBConnection {
 			logger.error("did not find jdbc driver", e);
 		}
 	}
-	
+
 	/**
 	 * Returns unique instance of connection to database.
 	 */
@@ -39,7 +38,7 @@ public class DBConnection {
 		if (DBConnection.connection == null) {
 			new DBConnection();
 		}
-		
+
 		return DBConnection.connection;
 	}
 
