@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence.dao.impl;
+package fr.ebiz.cdb.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -16,14 +16,12 @@ import org.slf4j.LoggerFactory;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.dao.DAO;
-import fr.ebiz.cdb.persistence.dao.DAOFactory;
 
 /**
  * Computer DAO. Interacts with a data source to persist and retrieve Computer
  * objects.
  */
-public class ComputerDAO extends DAO<Computer> {
+class ComputerDAO extends DAO<Computer> {
 
 	private Logger logger = LoggerFactory.getLogger(DAO.class);
 

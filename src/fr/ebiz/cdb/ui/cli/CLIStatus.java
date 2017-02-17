@@ -3,7 +3,7 @@ package fr.ebiz.cdb.ui.cli;
 /**
  * CLI Status. Represents state of the CLI.
  */
-public enum CLIStatus {
+enum CLIStatus {
 
 	/**
 	 * CLI is ready to stop.

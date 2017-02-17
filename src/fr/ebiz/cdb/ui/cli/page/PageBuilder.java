@@ -12,9 +12,15 @@ import fr.ebiz.cdb.ui.cli.CLIOptions;
  */
 public class PageBuilder {
 
+	private static final String CDB = "CDB";
+	private static final String COMPUTERS = "computers";
+	private static final String COMPANIES = "companies";
+	private static final String EDIT = "edit";
+	private static final String NEW = "new";
+
 	public Page buildIndex() {
 		List<String> levels = new ArrayList<>();
-		levels.add("CDB");
+		levels.add(CDB);
 		HeaderPage header = new HeaderPage(levels);
 
 		ContentPage content = new InfoPage("Manage computers");
@@ -33,8 +39,8 @@ public class PageBuilder {
 
 	public Page buildComputers(List<Computer> computers) {
 		List<String> levels = new ArrayList<>();
-		levels.add("CDB");
-		levels.add("Computers");
+		levels.add(CDB);
+		levels.add(COMPUTERS);
 		HeaderPage header = new HeaderPage(levels);
 
 		ContentPage content = new ComputersPage(computers);
@@ -51,8 +57,8 @@ public class PageBuilder {
 
 	public Page buildComputer(Computer computer) {
 		List<String> levels = new ArrayList<>();
-		levels.add("CDB");
-		levels.add("Computers");
+		levels.add(CDB);
+		levels.add(COMPUTERS);
 		levels.add(String.valueOf(computer.getId()));
 		HeaderPage header = new HeaderPage(levels);
 
@@ -71,8 +77,8 @@ public class PageBuilder {
 
 	public Page buildCompanies(List<Company> companies) {
 		List<String> levels = new ArrayList<>();
-		levels.add("CDB");
-		levels.add("Companies");
+		levels.add(CDB);
+		levels.add(COMPANIES);
 		HeaderPage header = new HeaderPage(levels);
 
 		ContentPage content = new CompaniesPage(companies);
@@ -88,10 +94,10 @@ public class PageBuilder {
 
 	public Page buildComputerEdit(Computer computer) {
 		List<String> levels = new ArrayList<>();
-		levels.add("CDB");
-		levels.add("Computers");
+		levels.add(CDB);
+		levels.add(COMPUTERS);
 		levels.add(String.valueOf(computer.getId()));
-		levels.add("edit");
+		levels.add(EDIT);
 		HeaderPage header = new HeaderPage(levels);
 
 		ContentPage content = new ComputerChangePage(computer);
@@ -112,8 +118,9 @@ public class PageBuilder {
 
 	public Page buildComputerCreate(Computer computer) {
 		List<String> levels = new ArrayList<>();
-		levels.add("CDB");
-		levels.add("new computer");
+		levels.add(CDB);
+		levels.add(COMPUTERS);
+		levels.add(NEW);
 		HeaderPage header = new HeaderPage(levels);
 
 		ContentPage content = new ComputerChangePage(computer);

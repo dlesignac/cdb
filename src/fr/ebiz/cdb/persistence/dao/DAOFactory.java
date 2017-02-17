@@ -4,8 +4,6 @@ import java.sql.Connection;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.dao.impl.CompanyDAO;
-import fr.ebiz.cdb.persistence.dao.impl.ComputerDAO;
 
 /**
  * DAO Factory. Abstracts DAO objects instantiation.

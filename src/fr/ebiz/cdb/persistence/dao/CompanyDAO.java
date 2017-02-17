@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence.dao.impl;
+package fr.ebiz.cdb.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,13 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.persistence.dao.DAO;
 
 /**
  * Company DAO. Interacts with a data source to persist and retrieve Company
  * objects.
  */
-public class CompanyDAO extends DAO<Company> {
+class CompanyDAO extends DAO<Company> {
 
 	private Logger logger = LoggerFactory.getLogger(DAO.class);
 
