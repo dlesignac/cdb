@@ -6,15 +6,20 @@ package fr.ebiz.cdb.ui.cli.page;
  */
 public class InfoPage implements ContentPage {
 
-	private String info;
+    private String info;
 
-	public InfoPage(String info) {
-		this.info = info;
-	}
+    /**
+     * Constructor.
+     * @param info
+     *            info to be displayed
+     */
+    public InfoPage(String info) {
+        this.info = info;
+    }
 
-	@Override
-	public String toDisplay() {
-		return info;
-	}
+    @Override
+    public String toDisplay() {
+        return info;
+    }
 
 }

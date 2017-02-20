@@ -12,24 +12,29 @@ import fr.ebiz.cdb.model.Company;
  */
 public class CompaniesPage implements ContentPage {
 
-	private List<Company> companies;
+    private List<Company> companies;
 
-	public CompaniesPage(List<Company> companies) {
-		this.companies = companies;
-	}
+    /**
+     * Constructor.
+     * @param companies
+     *            list of companies
+     */
+    public CompaniesPage(List<Company> companies) {
+        this.companies = companies;
+    }
 
-	@Override
-	public String toDisplay() {
-		String display = "";
+    @Override
+    public String toDisplay() {
+        String display = "";
 
-		for (Company company : this.companies) {
-			display += StringUtils.leftPad(String.valueOf(company.getId()), 6);
-			display += ". ";
-			display += company.getName();
-			display += "\n";
-		}
+        for (Company company : this.companies) {
+            display += StringUtils.leftPad(String.valueOf(company.getId()), 6);
+            display += ". ";
+            display += company.getName();
+            display += "\n";
+        }
 
-		return display;
-	}
+        return display;
+    }
 
 }

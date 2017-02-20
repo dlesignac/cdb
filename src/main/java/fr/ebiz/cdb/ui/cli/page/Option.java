@@ -6,20 +6,27 @@ package fr.ebiz.cdb.ui.cli.page;
  */
 public class Option {
 
-	private String id;
-	private String description;
+    private String id;
+    private String description;
 
-	public Option(String id, String description) {
-		this.id = id;
-		this.description = description;
-	}
+    /**
+     * Constructor.
+     * @param id
+     *            option id
+     * @param description
+     *            option description
+     */
+    public Option(String id, String description) {
+        this.id = id;
+        this.description = description;
+    }
 
-	public String getId() {
-		return this.id;
-	}
+    public String getId() {
+        return this.id;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
 }

@@ -5,8 +5,16 @@ package fr.ebiz.cdb.ui.cli.page;
  */
 public interface Page {
 
-	void display();
+    /**
+     * Displays page on stdout.
+     */
+    void display();
 
-	void setError(String error);
+    /**
+     * Sets error page component for next display.
+     * @param error
+     *            error to be displayed.
+     */
+    void setError(String error);
 
 }

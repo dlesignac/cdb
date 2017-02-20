@@ -10,24 +10,31 @@ import fr.ebiz.cdb.model.Computer;
  */
 public class DAOFactory {
 
-	private final Connection connection;
+    private final Connection connection;
 
-	public DAOFactory(Connection connection) {
-		this.connection = connection;
-	}
+    /**
+     * Constructor.
+     * @param connection
+     *            connection to use
+     */
+    public DAOFactory(Connection connection) {
+        this.connection = connection;
+    }
 
-	/**
-	 * Returns new instance of ComputerDAO.
-	 */
-	public DAO<Computer> getComputerDAO() {
-		return new ComputerDAO(connection);
-	}
+    /**
+     * Returns new instance of ComputerDAO.
+     * @return computer dao
+     */
+    public DAO<Computer> getComputerDAO() {
+        return new ComputerDAO(connection);
+    }
 
-	/**
-	 * Returns new instance of CompanyDAO.
-	 */
-	public DAO<Company> getCompanyDAO() {
-		return new CompanyDAO(connection);
-	}
+    /**
+     * Returns new instance of CompanyDAO.
+     * @return company dao
+     */
+    public DAO<Company> getCompanyDAO() {
+        return new CompanyDAO(connection);
+    }
 
 }

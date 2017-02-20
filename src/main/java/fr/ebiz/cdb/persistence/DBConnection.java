@@ -12,34 +12,37 @@ import org.slf4j.LoggerFactory;
  */
 public class DBConnection {
 
-	private Logger logger = LoggerFactory.getLogger(DBConnection.class);
+    private Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
-	private static Connection connection = null;
-	private String url = "jdbc:mysql://localhost:3306/computer-database-db";
-	private String user = "admincdb";
-	private String password = "qwerty1234";
+    private static Connection connection = null;
+    private String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
+    private String user = "admincdb";
+    private String password = "qwerty1234";
 
-	private DBConnection() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			DBConnection.connection = DriverManager.getConnection(url, user, password);
-			connection.setAutoCommit(false);
-		} catch (SQLException e) {
-			logger.error("could not open connection with database", e);
-		} catch (ClassNotFoundException e) {
-			logger.error("did not find jdbc driver", e);
-		}
-	}
+    /**
+     * Private constructor in order to make DBConnection a singleton.
+     */
+    private DBConnection() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            DBConnection.connection = DriverManager.getConnection(url, user, password);
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            logger.error("could not open connection with database", e);
+        } catch (ClassNotFoundException e) {
+            logger.error("did not find jdbc driver", e);
+        }
+    }
 
-	/**
-	 * Returns unique instance of connection to database.
-	 */
-	public static Connection getInstance() {
-		if (DBConnection.connection == null) {
-			new DBConnection();
-		}
+    /**
+     * @return unique instance of Connection
+     */
+    public static Connection getInstance() {
+        if (DBConnection.connection == null) {
+            new DBConnection();
+        }
 
-		return DBConnection.connection;
-	}
+        return DBConnection.connection;
+    }
 
 }

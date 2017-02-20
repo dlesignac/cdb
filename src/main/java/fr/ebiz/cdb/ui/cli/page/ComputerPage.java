@@ -8,30 +8,35 @@ import fr.ebiz.cdb.model.Computer;
  */
 public class ComputerPage implements ComputerHolderPage {
 
-	private Computer computer;
+    private Computer computer;
 
-	public ComputerPage(Computer computer) {
-		this.computer = computer;
-	}
+    /**
+     * Constructor.
+     * @param computer
+     *            computer to be detailed
+     */
+    public ComputerPage(Computer computer) {
+        this.computer = computer;
+    }
 
-	public Computer getComputer() {
-		return this.computer;
-	}
+    public Computer getComputer() {
+        return this.computer;
+    }
 
-	@Override
-	public String toDisplay() {
-		String name = this.computer.getName();
-		String introduced = this.computer.getIntroduced() == null ? "UNKNOWN"
-				: this.computer.getIntroduced().toString();
-		String discontinued = this.computer.getDiscontinued() == null ? "UNKNOWN"
-				: this.computer.getDiscontinued().toString();
-		String manufacturer = this.computer.getManufacturer() == null ? "UNKNOWN"
-				: this.computer.getManufacturer().getName();
+    @Override
+    public String toDisplay() {
+        String name = this.computer.getName();
+        String introduced = this.computer.getIntroduced() == null ? "UNKNOWN"
+                : this.computer.getIntroduced().toString();
+        String discontinued = this.computer.getDiscontinued() == null ? "UNKNOWN"
+                : this.computer.getDiscontinued().toString();
+        String manufacturer = this.computer.getManufacturer() == null ? "UNKNOWN"
+                : this.computer.getManufacturer().getName();
 
-		String display = "Name         : " + name + "\n" + "Introduced   : " + introduced + "\n" + "Discontinued : "
-				+ discontinued + "\n" + "Manufacturer : " + manufacturer + "\n";
+        String display = "Name         : " + name + "\n" + "Introduced   : " + introduced + "\n" + "Discontinued : "
+                + discontinued + "\n" + "Manufacturer : " + manufacturer + "\n";
 
-		return display;
-	}
+        return display;
+    }
 
 }

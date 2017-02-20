@@ -6,6 +6,10 @@ package fr.ebiz.cdb.ui.cli.page;
  */
 public interface PageComponent {
 
-	String toDisplay();
+    /**
+     * Computes data into a string that can be displayed.
+     * @return string to be displayed
+     */
+    String toDisplay();
 
 }

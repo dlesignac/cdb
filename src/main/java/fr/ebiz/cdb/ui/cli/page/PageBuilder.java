@@ -12,131 +12,165 @@ import fr.ebiz.cdb.ui.cli.CLIOptions;
  */
 public class PageBuilder {
 
-	private static final String CDB = "CDB";
-	private static final String COMPUTERS = "computers";
-	private static final String COMPANIES = "companies";
-	private static final String EDIT = "edit";
-	private static final String NEW = "new";
+    private static final String CDB = "CDB";
+    private static final String COMPUTERS = "computers";
+    private static final String COMPANIES = "companies";
+    private static final String EDIT = "edit";
+    private static final String NEW = "new";
 
-	public Page buildIndex() {
-		List<String> levels = new ArrayList<>();
-		levels.add(CDB);
-		HeaderPage header = new HeaderPage(levels);
+    /**
+     * Builds index page.
+     * @return index page
+     */
+    public Page buildIndex() {
+        List<String> levels = new ArrayList<>();
+        levels.add(CDB);
+        HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new InfoPage("Manage computers");
+        ContentPage content = new InfoPage("Manage computers");
 
-		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option(CLIOptions.LIST_COMPUTERS, "List computers"));
-		optionsList.add(new Option(CLIOptions.LIST_COMPANIES, "List companies"));
-		optionsList.add(new Option(CLIOptions.CREATE_COMPUTER, "Create computer"));
-		optionsList.add(new Option(CLIOptions.QUIT, "Quit"));
-		OptionsPage options = new OptionsPage(optionsList);
+        List<Option> optionsList = new ArrayList<>();
+        optionsList.add(new Option(CLIOptions.LIST_COMPUTERS, "List computers"));
+        optionsList.add(new Option(CLIOptions.LIST_COMPANIES, "List companies"));
+        optionsList.add(new Option(CLIOptions.CREATE_COMPUTER, "Create computer"));
+        optionsList.add(new Option(CLIOptions.QUIT, "Quit"));
+        OptionsPage options = new OptionsPage(optionsList);
 
-		ErrorPage error = new ErrorPage(null);
+        ErrorPage error = new ErrorPage(null);
 
-		return new FullPage(header, content, options, error);
-	}
+        return new FullPage(header, content, options, error);
+    }
 
-	public Page buildComputers(List<Computer> computers) {
-		List<String> levels = new ArrayList<>();
-		levels.add(CDB);
-		levels.add(COMPUTERS);
-		HeaderPage header = new HeaderPage(levels);
+    /**
+     * Builds computer list page.
+     * @param computers
+     *            list of computers
+     * @return computer list page
+     */
+    public Page buildComputers(List<Computer> computers) {
+        List<String> levels = new ArrayList<>();
+        levels.add(CDB);
+        levels.add(COMPUTERS);
+        HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputersPage(computers);
+        ContentPage content = new ComputersPage(computers);
 
-		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option(CLIOptions.SHOW + " <id>", "Show computer identified by <id>"));
-		optionsList.add(new Option(CLIOptions.BACK, "Back"));
-		OptionsPage options = new OptionsPage(optionsList);
+        List<Option> optionsList = new ArrayList<>();
+        optionsList.add(new Option(CLIOptions.SHOW + " <id>", "Show computer identified by <id>"));
+        optionsList.add(new Option(CLIOptions.BACK, "Back"));
+        OptionsPage options = new OptionsPage(optionsList);
 
-		ErrorPage error = new ErrorPage(null);
+        ErrorPage error = new ErrorPage(null);
 
-		return new FullPage(header, content, options, error);
-	}
+        return new FullPage(header, content, options, error);
+    }
 
-	public Page buildComputer(Computer computer) {
-		List<String> levels = new ArrayList<>();
-		levels.add(CDB);
-		levels.add(COMPUTERS);
-		levels.add(String.valueOf(computer.getId()));
-		HeaderPage header = new HeaderPage(levels);
+    /**
+     * Builds computer details page.
+     * @param computer
+     *            computer to be detailed.
+     * @return computer details page
+     */
+    public Page buildComputer(Computer computer) {
+        List<String> levels = new ArrayList<>();
+        levels.add(CDB);
+        levels.add(COMPUTERS);
+        levels.add(String.valueOf(computer.getId()));
+        HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputerPage(computer);
+        ContentPage content = new ComputerPage(computer);
 
-		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option(CLIOptions.EDIT, "Edit"));
-		optionsList.add(new Option(CLIOptions.DELETE, "Delete"));
-		optionsList.add(new Option(CLIOptions.BACK, "Back"));
-		OptionsPage options = new OptionsPage(optionsList);
+        List<Option> optionsList = new ArrayList<>();
+        optionsList.add(new Option(CLIOptions.EDIT, "Edit"));
+        optionsList.add(new Option(CLIOptions.DELETE, "Delete"));
+        optionsList.add(new Option(CLIOptions.BACK, "Back"));
+        OptionsPage options = new OptionsPage(optionsList);
 
-		ErrorPage error = new ErrorPage(null);
+        ErrorPage error = new ErrorPage(null);
 
-		return new FullPage(header, content, options, error);
-	}
+        return new FullPage(header, content, options, error);
+    }
 
-	public Page buildCompanies(List<Company> companies) {
-		List<String> levels = new ArrayList<>();
-		levels.add(CDB);
-		levels.add(COMPANIES);
-		HeaderPage header = new HeaderPage(levels);
+    /**
+     * Builds company list page.
+     * @param companies
+     *            list of companies
+     * @return company list page
+     */
+    public Page buildCompanies(List<Company> companies) {
+        List<String> levels = new ArrayList<>();
+        levels.add(CDB);
+        levels.add(COMPANIES);
+        HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new CompaniesPage(companies);
+        ContentPage content = new CompaniesPage(companies);
 
-		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option(CLIOptions.BACK, "Back"));
-		OptionsPage options = new OptionsPage(optionsList);
+        List<Option> optionsList = new ArrayList<>();
+        optionsList.add(new Option(CLIOptions.BACK, "Back"));
+        OptionsPage options = new OptionsPage(optionsList);
 
-		ErrorPage error = new ErrorPage(null);
+        ErrorPage error = new ErrorPage(null);
 
-		return new FullPage(header, content, options, error);
-	}
+        return new FullPage(header, content, options, error);
+    }
 
-	public Page buildComputerEdit(Computer computer) {
-		List<String> levels = new ArrayList<>();
-		levels.add(CDB);
-		levels.add(COMPUTERS);
-		levels.add(String.valueOf(computer.getId()));
-		levels.add(EDIT);
-		HeaderPage header = new HeaderPage(levels);
+    /**
+     * Builds computer editing page.
+     * @param computer
+     *            computer to be edited
+     * @return computer editing page
+     */
+    public Page buildComputerEdit(Computer computer) {
+        List<String> levels = new ArrayList<>();
+        levels.add(CDB);
+        levels.add(COMPUTERS);
+        levels.add(String.valueOf(computer.getId()));
+        levels.add(EDIT);
+        HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputerChangePage(computer);
+        ContentPage content = new ComputerChangePage(computer);
 
-		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option(CLIOptions.NEW_NAME + " <new>", "Name"));
-		optionsList.add(new Option(CLIOptions.NEW_INTRODUCED + " <new>", "Introduced"));
-		optionsList.add(new Option(CLIOptions.NEW_DISCONTINUED + " <new>", "Discontinued"));
-		optionsList.add(new Option(CLIOptions.NEW_MANUFACTURER + " <new>", "Manufacturer"));
-		optionsList.add(new Option(CLIOptions.SAVE, "Save"));
-		optionsList.add(new Option(CLIOptions.CANCEL, "Cancel"));
-		OptionsPage options = new OptionsPage(optionsList);
+        List<Option> optionsList = new ArrayList<>();
+        optionsList.add(new Option(CLIOptions.NEW_NAME + " <new>", "Name"));
+        optionsList.add(new Option(CLIOptions.NEW_INTRODUCED + " <new>", "Introduced"));
+        optionsList.add(new Option(CLIOptions.NEW_DISCONTINUED + " <new>", "Discontinued"));
+        optionsList.add(new Option(CLIOptions.NEW_MANUFACTURER + " <new>", "Manufacturer"));
+        optionsList.add(new Option(CLIOptions.SAVE, "Save"));
+        optionsList.add(new Option(CLIOptions.CANCEL, "Cancel"));
+        OptionsPage options = new OptionsPage(optionsList);
 
-		ErrorPage error = new ErrorPage(null);
+        ErrorPage error = new ErrorPage(null);
 
-		return new FullPage(header, content, options, error);
-	}
+        return new FullPage(header, content, options, error);
+    }
 
-	public Page buildComputerCreate(Computer computer) {
-		List<String> levels = new ArrayList<>();
-		levels.add(CDB);
-		levels.add(COMPUTERS);
-		levels.add(NEW);
-		HeaderPage header = new HeaderPage(levels);
+    /**
+     * Builds computer creating page.
+     * @param computer
+     *            computer to be created
+     * @return computer creating page
+     */
+    public Page buildComputerCreate(Computer computer) {
+        List<String> levels = new ArrayList<>();
+        levels.add(CDB);
+        levels.add(COMPUTERS);
+        levels.add(NEW);
+        HeaderPage header = new HeaderPage(levels);
 
-		ContentPage content = new ComputerChangePage(computer);
+        ContentPage content = new ComputerChangePage(computer);
 
-		List<Option> optionsList = new ArrayList<>();
-		optionsList.add(new Option(CLIOptions.NEW_NAME + " <new>", "Name"));
-		optionsList.add(new Option(CLIOptions.NEW_INTRODUCED + " <new>", "Introduced"));
-		optionsList.add(new Option(CLIOptions.NEW_DISCONTINUED + " <new>", "Discontinued"));
-		optionsList.add(new Option(CLIOptions.NEW_MANUFACTURER + " <new>", "Manufacturer"));
-		optionsList.add(new Option(CLIOptions.SAVE, "Save"));
-		optionsList.add(new Option(CLIOptions.CANCEL, "Cancel"));
-		OptionsPage options = new OptionsPage(optionsList);
+        List<Option> optionsList = new ArrayList<>();
+        optionsList.add(new Option(CLIOptions.NEW_NAME + " <new>", "Name"));
+        optionsList.add(new Option(CLIOptions.NEW_INTRODUCED + " <new>", "Introduced"));
+        optionsList.add(new Option(CLIOptions.NEW_DISCONTINUED + " <new>", "Discontinued"));
+        optionsList.add(new Option(CLIOptions.NEW_MANUFACTURER + " <new>", "Manufacturer"));
+        optionsList.add(new Option(CLIOptions.SAVE, "Save"));
+        optionsList.add(new Option(CLIOptions.CANCEL, "Cancel"));
+        OptionsPage options = new OptionsPage(optionsList);
 
-		ErrorPage error = new ErrorPage(null);
+        ErrorPage error = new ErrorPage(null);
 
-		return new FullPage(header, content, options, error);
-	}
+        return new FullPage(header, content, options, error);
+    }
 
 }

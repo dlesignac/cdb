@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.ebiz.cdb.model.Company;
+import fr.ebiz.cdb.persistence.Page;
 
 /**
  * Company DAO. Interacts with a data source to persist and retrieve Company
@@ -19,130 +20,147 @@ import fr.ebiz.cdb.model.Company;
  */
 class CompanyDAO extends DAO<Company> {
 
-	private Logger logger = LoggerFactory.getLogger(DAO.class);
+    private Logger logger = LoggerFactory.getLogger(DAO.class);
 
-	private static final String SQL_TABLE_COMPANY = "company";
-	private static final String SQL_COLUMN_ID = "id";
-	private static final String SQL_COLUMN_NAME = "name";
+    private static final String SQL_TABLE_COMPANY = "company";
+    private static final String SQL_COLUMN_ID = "id";
+    private static final String SQL_COLUMN_NAME = "name";
 
-	public CompanyDAO(Connection connection) {
-		super(connection);
-	}
+    /**
+     * CompanyDAO should not be instantiated without parameters.
+     * @param connection
+     *            connection to use
+     */
+    CompanyDAO(Connection connection) {
+        super(connection);
+    }
 
-	/**
-	 * Persist new Company object.
-	 */
-	@Override
-	public boolean create(Company obj) {
-		try {
-			String query = "INSERT INTO " + SQL_TABLE_COMPANY + "(" + SQL_COLUMN_NAME + ") VALUES (?)";
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, obj.getName());
+    /**
+     * Persist new Company object.
+     */
+    @Override
+    public boolean create(Company obj) {
+        try {
+            String query = "INSERT INTO " + SQL_TABLE_COMPANY + "(" + SQL_COLUMN_NAME + ") VALUES (?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, obj.getName());
 
-			statement.executeUpdate();
-			this.connection.commit();
-		} catch (SQLException e) {
-			logger.error("could not insert Company object", e);
-			return false;
-		}
+            statement.executeUpdate();
+            this.connection.commit();
+        } catch (SQLException e) {
+            logger.error("could not insert Company object", e);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Delete Company object from data source.
-	 */
-	@Override
-	public boolean delete(Company obj) {
-		try {
-			String query = "DELETE FROM " + SQL_TABLE_COMPANY + " WHERE id = ?";
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setInt(1, obj.getId());
+    /**
+     * Delete Company object from data source.
+     */
+    @Override
+    public boolean delete(Company obj) {
+        try {
+            String query = "DELETE FROM " + SQL_TABLE_COMPANY + " WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, obj.getId());
 
-			statement.executeUpdate();
-			this.connection.commit();
-		} catch (SQLException e) {
-			logger.error("could not delete Company object", e);
-			return false;
-		}
+            statement.executeUpdate();
+            this.connection.commit();
+        } catch (SQLException e) {
+            logger.error("could not delete Company object", e);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Update Company object in data source.
-	 */
-	@Override
-	public boolean update(Company obj) {
-		try {
-			String query = "UPDATE " + SQL_TABLE_COMPANY + " SET " + SQL_COLUMN_NAME + " = ? WHERE " + SQL_COLUMN_ID
-					+ " = ?";
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, obj.getName());
-			statement.setInt(2, obj.getId());
+    /**
+     * Update Company object in data source.
+     */
+    @Override
+    public boolean update(Company obj) {
+        try {
+            String query = "UPDATE " + SQL_TABLE_COMPANY + " SET " + SQL_COLUMN_NAME + " = ? WHERE " + SQL_COLUMN_ID
+                    + " = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, obj.getName());
+            statement.setInt(2, obj.getId());
 
-			statement.executeUpdate();
-			this.connection.commit();
-		} catch (SQLException e) {
-			logger.error("could not update Company object", e);
-			return false;
-		}
+            statement.executeUpdate();
+            this.connection.commit();
+        } catch (SQLException e) {
+            logger.error("could not update Company object", e);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Retrieve Company object from data source given an id.
-	 */
-	@Override
-	public Company find(int id) {
-		Company company = null;
+    /**
+     * Retrieve Company object from data source given an id.
+     */
+    @Override
+    public Company find(int id) {
+        Company company = null;
 
-		try {
-			String query = "SELECT * FROM " + SQL_TABLE_COMPANY + " WHERE " + SQL_COLUMN_ID + " = ?";
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setInt(1, id);
+        try {
+            String query = "SELECT * FROM " + SQL_TABLE_COMPANY + " WHERE " + SQL_COLUMN_ID + " = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
 
-			ResultSet rs = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
 
-			if (rs.first()) {
-				company = new Company();
-				company.setId(rs.getInt(SQL_COLUMN_ID));
-				company.setName(rs.getString(SQL_COLUMN_NAME));
-			}
-		} catch (SQLException e) {
-			logger.error("could not find Company object", e);
-		}
+            if (rs.first()) {
+                company = new Company();
+                company.setId(rs.getInt(SQL_COLUMN_ID));
+                company.setName(rs.getString(SQL_COLUMN_NAME));
+            }
+        } catch (SQLException e) {
+            logger.error("could not find Company object", e);
+        }
 
-		return company;
-	}
+        return company;
+    }
 
-	/**
-	 * Fetch all Company objects available in data source.
-	 */
-	@Override
-	public List<Company> fetch() {
-		List<Company> companies = null;
+    /**
+     * Fetch all Company objects available in data source.
+     */
+    @Override
+    public List<Company> fetch() {
+        List<Company> companies = null;
 
-		try {
-			String query = "SELECT * FROM " + SQL_TABLE_COMPANY;
-			Statement statement = connection.createStatement();
+        try {
+            String query = "SELECT * FROM " + SQL_TABLE_COMPANY;
+            Statement statement = connection.createStatement();
 
-			ResultSet rs = statement.executeQuery(query);
-			companies = new ArrayList<>();
+            ResultSet rs = statement.executeQuery(query);
+            companies = new ArrayList<>();
 
-			while (rs.next()) {
-				Company company = new Company();
-				company.setId(rs.getInt(SQL_COLUMN_ID));
-				company.setName(rs.getString(SQL_COLUMN_NAME));
+            while (rs.next()) {
+                Company company = new Company();
+                company.setId(rs.getInt(SQL_COLUMN_ID));
+                company.setName(rs.getString(SQL_COLUMN_NAME));
 
-				companies.add(company);
-			}
-		} catch (SQLException e) {
-			logger.error("could not fetch Company objects", e);
-		}
+                companies.add(company);
+            }
+        } catch (SQLException e) {
+            logger.error("could not fetch Company objects", e);
+        }
 
-		return companies;
-	}
+        return companies;
+    }
+
+    @Override
+    public Page<Company> fetch(int limit, int offset) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Page<Company> fetchAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

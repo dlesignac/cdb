@@ -12,24 +12,29 @@ import fr.ebiz.cdb.model.Computer;
  */
 public class ComputersPage implements ContentPage {
 
-	private List<Computer> computers;
+    private List<Computer> computers;
 
-	public ComputersPage(List<Computer> computers) {
-		this.computers = computers;
-	}
+    /**
+     * Constructor.
+     * @param computers
+     *            list of computers
+     */
+    public ComputersPage(List<Computer> computers) {
+        this.computers = computers;
+    }
 
-	@Override
-	public String toDisplay() {
-		String display = "";
+    @Override
+    public String toDisplay() {
+        String display = "";
 
-		for (Computer computer : this.computers) {
-			display += StringUtils.leftPad(String.valueOf(computer.getId()), 6);
-			display += ". ";
-			display += computer.getName();
-			display += "\n";
-		}
+        for (Computer computer : this.computers) {
+            display += StringUtils.leftPad(String.valueOf(computer.getId()), 6);
+            display += ". ";
+            display += computer.getName();
+            display += "\n";
+        }
 
-		return display;
-	}
+        return display;
+    }
 
 }

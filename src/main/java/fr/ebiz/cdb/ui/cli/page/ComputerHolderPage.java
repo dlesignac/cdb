@@ -8,6 +8,10 @@ import fr.ebiz.cdb.model.Computer;
  */
 public interface ComputerHolderPage extends ContentPage {
 
-	Computer getComputer();
+    /**
+     * Gets computer held by the page.
+     * @return computer held by the page
+     */
+    Computer getComputer();
 
 }

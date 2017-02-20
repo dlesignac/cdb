@@ -8,26 +8,31 @@ import java.util.List;
  */
 public class HeaderPage implements PageComponent {
 
-	private List<String> levels;
+    private List<String> levels;
 
-	public HeaderPage(List<String> levels) {
-		this.levels = levels;
-	}
+    /**
+     * Constructor.
+     * @param levels
+     *            list of levels of navigation
+     */
+    public HeaderPage(List<String> levels) {
+        this.levels = levels;
+    }
 
-	@Override
-	public String toDisplay() {
-		String display = this.levels.get(0);
+    @Override
+    public String toDisplay() {
+        String display = this.levels.get(0);
 
-		int size = this.levels.size();
+        int size = this.levels.size();
 
-		for (int i = 1; i < size; i++) {
-			display += " > ";
-			display += this.levels.get(i);
-		}
+        for (int i = 1; i < size; i++) {
+            display += " > ";
+            display += this.levels.get(i);
+        }
 
-		display += "\n";
+        display += "\n";
 
-		return display;
-	}
+        return display;
+    }
 
 }
