@@ -9,14 +9,15 @@ import fr.ebiz.cdb.persistence.Page;
 
 public class ComputerDAOTest {
 
-	@Test
-	public void testFetch() {
-		DAO<Computer> dao = new DAOFactory(DBConnection.getInstance()).getComputerDAO();
-		Page<Computer> computers = dao.fetchAll();
+    @Test
+    public void testFetch() {
+        DAO<Computer> dao = new DAOFactory(DBConnection.getInstance()).getComputerDAO();
+        Page<Computer> computers = dao.fetchAll();
 
-		if (computers == null || computers.getEntries() == null || computers.getEntries().size() != 10) {
-			Assert.fail("null");
-		}
-	}
+        if (computers == null || computers.getEntries() == null || computers.getEntries().size() != 10) {
+            System.out.println(computers.getEntries().size());
+            Assert.fail("null");
+        }
+    }
 
 }

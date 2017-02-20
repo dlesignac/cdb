@@ -31,7 +31,7 @@ class ComputerDAO extends DAO<Computer> {
     private static final String SQL_COLUMN_NAME = "name";
     private static final String SQL_COLUMN_INTRODUCED = "introduced";
     private static final String SQL_COLUMN_DISCONTINUED = "discontinued";
-    private static final String SQL_COLUMN_COMPANY_ID = "companyId";
+    private static final String SQL_COLUMN_COMPANY_ID = "company_id";
 
     /**
      * ComputerDAO should not be instantiated without parameters.
@@ -42,9 +42,6 @@ class ComputerDAO extends DAO<Computer> {
         super(connection);
     }
 
-    /**
-     * Persist new Computer object.
-     */
     @Override
     public boolean create(Computer obj) {
         try {
@@ -85,9 +82,6 @@ class ComputerDAO extends DAO<Computer> {
         return true;
     }
 
-    /**
-     * Delete Computer object from data source.
-     */
     @Override
     public boolean delete(Computer obj) {
         try {
@@ -105,9 +99,6 @@ class ComputerDAO extends DAO<Computer> {
         return true;
     }
 
-    /**
-     * Update Computer object in data source.
-     */
     @Override
     public boolean update(Computer obj) {
         try {
@@ -151,9 +142,6 @@ class ComputerDAO extends DAO<Computer> {
         return true;
     }
 
-    /**
-     * Retrieve Computer object from data source given an id.
-     */
     @Override
     public Computer find(int id) {
         Computer computer = null;
@@ -192,9 +180,6 @@ class ComputerDAO extends DAO<Computer> {
         return computer;
     }
 
-    /**
-     * Fetch all Computers objects available in data source.
-     */
     @Override
     public List<Computer> fetch() {
         List<Computer> computers = null;
@@ -266,7 +251,7 @@ class ComputerDAO extends DAO<Computer> {
                 computers.add(computer);
             }
         } catch (SQLException e) {
-            // TODO
+            logger.error("SQLEXCEPTION MAGGLE", e);// TODO
         }
 
         return new Page<Computer>(limit, offset, computers);

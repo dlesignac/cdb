@@ -35,9 +35,6 @@ class CompanyDAO extends DAO<Company> {
         super(connection);
     }
 
-    /**
-     * Persist new Company object.
-     */
     @Override
     public boolean create(Company obj) {
         try {
@@ -55,9 +52,6 @@ class CompanyDAO extends DAO<Company> {
         return true;
     }
 
-    /**
-     * Delete Company object from data source.
-     */
     @Override
     public boolean delete(Company obj) {
         try {
@@ -75,9 +69,6 @@ class CompanyDAO extends DAO<Company> {
         return true;
     }
 
-    /**
-     * Update Company object in data source.
-     */
     @Override
     public boolean update(Company obj) {
         try {
@@ -97,9 +88,6 @@ class CompanyDAO extends DAO<Company> {
         return true;
     }
 
-    /**
-     * Retrieve Company object from data source given an id.
-     */
     @Override
     public Company find(int id) {
         Company company = null;
@@ -123,9 +111,6 @@ class CompanyDAO extends DAO<Company> {
         return company;
     }
 
-    /**
-     * Fetch all Company objects available in data source.
-     */
     @Override
     public List<Company> fetch() {
         List<Company> companies = null;
