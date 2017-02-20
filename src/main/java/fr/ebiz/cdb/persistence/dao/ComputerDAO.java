@@ -44,10 +44,10 @@ class ComputerDAO extends DAO<Computer> {
 
     @Override
     public boolean create(Computer obj) {
-        try {
-            String query = "INSERT INTO " + SQL_TABLE_COMPUTER + "(" + SQL_COLUMN_NAME + ", " + SQL_COLUMN_INTRODUCED
-                    + "," + SQL_COLUMN_DISCONTINUED + "," + SQL_COLUMN_COMPANY_ID + ") VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
+        String query = "INSERT INTO " + SQL_TABLE_COMPUTER + "(" + SQL_COLUMN_NAME + ", " + SQL_COLUMN_INTRODUCED + ","
+                + SQL_COLUMN_DISCONTINUED + "," + SQL_COLUMN_COMPANY_ID + ") VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, obj.getName());
 
             LocalDate introduced = obj.getIntroduced();
@@ -84,9 +84,9 @@ class ComputerDAO extends DAO<Computer> {
 
     @Override
     public boolean delete(Computer obj) {
-        try {
-            String query = "DELETE FROM " + SQL_TABLE_COMPUTER + " WHERE " + SQL_COLUMN_ID + " = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+        String query = "DELETE FROM " + SQL_TABLE_COMPUTER + " WHERE " + SQL_COLUMN_ID + " = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, obj.getId());
 
             statement.executeUpdate();
@@ -101,11 +101,11 @@ class ComputerDAO extends DAO<Computer> {
 
     @Override
     public boolean update(Computer obj) {
-        try {
-            String query = "UPDATE " + SQL_TABLE_COMPUTER + " SET " + SQL_COLUMN_NAME + " = ?, " + SQL_COLUMN_INTRODUCED
-                    + " = ?, " + SQL_COLUMN_DISCONTINUED + " = ?, " + SQL_COLUMN_COMPANY_ID + " = ?" + " WHERE "
-                    + SQL_COLUMN_ID + " = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+        String query = "UPDATE " + SQL_TABLE_COMPUTER + " SET " + SQL_COLUMN_NAME + " = ?, " + SQL_COLUMN_INTRODUCED
+                + " = ?, " + SQL_COLUMN_DISCONTINUED + " = ?, " + SQL_COLUMN_COMPANY_ID + " = ?" + " WHERE "
+                + SQL_COLUMN_ID + " = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query);) {
             statement.setString(1, obj.getName());
 
             LocalDate introduced = obj.getIntroduced();
@@ -145,31 +145,32 @@ class ComputerDAO extends DAO<Computer> {
     @Override
     public Computer find(int id) {
         Computer computer = null;
+        String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
+                + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
+                + "ON c1.company_id = c2.id";
 
-        try {
-            String query = "SELECT * FROM " + SQL_TABLE_COMPUTER + " WHERE " + SQL_COLUMN_ID + " = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+        try (PreparedStatement statement = connection.prepareStatement(query);) {
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
 
             if (rs.first()) {
                 computer = new Computer();
-                computer.setId(rs.getInt(SQL_COLUMN_ID));
-                computer.setName(rs.getString(SQL_COLUMN_NAME));
+                computer.setId(rs.getInt("computer_id"));
+                computer.setName(rs.getString("computer_name"));
 
-                Date introduced = rs.getDate(SQL_COLUMN_INTRODUCED);
-                Date discontinued = rs.getDate(SQL_COLUMN_DISCONTINUED);
+                Date introduced = rs.getDate("introduced");
+                Date discontinued = rs.getDate("discontinued");
 
                 computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
                 computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
 
-                Integer companyId = rs.getInt(SQL_COLUMN_COMPANY_ID);
+                Integer companyId = rs.getInt("company_id");
 
                 if (companyId != null) {
-                    DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
-
-                    Company company = companyDAO.find(companyId);
+                    Company company = new Company();
+                    company.setId(companyId);
+                    company.setName(rs.getString("company_name"));
                     computer.setManufacturer(company);
                 }
             }
@@ -181,48 +182,10 @@ class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public List<Computer> fetch() {
-        List<Computer> computers = null;
-
-        try {
-            String query = "SELECT * FROM " + SQL_TABLE_COMPUTER;
-            Statement statement = connection.createStatement();
-
-            ResultSet rs = statement.executeQuery(query);
-            computers = new ArrayList<>();
-
-            while (rs.next()) {
-                Computer computer = new Computer();
-                computer.setId(rs.getInt(SQL_COLUMN_ID));
-                computer.setName(rs.getString(SQL_COLUMN_NAME));
-
-                Date introduced = rs.getDate(SQL_COLUMN_INTRODUCED);
-                Date discontinued = rs.getDate(SQL_COLUMN_DISCONTINUED);
-
-                computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
-                computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
-
-                int companyId = rs.getInt(SQL_COLUMN_COMPANY_ID);
-
-                if (companyId != 0) {
-                    DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
-
-                    Company company = companyDAO.find(companyId);
-                    computer.setManufacturer(company);
-                }
-
-                computers.add(computer);
-            }
-        } catch (SQLException e) {
-            logger.error("could not fetch Computer objects", e);
-        }
-
-        return computers;
-    }
-
-    @Override
     public Page<Computer> fetch(int limit, int offset) {
-        String query = "SELECT * FROM " + SQL_TABLE_COMPUTER + " LIMIT " + limit + " OFFSET " + offset;
+        String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
+                + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
+                + "ON c1.company_id = c2.id LIMIT " + limit + " OFFSET " + offset;
         List<Computer> computers = new ArrayList<>();
 
         try (Statement stmt = connection.createStatement()) {
@@ -230,28 +193,28 @@ class ComputerDAO extends DAO<Computer> {
 
             while (rs.next()) {
                 Computer computer = new Computer();
-                computer.setId(rs.getInt(SQL_COLUMN_ID));
-                computer.setName(rs.getString(SQL_COLUMN_NAME));
+                computer.setId(rs.getInt("computer_id"));
+                computer.setName(rs.getString("computer_name"));
 
-                Date introduced = rs.getDate(SQL_COLUMN_INTRODUCED);
-                Date discontinued = rs.getDate(SQL_COLUMN_DISCONTINUED);
+                Date introduced = rs.getDate("introduced");
+                Date discontinued = rs.getDate("discontinued");
 
                 computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
                 computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
 
-                int companyId = rs.getInt(SQL_COLUMN_COMPANY_ID);
+                Integer companyId = rs.getInt("company_id");
 
-                if (companyId != 0) {
-                    DAO<Company> companyDAO = new DAOFactory(this.connection).getCompanyDAO();
-
-                    Company company = companyDAO.find(companyId);
+                if (companyId != null) {
+                    Company company = new Company();
+                    company.setId(companyId);
+                    company.setName(rs.getString("company_name"));
                     computer.setManufacturer(company);
                 }
 
                 computers.add(computer);
             }
         } catch (SQLException e) {
-            logger.error("SQLEXCEPTION MAGGLE", e);// TODO
+            logger.error("", e); // TODO
         }
 
         return new Page<Computer>(limit, offset, computers);

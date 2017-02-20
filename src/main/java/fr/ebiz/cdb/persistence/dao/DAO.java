@@ -1,7 +1,6 @@
 package fr.ebiz.cdb.persistence.dao;
 
 import java.sql.Connection;
-import java.util.List;
 
 import fr.ebiz.cdb.persistence.Page;
 
@@ -53,12 +52,6 @@ public abstract class DAO<T> {
      * @return entry
      */
     public abstract T find(int id);
-
-    /**
-     * Fetches all object entries from data source.
-     * @return pager on entry list
-     */
-    public abstract List<T> fetch();
 
     /**
      * Fetches all object entries from data source.

@@ -112,40 +112,30 @@ class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public List<Company> fetch() {
-        List<Company> companies = null;
+    public Page<Company> fetch(int limit, int offset) {
+        String query = "SELECT id, name FROM company LIMIT " + limit + " OFFSET " + offset;
+        List<Company> companies = new ArrayList<>();
 
-        try {
-            String query = "SELECT * FROM " + SQL_TABLE_COMPANY;
-            Statement statement = connection.createStatement();
-
-            ResultSet rs = statement.executeQuery(query);
-            companies = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 Company company = new Company();
-                company.setId(rs.getInt(SQL_COLUMN_ID));
-                company.setName(rs.getString(SQL_COLUMN_NAME));
+                company.setId(rs.getInt("id"));
+                company.setName(rs.getString("name"));
 
                 companies.add(company);
             }
         } catch (SQLException e) {
-            logger.error("could not fetch Company objects", e);
+            logger.error("", e); // TODO
         }
 
-        return companies;
-    }
-
-    @Override
-    public Page<Company> fetch(int limit, int offset) {
-        // TODO Auto-generated method stub
-        return null;
+        return new Page<Company>(limit, offset, companies);
     }
 
     @Override
     public Page<Company> fetchAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return fetch(10, 0);
     }
 
 }
