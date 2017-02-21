@@ -1,3 +1,4 @@
+/*
 package fr.ebiz.cdb.ui.cli;
 
 import java.time.LocalDate;
@@ -20,18 +21,22 @@ import fr.ebiz.cdb.ui.cli.page.FullPage;
 import fr.ebiz.cdb.ui.cli.page.Page;
 import fr.ebiz.cdb.ui.cli.page.PageBuilder;
 
+*/
 /**
  * Command Line Interface.
- */
+ *//*
+
 public class CLI {
 
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
 
-    /**
+    */
+/**
      * CLI entry point.
      * @param args
      *            entry point arguments
-     */
+     *//*
+
     public static void main(String[] args) {
         new CLI().loop();
     }
@@ -42,9 +47,11 @@ public class CLI {
     private Page nextPage;
     private CLIStatus status;
 
-    /**
+    */
+/**
      * Default constructor.
-     */
+     *//*
+
     public CLI() {
         DAOFactory daoFactory = new DAOFactory(DBConnection.getInstance());
         this.companyDAO = daoFactory.getCompanyDAO();
@@ -55,9 +62,11 @@ public class CLI {
         this.status = CLIStatus.INDEX;
     }
 
-    /**
+    */
+/**
      * Main loop. Prints pages and waits for user inputs.
-     */
+     *//*
+
     public void loop() {
         while (this.status != CLIStatus.EXIT) {
             this.nextPage.display();
@@ -79,9 +88,11 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Waits for and manages user inputs.
-     */
+     *//*
+
     private void listen() {
         String[] input = this.in.nextLine().split(" ");
 
@@ -109,11 +120,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for index page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doIndex(String[] input) {
         if (CLIOptions.QUIT.equals(input[0])) {
             this.status = CLIStatus.EXIT;
@@ -128,11 +141,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for computer list page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doComputers(String[] input) {
         if (CLIOptions.BACK.equals(input[0])) {
             callIndex();
@@ -156,11 +171,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for computer details page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doComputer(String[] input) {
         if (CLIOptions.BACK.equals(input[0])) {
             callComputers();
@@ -174,11 +191,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for company list page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doCompanies(String[] input) {
         if (CLIOptions.BACK.equals(input[0])) {
             callIndex();
@@ -187,11 +206,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for computer editing page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doComputerEdit(String[] input) {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callComputerBack();
@@ -204,11 +225,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for computer creating page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doComputerCreate(String[] input) {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callIndex();
@@ -221,11 +244,13 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Action listener for computer changing details page.
      * @param input
      *            user input
-     */
+     *//*
+
     private void doComputerChange(String[] input) {
         if (CLIOptions.NEW_NAME.equals(input[0])) {
             if (input.length < 2) {
@@ -291,117 +316,144 @@ public class CLI {
         }
     }
 
-    /**
+    */
+/**
      * Calls index page.
-     */
+     *//*
+
     private void callIndex() {
         this.nextPage = new PageBuilder().buildIndex();
         this.status = CLIStatus.INDEX;
     }
 
-    /**
+    */
+/**
      * Calls computer list page.
-     */
+     *//*
+
     private void callComputers() {
         List<Computer> computers = this.computerDAO.fetch();
         this.nextPage = new PageBuilder().buildComputers(computers);
         this.status = CLIStatus.COMPUTERS;
     }
 
-    /**
+    */
+/**
      * Calls computer details page.
      * @param computer
      *            computer to be detailed.
-     */
+     *//*
+
     private void callComputer(Computer computer) {
         this.nextPage = new PageBuilder().buildComputer(computer);
         this.status = CLIStatus.COMPUTER;
     }
 
-    /**
+    */
+/**
      * Calls company list page.
-     */
+     *//*
+
     private void callCompanies() {
         List<Company> companies = this.companyDAO.fetch();
         this.nextPage = new PageBuilder().buildCompanies(companies);
         this.status = CLIStatus.COMPANIES;
     }
 
-    /**
+    */
+/**
      * Calls computer editing page.
-     */
+     *//*
+
     private void callComputerEdit() {
         Computer computer = getComputerFromPage();
         this.nextPage = new PageBuilder().buildComputerEdit(computer);
         this.status = CLIStatus.COMPUTER_EDIT;
     }
 
-    /**
+    */
+/**
      * Calls computer details page back.
-     */
+     *//*
+
     private void callComputerBack() {
         Computer computer = getComputerFromPage();
         computer = this.getComputerById(computer.getId());
         callComputer(computer);
     }
 
-    /**
+    */
+/**
      * Calls computer creation page.
      * @param computer
      *            the computer to be created.
-     */
+     *//*
+
     private void callComputerCreate(Computer computer) {
         this.nextPage = new PageBuilder().buildComputerCreate(computer);
         this.status = CLIStatus.COMPUTER_CREATE;
     }
 
-    /**
+    */
+/**
      * Calls invalid input page component.
-     */
+     *//*
+
     private void callErrorInvalidInput() {
         this.nextPage.setError("Invalid input");
     }
 
-    /**
+    */
+/**
      * Calls missing parameter page component.
-     */
+     *//*
+
     private void callErrorMissingParameter() {
         this.nextPage.setError("Missing parameter");
     }
 
-    /**
+    */
+/**
      * Calls invalid parameter page component.
-     */
+     *//*
+
     private void callErrorInvalidParameter() {
         this.nextPage.setError("Invalid parameter");
     }
 
-    /**
+    */
+/**
      * Deletes computer.
-     */
+     *//*
+
     private void deleteComputer() {
         ComputerPage page = (ComputerPage) ((FullPage) this.nextPage).getContentPage();
         Computer computer = page.getComputer();
         this.computerDAO.delete(computer);
     }
 
-    /**
+    */
+/**
      * Gets computer by id using DAO.
      * @param id
      *            computer's id
      * @return object computer
-     */
+     *//*
+
     private Computer getComputerById(int id) {
         return this.computerDAO.find(id);
     }
 
-    /**
+    */
+/**
      * Gets computers held by last page.
      * @return object computer
-     */
+     *//*
+
     private Computer getComputerFromPage() {
         ComputerHolderPage page = (ComputerHolderPage) ((FullPage) this.nextPage).getContentPage();
         return page.getComputer();
     }
 
 }
+*/

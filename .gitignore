@@ -4,3 +4,6 @@
 .project
 .tern-project
 /.settings/
+*.iml
+/.idea/
+*.log

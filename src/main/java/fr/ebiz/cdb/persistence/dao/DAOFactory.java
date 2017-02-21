@@ -2,11 +2,8 @@ package fr.ebiz.cdb.persistence.dao;
 
 import java.sql.Connection;
 
-import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.model.Computer;
-
 /**
- * DAO Factory. Abstracts DAO objects instantiation.
+ * DAO Factory.
  */
 public class DAOFactory {
 
@@ -14,27 +11,29 @@ public class DAOFactory {
 
     /**
      * Constructor.
-     * @param connection
-     *            connection to use
+     *
+     * @param connection connection to use
      */
     public DAOFactory(Connection connection) {
         this.connection = connection;
     }
 
     /**
-     * Returns new instance of ComputerDAO.
+     * Returns new instance of DAOComputer.
+     *
      * @return computer dao
      */
-    public DAO<Computer> getComputerDAO() {
-        return new ComputerDAO(connection);
+    public IDAOComputer getComputerDAO() {
+        return new DAOComputer(connection);
     }
 
     /**
-     * Returns new instance of CompanyDAO.
+     * Returns new instance of DAOCompany.
+     *
      * @return company dao
      */
-    public DAO<Company> getCompanyDAO() {
-        return new CompanyDAO(connection);
+    public IDAOCompany getCompanyDAO() {
+        return new DAOCompany(connection);
     }
 
 }

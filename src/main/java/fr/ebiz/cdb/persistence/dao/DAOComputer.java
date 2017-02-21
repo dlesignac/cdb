@@ -5,12 +5,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.ebiz.cdb.persistence.exception.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,40 +19,31 @@ import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.Page;
 
 /**
- * Computer DAO. Interacts with a data source to persist and retrieve Computer
- * objects.
+ * Computer DAO.
  */
-class ComputerDAO extends DAO<Computer> {
+class DAOComputer extends DAO implements IDAOComputer {
 
     private Logger logger = LoggerFactory.getLogger(DAO.class);
 
-    private static final String SQL_TABLE_COMPUTER = "computer";
-    private static final String SQL_COLUMN_ID = "id";
-    private static final String SQL_COLUMN_NAME = "name";
-    private static final String SQL_COLUMN_INTRODUCED = "introduced";
-    private static final String SQL_COLUMN_DISCONTINUED = "discontinued";
-    private static final String SQL_COLUMN_COMPANY_ID = "company_id";
-
     /**
-     * ComputerDAO should not be instantiated without parameters.
-     * @param connection
-     *            connection to use
+     * Constructor.
+     *
+     * @param connection connection to use
      */
-    ComputerDAO(Connection connection) {
+    DAOComputer(Connection connection) {
         super(connection);
     }
 
     @Override
-    public boolean create(Computer obj) {
-        String query = "INSERT INTO " + SQL_TABLE_COMPUTER + "(" + SQL_COLUMN_NAME + ", " + SQL_COLUMN_INTRODUCED + ","
-                + SQL_COLUMN_DISCONTINUED + "," + SQL_COLUMN_COMPANY_ID + ") VALUES (?, ?, ?, ?)";
+    public boolean create(Computer computer) {
+        String query = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, obj.getName());
+            statement.setString(1, computer.getName());
 
-            LocalDate introduced = obj.getIntroduced();
-            LocalDate discontinued = obj.getDiscontinued();
-            Company company = obj.getManufacturer();
+            LocalDate introduced = computer.getIntroduced();
+            LocalDate discontinued = computer.getDiscontinued();
+            Company company = computer.getManufacturer();
 
             if (introduced == null) {
                 statement.setNull(2, Types.DATE);
@@ -75,7 +66,7 @@ class ComputerDAO extends DAO<Computer> {
             statement.executeUpdate();
             this.connection.commit();
         } catch (SQLException e) {
-            logger.error("could not insert Computer object", e);
+            logger.error("could not insert computer", e);
             return false;
         }
 
@@ -83,16 +74,16 @@ class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public boolean delete(Computer obj) {
-        String query = "DELETE FROM " + SQL_TABLE_COMPUTER + " WHERE " + SQL_COLUMN_ID + " = ?";
+    public boolean delete(Computer computer) {
+        String query = "DELETE FROM computer WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, obj.getId());
+            statement.setInt(1, computer.getId());
 
             statement.executeUpdate();
             this.connection.commit();
         } catch (SQLException e) {
-            logger.error("could not delete Computer object", e);
+            logger.error("could not delete computer", e);
             return false;
         }
 
@@ -100,17 +91,15 @@ class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public boolean update(Computer obj) {
-        String query = "UPDATE " + SQL_TABLE_COMPUTER + " SET " + SQL_COLUMN_NAME + " = ?, " + SQL_COLUMN_INTRODUCED
-                + " = ?, " + SQL_COLUMN_DISCONTINUED + " = ?, " + SQL_COLUMN_COMPANY_ID + " = ?" + " WHERE "
-                + SQL_COLUMN_ID + " = ?";
+    public boolean update(Computer computer) {
+        String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(query);) {
-            statement.setString(1, obj.getName());
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, computer.getName());
 
-            LocalDate introduced = obj.getIntroduced();
-            LocalDate discontinued = obj.getDiscontinued();
-            Company company = obj.getManufacturer();
+            LocalDate introduced = computer.getIntroduced();
+            LocalDate discontinued = computer.getDiscontinued();
+            Company company = computer.getManufacturer();
 
             if (introduced == null) {
                 statement.setNull(2, Types.DATE);
@@ -130,12 +119,12 @@ class ComputerDAO extends DAO<Computer> {
                 statement.setInt(4, company.getId());
             }
 
-            statement.setInt(5, obj.getId());
+            statement.setInt(5, computer.getId());
 
             statement.executeUpdate();
             this.connection.commit();
         } catch (SQLException e) {
-            logger.error("could not update Computer object", e);
+            logger.error("could not update computer", e);
             return false;
         }
 
@@ -143,19 +132,18 @@ class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public Computer find(int id) {
-        Computer computer = null;
+    public Computer find(int id) throws PersistenceException {
         String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
                 + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
                 + "ON c1.company_id = c2.id";
 
-        try (PreparedStatement statement = connection.prepareStatement(query);) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
 
             if (rs.first()) {
-                computer = new Computer();
+                Computer computer = new Computer();
                 computer.setId(rs.getInt("computer_id"));
                 computer.setName(rs.getString("computer_name"));
 
@@ -165,31 +153,52 @@ class ComputerDAO extends DAO<Computer> {
                 computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
                 computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
 
-                Integer companyId = rs.getInt("company_id");
+                int companyId = rs.getInt("company_id");
 
-                if (companyId != null) {
+                if (companyId != 0) {
                     Company company = new Company();
                     company.setId(companyId);
                     company.setName(rs.getString("company_name"));
                     computer.setManufacturer(company);
                 }
+
+                return computer;
             }
         } catch (SQLException e) {
-            logger.error("could not find Computer object", e);
+            logger.error("could not find computer", e);
+            throw new PersistenceException();
         }
 
-        return computer;
+        return null;
     }
 
     @Override
-    public Page<Computer> fetch(int limit, int offset) {
+    public int count() throws PersistenceException {
+        String query = "SELECT count(id) FROM computer";
+
+        try (PreparedStatement statement = this.connection.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.first()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            logger.error("could not count computers", e);
+        }
+
+        throw new PersistenceException();
+    }
+
+    @Override
+    public Page<Computer> fetch(int limit, int offset) throws PersistenceException {
         String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
                 + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
                 + "ON c1.company_id = c2.id LIMIT " + limit + " OFFSET " + offset;
-        List<Computer> computers = new ArrayList<>();
 
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(query);
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+            List<Computer> computers = new ArrayList<>();
 
             while (rs.next()) {
                 Computer computer = new Computer();
@@ -202,9 +211,9 @@ class ComputerDAO extends DAO<Computer> {
                 computer.setIntroduced(introduced == null ? null : introduced.toLocalDate());
                 computer.setDiscontinued(discontinued == null ? null : discontinued.toLocalDate());
 
-                Integer companyId = rs.getInt("company_id");
+                int companyId = rs.getInt("company_id");
 
-                if (companyId != null) {
+                if (companyId != 0) {
                     Company company = new Company();
                     company.setId(companyId);
                     company.setName(rs.getString("company_name"));
@@ -213,16 +222,13 @@ class ComputerDAO extends DAO<Computer> {
 
                 computers.add(computer);
             }
+
+            return new Page<>(limit, offset, computers);
         } catch (SQLException e) {
-            logger.error("", e); // TODO
+            logger.error("could not find computers", e);
         }
 
-        return new Page<Computer>(limit, offset, computers);
-    }
-
-    @Override
-    public Page<Computer> fetchAll() {
-        return fetch(10, 0);
+        throw new PersistenceException();
     }
 
 }
