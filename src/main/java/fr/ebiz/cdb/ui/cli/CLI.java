@@ -14,7 +14,7 @@ import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.DBConnection;
 import fr.ebiz.cdb.persistence.dao.DAO;
 import fr.ebiz.cdb.persistence.dao.DAOFactory;
-import fr.ebiz.cdb.service.validator.ComputerValidator;
+import ComputerValidator;
 import fr.ebiz.cdb.ui.cli.page.ComputerHolderPage;
 import fr.ebiz.cdb.ui.cli.page.ComputerPage;
 import fr.ebiz.cdb.ui.cli.page.FullPage;
@@ -256,7 +256,7 @@ public class CLI {
             if (input.length < 2) {
                 callErrorMissingParameter();
             } else {
-                if (ComputerValidator.validateName(input[1])) {
+                if (ValidatorComputer.validateName(input[1])) {
                     Computer computer = getComputerFromPage();
                     computer.setName(input[1]);
                 } else {
@@ -269,7 +269,7 @@ public class CLI {
             if (input.length >= 2) {
                 String date = input[1];
 
-                if (ComputerValidator.validateIntroduced(date)) {
+                if (ValidatorComputer.validateIntroduced(date)) {
 
                     LocalDate introduced = LocalDate.parse(date);
                     computer.setIntroduced(introduced);
@@ -287,7 +287,7 @@ public class CLI {
             if (input.length >= 2) {
                 String date = input[1];
 
-                if (ComputerValidator.validateDiscontinued(date, computer)) {
+                if (ValidatorComputer.validateDiscontinued(date, computer)) {
                     LocalDate discontinued = LocalDate.parse(date);
                     computer.setDiscontinued(discontinued);
                 } else {

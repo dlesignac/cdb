@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.Page;
 
 /**
  * Computer DAO.
@@ -190,11 +189,10 @@ class DAOComputer extends DAO implements IDAOComputer {
     }
 
     @Override
-    public Page<Computer> fetch(int limit, int offset) throws PersistenceException {
+    public List<Computer> fetch(int limit, int offset) throws PersistenceException {
         String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
                 + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
-                + "ON c1.company_id = c2.id LIMIT " + limit + " OFFSET " + offset;
-
+                + "ON c1.company_id = c2.id LIMIT " + limit + " OFFSET " + offset * limit;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet rs = statement.executeQuery();
@@ -223,7 +221,7 @@ class DAOComputer extends DAO implements IDAOComputer {
                 computers.add(computer);
             }
 
-            return new Page<>(limit, offset, computers);
+            return computers;
         } catch (SQLException e) {
             logger.error("could not find computers", e);
         }

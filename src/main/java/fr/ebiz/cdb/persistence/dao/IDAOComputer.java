@@ -1,8 +1,9 @@
 package fr.ebiz.cdb.persistence.dao;
 
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.Page;
 import fr.ebiz.cdb.persistence.exception.PersistenceException;
+
+import java.util.List;
 
 /**
  * DAOComputer interface.
@@ -55,9 +56,9 @@ public interface IDAOComputer {
      *
      * @param limit  max number of entries
      * @param offset number of pages to skip
-     * @return paginated entries
+     * @return entries
      * @throws PersistenceException an unexpected error occurred
      */
-    Page<Computer> fetch(int limit, int offset) throws PersistenceException;
+    List<Computer> fetch(int limit, int offset) throws PersistenceException;
 
 }

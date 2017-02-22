@@ -2,6 +2,7 @@
 <html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <jsp:include page="/WEB-INF/pages/head.jsp" />
 
 <body>
@@ -9,7 +10,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${count} Computers found</h1>
+			<h1 id="homeTitle">${computersCount} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -57,7 +58,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-				    <c:forEach items="${computers}" var="computer">
+				    <c:forEach items="${page.entries}" var="computer">
 				        <tr>
                     		<td class="editMode"><input type="checkbox" name="cb" class="cb" value="0"></td>
                     		<td><a href="editComputer.html" onclick="">${computer.name}</a></td>
@@ -71,7 +72,7 @@
 		</div>
 	</section>
 
-    <jsp:include page="/WEB-INF/pages/footer.jsp" />
+	<jsp:include page="/WEB-INF/pages/footer.jsp" />
 
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
