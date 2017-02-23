@@ -1,6 +1,5 @@
 package fr.ebiz.cdb.servlet;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,8 +17,7 @@ public class ServletError404 extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ERROR_404_JSP);
-        dispatcher.forward(req, resp);
+        getServletContext().getRequestDispatcher(ERROR_404_JSP).forward(req, resp);
     }
 
 }

@@ -118,7 +118,7 @@ public class FrameBuilder {
         options.add(new Option(CLIOptions.NEW_DISCONTINUED, "new discontinued"));
         options.add(new Option(CLIOptions.NEW_MANUFACTURER, "new company id"));
         options.add(new Option(CLIOptions.SAVE, "save"));
-        options.add(new Option(CLIOptions.BACK, "back"));
+        options.add(new Option(CLIOptions.CANCEL, "cancel"));
         frame.setOptions(options);
 
         return frame;
@@ -148,7 +148,7 @@ public class FrameBuilder {
         options.add(new Option(CLIOptions.NEW_DISCONTINUED, "new discontinued"));
         options.add(new Option(CLIOptions.NEW_MANUFACTURER, "new company id"));
         options.add(new Option(CLIOptions.SAVE, "save"));
-        options.add(new Option(CLIOptions.BACK, "back"));
+        options.add(new Option(CLIOptions.CANCEL, "cancel"));
         frame.setOptions(options);
 
         return frame;

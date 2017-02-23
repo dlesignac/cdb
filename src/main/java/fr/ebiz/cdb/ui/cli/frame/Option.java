@@ -1,8 +1,7 @@
 package fr.ebiz.cdb.ui.cli.frame;
 
 /**
- * Navigation Option. Describes a CLI navigation option that can be passed to a
- * OptionsPage in order to be displayed.
+ * Navigation Option.
  */
 public class Option {
 
@@ -11,12 +10,11 @@ public class Option {
 
     /**
      * Constructor.
-     * @param id
-     *            option id
-     * @param description
-     *            option description
+     *
+     * @param id          option id
+     * @param description option description
      */
-    public Option(String id, String description) {
+    Option(String id, String description) {
         this.id = id;
         this.description = description;
     }

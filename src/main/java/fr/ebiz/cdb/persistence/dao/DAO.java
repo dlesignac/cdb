@@ -6,9 +6,9 @@ import java.sql.Connection;
  * DAO interface.
  * Abstracts interactions with a data source.
  */
-public abstract class DAO {
+abstract class DAO {
 
-    protected Connection connection = null;
+    Connection connection = null;
 
     /**
      * Constructor.

@@ -1,6 +1,5 @@
 package fr.ebiz.cdb.servlet;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,12 +13,13 @@ import java.io.IOException;
 @WebServlet("/error500")
 public class ServletError500 extends HttpServlet {
 
+    static final String URL = "/error500";
+
     private static final String ERROR_500_JSP = "/WEB-INF/pages/500.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ERROR_500_JSP);
-        dispatcher.forward(req, resp);
+        getServletContext().getRequestDispatcher(ERROR_500_JSP).forward(req, resp);
     }
 
 }

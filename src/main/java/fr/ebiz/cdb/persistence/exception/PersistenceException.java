@@ -1,7 +1,7 @@
 package fr.ebiz.cdb.persistence.exception;
 
 /**
- * Created by ebiz on 21/02/17.
+ * Persistence exception.
  */
 public class PersistenceException extends Exception {
 

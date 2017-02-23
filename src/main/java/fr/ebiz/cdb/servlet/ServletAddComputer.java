@@ -7,7 +7,6 @@ import fr.ebiz.cdb.persistence.exception.PersistenceException;
 import fr.ebiz.cdb.service.datasource.ServiceDatasource;
 import fr.ebiz.cdb.service.validator.exception.ValidationException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +24,7 @@ public class ServletAddComputer extends HttpServlet {
     private static final String ADD_COMPUTER_JSP = "/WEB-INF/pages/addComputer.jsp";
 
     private static final String REQUEST_ATTRIBUTE_COMPANIES = "companies";
-    private static final String REQUEST_ATTRIBUTE_SUCCESS = "success";
+    private static final String REQUEST_ATTRIBUTE_STATUS = "status";
 
     private static final String REQUEST_PARAMETER_COMPUTER_NAME = "computerName";
     private static final String REQUEST_PARAMETER_INTRODUCED = "introduced";
@@ -39,10 +38,9 @@ public class ServletAddComputer extends HttpServlet {
         try {
             List<Company> companies = dsService.listCompanies();
             req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP);
-            dispatcher.forward(req, resp);
+            getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
         } catch (PersistenceException e) {
-            resp.sendError(500);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
         }
     }
 
@@ -54,16 +52,19 @@ public class ServletAddComputer extends HttpServlet {
         String companyId = req.getParameter(REQUEST_PARAMETER_COMPANY_ID);
 
         try {
+            List<Company> companies = dsService.listCompanies();
+            req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
+
             Computer computer = MapperComputer.map(computerName, introduced, discontinued, companyId);
             dsService.createComputer(computer);
 
-            List<Company> companies = dsService.listCompanies();
-            req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
-            req.setAttribute(REQUEST_ATTRIBUTE_SUCCESS, true);
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP);
-            dispatcher.forward(req, resp);
-        } catch (PersistenceException | ValidationException e) {
-            resp.sendError(500);
+            req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "success");
+            getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
+        } catch (ValidationException e) {
+            req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "error");
+            getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
+        } catch (PersistenceException e) {
+            resp.sendRedirect(req.getContextPath() + ServletError500.URL);
         }
     }
 

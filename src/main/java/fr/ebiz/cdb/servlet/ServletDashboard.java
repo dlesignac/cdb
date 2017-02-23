@@ -2,10 +2,8 @@ package fr.ebiz.cdb.servlet;
 
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.service.datasource.Page;
-import fr.ebiz.cdb.persistence.exception.PersistenceException;
 import fr.ebiz.cdb.service.datasource.ServiceDatasource;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,12 +45,9 @@ public class ServletDashboard extends HttpServlet {
             req.setAttribute(REQUEST_ATTRIBUTE_COMPUTERS_COUNT, computersCount);
             req.setAttribute(REQUEST_ATTRIBUTE_PAGE, page);
 
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(DASHBOARD_JSP);
-            dispatcher.forward(req, resp);
-        } catch (PersistenceException e) {
-            // TODO
+            getServletContext().getRequestDispatcher(DASHBOARD_JSP).forward(req, resp);
         } catch (Exception e) {
-            resp.sendError(500);
+            resp.sendRedirect(req.getContextPath() + ServletError500.URL);
         }
     }
 
