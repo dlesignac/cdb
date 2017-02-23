@@ -31,7 +31,7 @@
         </a></li>
     </c:if>
     <c:forEach var="i" begin="${begin}" end="${end}">
-        <li><a href="?limit=${limit}&page=${i}">${i}</a></li>
+        <li<c:if test="${i == number}"> class="active"</c:if>><a href="?limit=${limit}&page=${i}">${i}</a></li>
     </c:forEach>
     <c:if test="${number != count}">
         <li><a href="?limit=${limit}&page=${number + 1}" aria-label="Next">
