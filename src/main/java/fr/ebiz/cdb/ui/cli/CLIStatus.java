@@ -11,32 +11,32 @@ enum CLIStatus {
     EXIT,
 
     /**
-     * CLI is currently running the index page.
+     * CLI is currently running the index frame.
      */
     INDEX,
 
     /**
-     * CLI is currently running the Computers List page.
+     * CLI is currently running the Computers List frame.
      */
     COMPUTERS,
 
     /**
-     * CLI is currently running the Computer Details page.
+     * CLI is currently running the Computer Details frame.
      */
     COMPUTER,
 
     /**
-     * CLI is currently running the Companies List page.
+     * CLI is currently running the Companies List frame.
      */
     COMPANIES,
 
     /**
-     * CLI is currently running the Computer Edit page.
+     * CLI is currently running the Computer Edit frame.
      */
     COMPUTER_EDIT,
 
     /**
-     * CLI is currently running the Computer Create page.
+     * CLI is currently running the Computer Create frame.
      */
     COMPUTER_CREATE;
 

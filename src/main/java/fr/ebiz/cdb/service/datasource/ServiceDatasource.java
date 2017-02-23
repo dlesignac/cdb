@@ -39,6 +39,35 @@ public class ServiceDatasource {
     }
 
     /**
+     * Deletes computer into datasource.
+     *
+     * @param computer computer to be deleted
+     */
+    public void deleteComputer(Computer computer) {
+        this.daoComputer.delete(computer);
+    }
+
+    /**
+     * Updates computer into datasource.
+     *
+     * @param computer computer to be updated
+     */
+    public void updateComputer(Computer computer) {
+        this.daoComputer.update(computer);
+    }
+
+    /**
+     * Find computer by id.
+     *
+     * @param id computer's id
+     * @return computer
+     * @throws PersistenceException unexpected error occurred
+     */
+    public Computer findComputer(int id) throws PersistenceException {
+        return this.daoComputer.find(id);
+    }
+
+    /**
      * Fetches computers.
      *
      * @param limit  max number of computers
@@ -53,7 +82,7 @@ public class ServiceDatasource {
     /**
      * Gets computers count.
      *
-     * @return computers cout
+     * @return computers count
      * @throws PersistenceException unexpected error occurred
      */
     public int countComputers() throws PersistenceException {
@@ -61,11 +90,11 @@ public class ServiceDatasource {
     }
 
     /**
-     * Gets a page of computers.
+     * Gets a frame of computers.
      *
      * @param limit  max number of computers
-     * @param number number of requested page
-     * @return page of computers
+     * @param number number of requested frame
+     * @return frame of computers
      * @throws PersistenceException unexpected error occurred
      */
     public Page<Computer> pageComputers(int limit, int number) throws PersistenceException {
@@ -73,6 +102,17 @@ public class ServiceDatasource {
         int pageCount = (computersCount + limit - 1) / limit;
         List<Computer> computers = listComputers(limit, number - 1);
         return new Page<>(limit, pageCount, number, computers);
+    }
+
+    /**
+     * Find company by id.
+     *
+     * @param id company's id
+     * @return company
+     * @throws PersistenceException unexpected error occurred
+     */
+    public Company findCompany(int id) throws PersistenceException {
+        return this.daoCompany.find(id);
     }
 
     /**

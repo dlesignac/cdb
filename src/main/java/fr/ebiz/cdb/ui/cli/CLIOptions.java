@@ -16,5 +16,7 @@ public abstract class CLIOptions {
     public static final String NEW_INTRODUCED = "2";
     public static final String NEW_DISCONTINUED = "3";
     public static final String NEW_MANUFACTURER = "4";
+    public static final String PREVIOUS_PAGE = "<";
+    public static final String NEXT_PAGE = ">";
 
 }

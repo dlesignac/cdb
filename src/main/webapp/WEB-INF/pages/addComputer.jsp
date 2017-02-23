@@ -12,23 +12,24 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="${pageContext.request.contextPath}/add-computer" method="POST">
+                    <form id="addComputerForm" action="${pageContext.request.contextPath}/add-computer" method="POST">
                         <fieldset>
-                            <div class="form-group">
+                            <div id="computerNameContainer" class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
                             </div>
-                            <div class="form-group">
+                            <div id="introducedContainer" class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
                             </div>
-                            <div class="form-group">
+                            <div id="discontinuedContainer" class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
                             </div>
-                            <div class="form-group">
+                            <div id="companyIdContainer" class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId" >
+                                    <option value=""></option>
                                     <c:forEach items="${companies}" var="company">
                                         <option value="${company.id}">${company.name}</option>
                                     </c:forEach>
@@ -44,11 +45,15 @@
                 </div>
             </div>
             <c:if test="${not empty success}">
-                <div class="col-xs-8 col-xs-offset-2 box">
-                    <p>Successfully added computer !</p>
+                <div class="col-xs-8 col-xs-offset-2 box has-success">
+                    Successfully added computer !
                 </div>
             </c:if>
         </div>
     </section>
+
+    <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/addComputer.js"></script>
 </body>
 </html>

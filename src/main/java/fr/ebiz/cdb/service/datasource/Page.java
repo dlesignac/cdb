@@ -14,7 +14,7 @@ public class Page<T> {
      *
      * @param limit   max number of entries
      * @param count   number of pages
-     * @param number  current page number
+     * @param number  current frame number
      * @param entries entry list
      */
     public Page(int limit, int count, int number, List<T> entries) {

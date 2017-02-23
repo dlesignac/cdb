@@ -132,9 +132,9 @@ class DAOComputer extends DAO implements IDAOComputer {
 
     @Override
     public Computer find(int id) throws PersistenceException {
-        String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
-                + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
-                + "ON c1.company_id = c2.id";
+        String query = "SELECT c1.id as computer_id, c1.name AS computer_name, c1.introduced, c1.discontinued, "
+                + "c2.id AS company_id, c2.name AS company_name FROM computer c1 LEFT OUTER JOIN company c2 "
+                + "ON c1.company_id = c2.id WHERE c1.id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -190,8 +190,8 @@ class DAOComputer extends DAO implements IDAOComputer {
 
     @Override
     public List<Computer> fetch(int limit, int offset) throws PersistenceException {
-        String query = "SELECT c1.id as computer_id, c1.name as computer_name, c1.introduced, c1.discontinued, "
-                + "c2.id as company_id, c2.name as company_name FROM computer c1 LEFT OUTER JOIN company c2 "
+        String query = "SELECT c1.id AS computer_id, c1.name AS computer_name, c1.introduced, c1.discontinued, "
+                + "c2.id AS company_id, c2.name AS company_name FROM computer c1 LEFT OUTER JOIN company c2 "
                 + "ON c1.company_id = c2.id LIMIT " + limit + " OFFSET " + offset * limit;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
