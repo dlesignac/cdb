@@ -30,22 +30,22 @@ public abstract class MapperComputer {
         boolean valid = true;
 
         if (!ValidatorComputer.validateName(name)) {
-            LOGGER.warn("tried to set computer name :" + name);
+            LOGGER.warn("tried to set computer name : " + name);
             valid = false;
         }
 
         if (!ValidatorComputer.validateIntroduced(introduced)) {
-            LOGGER.warn("tried to set computer introduced :" + introduced);
+            LOGGER.warn("tried to set computer introduced : " + introduced);
             valid = false;
         }
 
         if (!ValidatorComputer.validateDiscontinued(discontinued)) {
-            LOGGER.warn("tried to set computer discontinued :" + discontinued);
+            LOGGER.warn("tried to set computer discontinued : " + discontinued);
             valid = false;
         }
 
         if (!ValidatorComputer.validateCompanyId(companyId)) {
-            LOGGER.warn("tried to set computer companyId :" + companyId);
+            LOGGER.warn("tried to set computer companyId : " + companyId);
             valid = false;
         }
 
@@ -70,8 +70,8 @@ public abstract class MapperComputer {
             if (ValidatorComputer.validate(computer)) {
                 return computer;
             }
-            // TODO warn invalid
-            // TODO check companyId
+
+            LOGGER.warn("tried to insert invalid computer : " + computer);
         }
 
         throw new ValidationException();

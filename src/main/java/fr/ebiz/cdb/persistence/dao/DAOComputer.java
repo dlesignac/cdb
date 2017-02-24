@@ -41,6 +41,7 @@ class DAOComputer extends DAO implements IDAOComputer {
             statement.setString(1, computer.getName());
 
             LocalDate introduced = computer.getIntroduced();
+
             LocalDate discontinued = computer.getDiscontinued();
             Company company = computer.getManufacturer();
 

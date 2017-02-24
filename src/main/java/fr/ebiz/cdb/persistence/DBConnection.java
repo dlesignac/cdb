@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Database connection holder. Holds unique connection to database.
  */
-public class DBConnection {
+public enum DBConnection {
+
+    INSTANCE;
 
     private Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
-    private static Connection connection = null;
+    private Connection connection = null;
     private String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
     private String user = "admincdb";
     private String password = "qwerty1234";
@@ -22,10 +24,10 @@ public class DBConnection {
     /**
      * Private constructor in order to make DBConnection a singleton.
      */
-    private DBConnection() {
+    DBConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            DBConnection.connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(url, user, password);
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             logger.error("could not open connection with database", e);
@@ -34,15 +36,8 @@ public class DBConnection {
         }
     }
 
-    /**
-     * @return unique instance of Connection
-     */
-    public static Connection getInstance() {
-        if (DBConnection.connection == null) {
-            new DBConnection();
-        }
-
-        return DBConnection.connection;
+    public Connection getConnection() {
+        return this.connection;
     }
 
 }

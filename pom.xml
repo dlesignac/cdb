@@ -16,15 +16,27 @@
     </properties>
 
     <build>
+        <finalName>training-java</finalName>
+
         <plugins>
+            <!--
+            Unit tests plugin.
+            Need it to exclude selenium tests from unit testing.
+             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
                 <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <excludes>
+                        <exclude>**/selenium/Test*.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
+
+            <!--
+            Checkstyle plugin.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -45,6 +57,19 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!--
+            Packaging plugin.
+            Need it to deactivate default failOnMissingWebXml.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -96,13 +121,15 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-mockito-release-full</artifactId>
+            <version>1.6.4</version>
+            <classifier>full</classifier>
             <scope>test</scope>
         </dependency>
 
@@ -110,6 +137,13 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

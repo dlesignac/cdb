@@ -72,7 +72,7 @@ public class CLI {
         this.in.close();
 
         try {
-            DBConnection.getInstance().close();
+            DBConnection.INSTANCE.getConnection().close();
         } catch (Exception e) {
             logger.error("caught exception while closing db connection");
         }

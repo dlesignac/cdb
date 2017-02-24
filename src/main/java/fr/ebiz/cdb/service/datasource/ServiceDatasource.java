@@ -24,7 +24,7 @@ public class ServiceDatasource {
      * Constructor.
      */
     private ServiceDatasource() {
-        DAOFactory daoFactory = new DAOFactory(DBConnection.getInstance());
+        DAOFactory daoFactory = new DAOFactory(DBConnection.INSTANCE.getConnection());
         this.daoCompany = daoFactory.getCompanyDAO();
         this.daoComputer = daoFactory.getComputerDAO();
     }

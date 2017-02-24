@@ -59,11 +59,7 @@ public class Company {
         }
 
         Company other = (Company) obj;
-        if (id != other.id) {
-            return false;
-        }
-
-        return true;
+        return id == other.id;
     }
 
 }

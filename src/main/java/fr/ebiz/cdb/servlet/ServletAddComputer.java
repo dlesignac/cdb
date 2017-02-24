@@ -6,6 +6,8 @@ import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.exception.PersistenceException;
 import fr.ebiz.cdb.service.datasource.ServiceDatasource;
 import fr.ebiz.cdb.service.validator.exception.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,6 +33,8 @@ public class ServletAddComputer extends HttpServlet {
     private static final String REQUEST_PARAMETER_DISCONTINUED = "discontinued";
     private static final String REQUEST_PARAMETER_COMPANY_ID = "companyId";
 
+    private Logger logger = LoggerFactory.getLogger(ServletAddComputer.class);
+
     private ServiceDatasource dsService = ServiceDatasource.getInstance();
 
     @Override
@@ -40,7 +44,7 @@ public class ServletAddComputer extends HttpServlet {
             req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
             getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
         } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
+            resp.sendRedirect(req.getContextPath() + ServletError500.URL);
         }
     }
 

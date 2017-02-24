@@ -90,11 +90,7 @@ public class Computer {
 
         Computer other = (Computer) obj;
 
-        if (id != other.id) {
-            return false;
-        }
-
-        return true;
+        return id == other.id;
     }
 
 }
