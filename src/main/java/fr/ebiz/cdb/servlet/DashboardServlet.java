@@ -1,8 +1,8 @@
 package fr.ebiz.cdb.servlet;
 
 import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.Page;
-import fr.ebiz.cdb.service.datasource.ServiceDatasource;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,7 @@ import java.io.IOException;
  * Dashboard servlet.
  */
 @WebServlet("/dashboard")
-public class ServletDashboard extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 
     private static final String DASHBOARD_JSP = "/WEB-INF/pages/dashboard.jsp";
 
@@ -28,7 +28,7 @@ public class ServletDashboard extends HttpServlet {
     private static final int DEFAULT_LIMIT = 10;
     private static final int DEFAULT_NUMBER = 1;
 
-    private ServiceDatasource dsService = ServiceDatasource.getInstance();
+    private ComputerService computerService = ComputerService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,15 +39,15 @@ public class ServletDashboard extends HttpServlet {
             int pageLimit = reqLimit == null ? DEFAULT_LIMIT : Integer.parseInt(reqLimit);
             int pageNumber = reqPage == null ? DEFAULT_NUMBER : Integer.parseInt(reqPage);
 
-            int computersCount = dsService.countComputers();
-            Page<Computer> page = dsService.pageComputers(pageLimit, pageNumber);
+            int computersCount = computerService.countComputers();
+            Page<Computer> page = computerService.pageComputers(pageLimit, pageNumber);
 
             req.setAttribute(REQUEST_ATTRIBUTE_COMPUTERS_COUNT, computersCount);
             req.setAttribute(REQUEST_ATTRIBUTE_PAGE, page);
 
             getServletContext().getRequestDispatcher(DASHBOARD_JSP).forward(req, resp);
         } catch (Exception e) {
-            resp.sendRedirect(req.getContextPath() + ServletError500.URL);
+            resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
         }
     }
 

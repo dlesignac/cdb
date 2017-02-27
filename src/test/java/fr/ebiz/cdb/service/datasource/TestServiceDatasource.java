@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.service.datasource;
 
-//import fr.ebiz.cdb.persistence.dao.IDAOComputer;
+//import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.mockito.Mock;
@@ -12,7 +12,7 @@ package fr.ebiz.cdb.service.datasource;
 public class TestServiceDatasource {
 
 //    @Mock
-//    private IDAOComputer mockDaoComputer;
+//    private IComputerDAO mockDaoComputer;
 //
 //    @Test
 //    public void test() {

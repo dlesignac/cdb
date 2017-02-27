@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.ebiz.cdb.persistence.exception.PersistenceException;
+import fr.ebiz.cdb.persistence.exception.DatasourceException;
+import fr.ebiz.cdb.persistence.exception.QueryException;
+import fr.ebiz.cdb.service.datasource.CompanyService;
+import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.Page;
-import fr.ebiz.cdb.service.datasource.ServiceDatasource;
-import fr.ebiz.cdb.service.validator.ValidatorComputer;
+import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.ui.cli.frame.Frame;
 import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputer;
@@ -19,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.DBConnection;
 
 /**
  * Command Line Interface.
@@ -37,7 +38,8 @@ public class CLI {
         new CLI().loop();
     }
 
-    private ServiceDatasource dsService;
+    private CompanyService companyService;
+    private ComputerService computerService;
     private Scanner in;
     private Frame frame;
     private CLIStatus status;
@@ -47,7 +49,8 @@ public class CLI {
      * Default constructor.
      */
     private CLI() {
-        this.dsService = ServiceDatasource.getInstance();
+        this.companyService = CompanyService.INSTANCE;
+        this.computerService = ComputerService.INSTANCE;
         this.in = new Scanner(System.in);
         this.frame = new FrameBuilder().buildIndex();
         this.status = CLIStatus.INDEX;
@@ -70,12 +73,6 @@ public class CLI {
         }
 
         this.in.close();
-
-        try {
-            DBConnection.INSTANCE.getConnection().close();
-        } catch (Exception e) {
-            logger.error("caught exception while closing db connection");
-        }
     }
 
 
@@ -162,7 +159,7 @@ public class CLI {
             } else {
                 callErrorInvalidInput();
             }
-        } catch (PersistenceException e) {
+        } catch (QueryException | DatasourceException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -176,8 +173,12 @@ public class CLI {
         if (CLIOptions.BACK.equals(input[0])) {
             callComputers(1);
         } else if (CLIOptions.DELETE.equals(input[0])) {
-            deleteComputer();
-            callComputers(1);
+            try {
+                deleteComputer();
+                callComputers(1);
+            } catch (DatasourceException e) {
+                callErrorInternalServerError(e);
+            }
         } else if (CLIOptions.EDIT.equals(input[0])) {
             callComputerEdit();
         } else {
@@ -207,9 +208,13 @@ public class CLI {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callComputerBack();
         } else if (CLIOptions.SAVE.equals(input[0])) {
-            Computer computer = getComputerFromPage();
-            dsService.updateComputer(computer);
-            callComputer(computer);
+            try {
+                Computer computer = getComputerFromPage();
+                computerService.updateComputer(computer);
+                callComputer(computer);
+            } catch (DatasourceException e) {
+                callErrorInternalServerError(e);
+            }
         } else {
             doComputerChange(input);
         }
@@ -224,9 +229,13 @@ public class CLI {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callIndex();
         } else if (CLIOptions.SAVE.equals(input[0])) {
-            Computer computer = getComputerFromPage();
-            dsService.createComputer(computer);
-            callComputer(computer);
+            try {
+                Computer computer = getComputerFromPage();
+                computerService.createComputer(computer);
+                callComputer(computer);
+            } catch (DatasourceException e) {
+                callErrorInternalServerError(e);
+            }
         } else {
             doComputerChange(input);
         }
@@ -243,7 +252,7 @@ public class CLI {
                 if (input.length < 2) {
                     callErrorMissingParameter();
                 } else {
-                    if (ValidatorComputer.validateName(input[1])) {
+                    if (ComputerValidator.validateName(input[1])) {
                         Computer computer = getComputerFromPage();
                         computer.setName(input[1]);
                     } else {
@@ -256,7 +265,7 @@ public class CLI {
                 if (input.length >= 2) {
                     String date = input[1];
 
-                    if (ValidatorComputer.validateIntroduced(date)) {
+                    if (ComputerValidator.validateIntroduced(date)) {
 
                         LocalDate introduced = LocalDate.parse(date);
                         computer.setIntroduced(introduced);
@@ -274,7 +283,7 @@ public class CLI {
                 if (input.length >= 2) {
                     String date = input[1];
 
-                    if (ValidatorComputer.validateDiscontinued(date)) {
+                    if (ComputerValidator.validateDiscontinued(date)) {
                         LocalDate discontinued = LocalDate.parse(date);
                         computer.setDiscontinued(discontinued);
                     } else {
@@ -288,7 +297,7 @@ public class CLI {
 
                 if (input.length >= 2) {
                     int companyId = Integer.parseInt(input[1]);
-                    manufacturer = dsService.findCompany(companyId);
+                    manufacturer = companyService.findCompany(companyId);
 
                     if (manufacturer == null) {
                         this.frame.setError("No company found for this id");
@@ -297,11 +306,11 @@ public class CLI {
 
                 Computer computer = getComputerFromPage();
                 computer.setManufacturer(manufacturer);
-                dsService.updateComputer(computer);
+                computerService.updateComputer(computer);
             } else {
                 callErrorInvalidInput();
             }
-        } catch (PersistenceException e) {
+        } catch (QueryException | DatasourceException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -321,10 +330,10 @@ public class CLI {
      */
     private void callComputers(int offset) {
         try {
-            Page<Computer> computers = dsService.pageComputers(10, offset);
+            Page<Computer> computers = computerService.pageComputers(10, offset);
             this.frame = new FrameBuilder().buildComputers(computers);
             this.status = CLIStatus.COMPUTERS;
-        } catch (PersistenceException e) {
+        } catch (QueryException | DatasourceException e) {
             callErrorInternalServerError(e);
         }
 
@@ -345,10 +354,10 @@ public class CLI {
      */
     private void callCompanies() {
         try {
-            List<Company> companies = dsService.listCompanies();
+            List<Company> companies = companyService.listCompanies();
             this.frame = new FrameBuilder().buildCompanies(companies);
             this.status = CLIStatus.COMPANIES;
-        } catch (PersistenceException e) {
+        } catch (QueryException | DatasourceException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -370,7 +379,7 @@ public class CLI {
             Computer computer = getComputerFromPage();
             computer = this.getComputerById(computer.getId());
             callComputer(computer);
-        } catch (PersistenceException e) {
+        } catch (QueryException | DatasourceException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -418,10 +427,12 @@ public class CLI {
 
     /**
      * Deletes computer.
+     *
+     * @throws DatasourceException an unexpected error occurred
      */
-    private void deleteComputer() {
+    private void deleteComputer() throws DatasourceException {
         Computer computer = getComputerFromPage();
-        dsService.deleteComputer(computer);
+        computerService.deleteComputer(computer);
     }
 
     /**
@@ -429,10 +440,11 @@ public class CLI {
      *
      * @param id computer's id
      * @return object computer
-     * @throws PersistenceException unexpected exception
+     * @throws QueryException      unexpected exception
+     * @throws DatasourceException an unexpected error occurred
      */
-    private Computer getComputerById(int id) throws PersistenceException {
-        return dsService.findComputer(id);
+    private Computer getComputerById(int id) throws QueryException, DatasourceException {
+        return computerService.findComputer(id);
     }
 
     /**

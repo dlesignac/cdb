@@ -2,7 +2,7 @@ package fr.ebiz.cdb.mapper;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.service.validator.ValidatorComputer;
+import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.service.validator.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,9 @@ import java.time.LocalDate;
 /**
  * Computer mapper.
  */
-public abstract class MapperComputer {
+public abstract class ComputerMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MapperComputer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerMapper.class);
 
     /**
      * Maps string parameters to a computer.
@@ -29,22 +29,22 @@ public abstract class MapperComputer {
     public static Computer map(String name, String introduced, String discontinued, String companyId) throws ValidationException {
         boolean valid = true;
 
-        if (!ValidatorComputer.validateName(name)) {
+        if (!ComputerValidator.validateName(name)) {
             LOGGER.warn("tried to set computer name : " + name);
             valid = false;
         }
 
-        if (!ValidatorComputer.validateIntroduced(introduced)) {
+        if (!ComputerValidator.validateIntroduced(introduced)) {
             LOGGER.warn("tried to set computer introduced : " + introduced);
             valid = false;
         }
 
-        if (!ValidatorComputer.validateDiscontinued(discontinued)) {
+        if (!ComputerValidator.validateDiscontinued(discontinued)) {
             LOGGER.warn("tried to set computer discontinued : " + discontinued);
             valid = false;
         }
 
-        if (!ValidatorComputer.validateCompanyId(companyId)) {
+        if (!ComputerValidator.validateCompanyId(companyId)) {
             LOGGER.warn("tried to set computer companyId : " + companyId);
             valid = false;
         }
@@ -67,7 +67,7 @@ public abstract class MapperComputer {
                 computer.setManufacturer(company);
             }
 
-            if (ValidatorComputer.validate(computer)) {
+            if (ComputerValidator.validate(computer)) {
                 return computer;
             }
 

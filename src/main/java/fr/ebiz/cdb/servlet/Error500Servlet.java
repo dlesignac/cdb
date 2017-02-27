@@ -8,16 +8,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Error 404 servlet.
+ * Error 500 servlet.
  */
-@WebServlet("/error404")
-public class ServletError404 extends HttpServlet {
+@WebServlet("/error500")
+public class Error500Servlet extends HttpServlet {
 
-    private static final String ERROR_404_JSP = "/WEB-INF/pages/404.jsp";
+    static final String URL = "/error500";
+
+    private static final String ERROR_500_JSP = "/WEB-INF/pages/500.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher(ERROR_404_JSP).forward(req, resp);
+        getServletContext().getRequestDispatcher(ERROR_500_JSP).forward(req, resp);
     }
 
 }

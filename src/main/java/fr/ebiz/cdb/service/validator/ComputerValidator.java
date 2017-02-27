@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-public class ValidatorComputer {
+public class ComputerValidator {
 
     /**
      * Checks if a name is valid.

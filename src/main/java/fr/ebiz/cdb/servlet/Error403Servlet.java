@@ -11,7 +11,7 @@ import java.io.IOException;
  * Error 403 servlet.
  */
 @WebServlet("/error403")
-public class ServletError403 extends HttpServlet {
+public class Error403Servlet extends HttpServlet {
 
     private static final String ERROR_403_JSP = "/WEB-INF/pages/403.jsp";
 

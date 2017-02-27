@@ -1,10 +1,12 @@
 package fr.ebiz.cdb.servlet;
 
-import fr.ebiz.cdb.mapper.MapperComputer;
+import fr.ebiz.cdb.mapper.ComputerMapper;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.exception.PersistenceException;
-import fr.ebiz.cdb.service.datasource.ServiceDatasource;
+import fr.ebiz.cdb.persistence.exception.DatasourceException;
+import fr.ebiz.cdb.persistence.exception.QueryException;
+import fr.ebiz.cdb.service.datasource.CompanyService;
+import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.validator.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,7 @@ import java.util.List;
  * Computer creating servlet.
  */
 @WebServlet("/add-computer")
-public class ServletAddComputer extends HttpServlet {
+public class AddComputerServlet extends HttpServlet {
 
     private static final String ADD_COMPUTER_JSP = "/WEB-INF/pages/addComputer.jsp";
 
@@ -33,18 +35,21 @@ public class ServletAddComputer extends HttpServlet {
     private static final String REQUEST_PARAMETER_DISCONTINUED = "discontinued";
     private static final String REQUEST_PARAMETER_COMPANY_ID = "companyId";
 
-    private Logger logger = LoggerFactory.getLogger(ServletAddComputer.class);
+    private Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
 
-    private ServiceDatasource dsService = ServiceDatasource.getInstance();
+    private CompanyService companyService = CompanyService.INSTANCE;
+    private ComputerService computerService = ComputerService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Company> companies = dsService.listCompanies();
+            List<Company> companies = companyService.listCompanies();
             req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
             getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
-        } catch (PersistenceException e) {
-            resp.sendRedirect(req.getContextPath() + ServletError500.URL);
+        } catch (QueryException e) {
+            resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
+        } catch (DatasourceException e) {
+            // TODO e.printStackTrace();
         }
     }
 
@@ -56,19 +61,21 @@ public class ServletAddComputer extends HttpServlet {
         String companyId = req.getParameter(REQUEST_PARAMETER_COMPANY_ID);
 
         try {
-            List<Company> companies = dsService.listCompanies();
+            List<Company> companies = companyService.listCompanies();
             req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
 
-            Computer computer = MapperComputer.map(computerName, introduced, discontinued, companyId);
-            dsService.createComputer(computer);
+            Computer computer = ComputerMapper.map(computerName, introduced, discontinued, companyId);
+            computerService.createComputer(computer);
 
             req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "success");
             getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
         } catch (ValidationException e) {
             req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "error");
             getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
-        } catch (PersistenceException e) {
-            resp.sendRedirect(req.getContextPath() + ServletError500.URL);
+        } catch (QueryException e) {
+            resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
+        } catch (DatasourceException e) {
+            // TODO e.printStackTrace();
         }
     }
 
