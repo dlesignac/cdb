@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import fr.ebiz.cdb.persistence.QueryBuilder;
-import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.persistence.exception.QueryException;
 import fr.ebiz.cdb.persistence.mapper.CompanyRSMapper;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public enum CompanyDAO implements ICompanyDAO {
     private Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
     @Override
-    public Company find(Connection connection, int id) throws DatasourceException, QueryException {
+    public Company find(Connection connection, int id) throws QueryException {
         String query = new QueryBuilder()
                 .select("*")
                 .from(TABLE_COMPANY)
@@ -46,7 +45,7 @@ public enum CompanyDAO implements ICompanyDAO {
     }
 
     @Override
-    public int count(Connection connection) throws DatasourceException, QueryException {
+    public int count(Connection connection) throws QueryException {
         String query = new QueryBuilder()
                 .select("count(id)")
                 .from(TABLE_COMPANY)
@@ -66,7 +65,7 @@ public enum CompanyDAO implements ICompanyDAO {
     }
 
     @Override
-    public List<Company> fetch(Connection connection) throws DatasourceException, QueryException {
+    public List<Company> fetch(Connection connection) throws QueryException {
         String query = new QueryBuilder()
                 .select("*")
                 .from(TABLE_COMPANY)

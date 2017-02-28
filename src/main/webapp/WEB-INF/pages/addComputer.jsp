@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form id="addComputerForm" action="${pageContext.request.contextPath}/add-computer" method="POST">
+                    <form id="computerForm" action="#" method="POST">
                         <fieldset>
                             <div id="computerNameContainer" class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -67,6 +67,6 @@
 
     <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/addComputer.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/formValidation.js"></script>
 </body>
 </html>

@@ -176,7 +176,7 @@ public class CLI {
             try {
                 deleteComputer();
                 callComputers(1);
-            } catch (DatasourceException e) {
+            } catch (DatasourceException | QueryException e) {
                 callErrorInternalServerError(e);
             }
         } else if (CLIOptions.EDIT.equals(input[0])) {
@@ -212,7 +212,7 @@ public class CLI {
                 Computer computer = getComputerFromPage();
                 computerService.updateComputer(computer);
                 callComputer(computer);
-            } catch (DatasourceException e) {
+            } catch (DatasourceException | QueryException e) {
                 callErrorInternalServerError(e);
             }
         } else {
@@ -233,7 +233,7 @@ public class CLI {
                 Computer computer = getComputerFromPage();
                 computerService.createComputer(computer);
                 callComputer(computer);
-            } catch (DatasourceException e) {
+            } catch (DatasourceException | QueryException e) {
                 callErrorInternalServerError(e);
             }
         } else {
@@ -429,8 +429,9 @@ public class CLI {
      * Deletes computer.
      *
      * @throws DatasourceException an unexpected error occurred
+     * @throws QueryException      an unexpected error occurred
      */
-    private void deleteComputer() throws DatasourceException {
+    private void deleteComputer() throws DatasourceException, QueryException {
         Computer computer = getComputerFromPage();
         computerService.deleteComputer(computer);
     }

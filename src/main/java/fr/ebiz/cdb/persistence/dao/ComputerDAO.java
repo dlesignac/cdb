@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import fr.ebiz.cdb.persistence.QueryBuilder;
-import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.persistence.exception.QueryException;
 import fr.ebiz.cdb.persistence.mapper.ComputerRSMapper;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ public enum ComputerDAO implements IComputerDAO {
     private Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
     @Override
-    public boolean create(Connection connection, Computer computer) throws DatasourceException {
+    public void create(Connection connection, Computer computer) throws QueryException {
         String query = new QueryBuilder()
                 .insertInto("computer(name, introduced, discontinued, company_id)")
                 .values("(?, ?, ?, ?)")
@@ -42,14 +41,12 @@ public enum ComputerDAO implements IComputerDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("could not insert computer", e);
-            return false;
+            throw new QueryException();
         }
-
-        return true;
     }
 
     @Override
-    public boolean delete(Connection connection, Computer computer) throws DatasourceException {
+    public void delete(Connection connection, Computer computer) throws QueryException {
         String query = new QueryBuilder()
                 .deleteFrom("computer")
                 .where("id = ?")
@@ -58,15 +55,14 @@ public enum ComputerDAO implements IComputerDAO {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, computer.getId());
             statement.executeUpdate();
-            return true;
         } catch (SQLException e) {
             logger.error("could not delete computer", e);
-            return false;
+            throw new QueryException();
         }
     }
 
     @Override
-    public boolean update(Connection connection, Computer computer) throws DatasourceException {
+    public void update(Connection connection, Computer computer) throws QueryException {
         String query = new QueryBuilder()
                 .update("computer")
                 .set("name = ?, introduced = ?, discontinued = ?, company_id = ?")
@@ -77,15 +73,14 @@ public enum ComputerDAO implements IComputerDAO {
             prepareInsert(statement, computer);
             statement.setInt(5, computer.getId());
             statement.executeUpdate();
-            return true;
         } catch (SQLException e) {
             logger.error("could not update computer", e);
-            return false;
+            throw new QueryException();
         }
     }
 
     @Override
-    public Computer find(Connection connection, int id) throws QueryException, DatasourceException {
+    public Computer find(Connection connection, int id) throws QueryException {
         String query = new QueryBuilder()
                 .select("c1.id AS computer_id, " +
                         "c1.name AS computer_name, " +
@@ -109,7 +104,7 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public int count(Connection connection) throws QueryException, DatasourceException {
+    public int count(Connection connection) throws QueryException {
         String query = new QueryBuilder()
                 .select("count(id)")
                 .from("computer")
@@ -129,7 +124,7 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> fetch(Connection connection, int limit, int offset) throws QueryException, DatasourceException {
+    public List<Computer> fetch(Connection connection, int limit, int offset) throws QueryException {
         String query = new QueryBuilder()
                 .select("c1.id AS computer_id, " +
                         "c1.name AS computer_name, " +

@@ -1,7 +1,6 @@
 package fr.ebiz.cdb.persistence.dao;
 
 import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.persistence.exception.QueryException;
 
 import java.sql.Connection;
@@ -19,9 +18,8 @@ public interface ICompanyDAO {
      * @param id         company's id
      * @return company
      * @throws QueryException an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
      */
-    Company find(Connection connection, int id) throws QueryException, DatasourceException;
+    Company find(Connection connection, int id) throws QueryException;
 
     /**
      * Counts companies.
@@ -29,9 +27,8 @@ public interface ICompanyDAO {
      * @param connection connection to use
      * @return companies' count
      * @throws QueryException an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
      */
-    int count(Connection connection) throws QueryException, DatasourceException;
+    int count(Connection connection) throws QueryException;
 
     /**
      * Fetches companies.
@@ -39,7 +36,6 @@ public interface ICompanyDAO {
      * @param connection connection to use
      * @return entries
      * @throws QueryException an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
      */
-    List<Company> fetch(Connection connection) throws QueryException, DatasourceException;
+    List<Company> fetch(Connection connection) throws QueryException;
 }

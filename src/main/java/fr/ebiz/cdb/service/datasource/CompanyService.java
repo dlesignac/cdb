@@ -36,7 +36,7 @@ public enum CompanyService {
      * @throws QueryException      an unexpected error occurred
      * @throws DatasourceException an unexpected error occurred
      */
-    public Company findCompany(int id) throws QueryException, DatasourceException {
+    public Company findCompany(int id) throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         Company company = companyDAO.find(connection, id);
         connectionManager.closeConnection(connection);
@@ -50,7 +50,7 @@ public enum CompanyService {
      * @throws QueryException      an unexpected error occurred
      * @throws DatasourceException an unexpected error occurred
      */
-    public List<Company> listCompanies() throws QueryException, DatasourceException {
+    public List<Company> listCompanies() throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         List<Company> companies = companyDAO.fetch(connection);
         connectionManager.closeConnection(connection);

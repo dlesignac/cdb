@@ -1,7 +1,5 @@
 $(document).ready(function() {
-    console.log("ready");
-
-    $("#addComputerForm").on("submit", function(e) {
+    $("#computerForm").on("submit", function(e) {
         var valid = checkComputerName() &&
             checkIntroduced() &&
             checkDiscontinued() &&

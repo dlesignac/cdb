@@ -35,6 +35,7 @@ $(function() {
         }).get().join();
         
         $(this).attr('value',str);
+        console.log(str);
         
         return this;
     };

@@ -1,5 +1,6 @@
 package fr.ebiz.cdb.mapper;
 
+import fr.ebiz.cdb.dto.ComputerRequest;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
@@ -19,15 +20,23 @@ public abstract class ComputerMapper {
     /**
      * Maps string parameters to a computer.
      *
-     * @param name         computer name parameter
-     * @param introduced   computer introduced parameter
-     * @param discontinued computer discontinued parameter
-     * @param companyId    computer's manufacturer id parameter
+     * @param computerRequest computerRequest
      * @return computer
      * @throws ValidationException one or more entries are invalid
      */
-    public static Computer map(String name, String introduced, String discontinued, String companyId) throws ValidationException {
+    public static Computer map(ComputerRequest computerRequest) throws ValidationException {
         boolean valid = true;
+
+        String id = computerRequest.getId();
+        String name = computerRequest.getName();
+        String introduced = computerRequest.getIntroduced();
+        String discontinued = computerRequest.getDiscontinued();
+        String companyId = computerRequest.getCompanyId();
+
+        if (!ComputerValidator.validateId(id)) {
+            LOGGER.warn("tried to set computer id : " + id);
+            valid = false;
+        }
 
         if (!ComputerValidator.validateName(name)) {
             LOGGER.warn("tried to set computer name : " + name);
@@ -52,6 +61,10 @@ public abstract class ComputerMapper {
         if (valid) {
             Computer computer = new Computer();
             computer.setName(name);
+
+            if (id != null && !"".equals(id)) {
+                computer.setId(Integer.parseInt(id));
+            }
 
             if (introduced != null && !"".equals(introduced)) {
                 computer.setIntroduced(LocalDate.parse(introduced));

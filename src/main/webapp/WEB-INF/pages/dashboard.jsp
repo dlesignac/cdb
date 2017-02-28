@@ -60,8 +60,8 @@
 				<tbody id="results">
 				    <c:forEach items="${page.entries}" var="computer">
 				        <tr>
-                    		<td class="editMode"><input type="checkbox" name="cb" class="cb" value="0"></td>
-                    		<td><a href="editComputer.html" onclick="">${computer.name}</a></td>
+                    		<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
+                    		<td><a href="${pageContext.request.contextPath}/edit-computer?id=${computer.id}" onclick="">${computer.name}</a></td>
                             <td>${computer.introduced}</td>
                             <td>${computer.discontinued}</td>
                             <td>${computer.manufacturer.name}</td>

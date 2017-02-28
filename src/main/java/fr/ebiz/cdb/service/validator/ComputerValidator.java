@@ -11,6 +11,16 @@ public class ComputerValidator {
     /**
      * Checks if a name is valid.
      *
+     * @param id string to be be checked
+     * @return true if valid, else false
+     */
+    public static boolean validateId(String id) {
+        return id == null || "".equals(id) || id.matches("^\\d+$");
+    }
+
+    /**
+     * Checks if a name is valid.
+     *
      * @param name string to be be checked
      * @return true if valid, else false
      */
