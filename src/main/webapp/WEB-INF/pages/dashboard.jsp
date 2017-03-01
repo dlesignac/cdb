@@ -2,6 +2,7 @@
 <html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 
 <jsp:include page="/WEB-INF/pages/head.jsp" />
 
@@ -10,15 +11,14 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computersCount} Computers found</h1>
+			<h1 id="homeTitle">${page.count} computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
-
-						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+					    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                        <input type="hidden" name="limit" value="${page.limit}"/>
+                        <input type="hidden" name="page" value="1"/>
+						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
@@ -47,13 +47,11 @@
 							    </a>
 						    </span>
 						</th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
-
+						<th>
+						    Computer name <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='computerName' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
+						<th>Introduced <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='introduced' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
+						<th>Discontinued date <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='discontinued' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
+						<th>Company <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='companyName' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -61,7 +59,7 @@
 				    <c:forEach items="${page.entries}" var="computer">
 				        <tr>
                     		<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
-                    		<td><a href="${pageContext.request.contextPath}/edit-computer?id=${computer.id}" onclick="">${computer.name}</a></td>
+                    		<td><a href="${pageContext.request.contextPath}/edit-computer?id=${computer.id}">${computer.name}</a></td>
                             <td>${computer.introduced}</td>
                             <td>${computer.discontinued}</td>
                             <td>${computer.manufacturer.name}</td>

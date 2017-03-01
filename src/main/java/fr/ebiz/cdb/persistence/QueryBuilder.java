@@ -107,12 +107,34 @@ public class QueryBuilder {
     }
 
     /**
+     * Builds or query.
+     *
+     * @param or or
+     * @return QueryBuilder
+     */
+    public QueryBuilder or(String or) {
+        query += " OR " + or;
+        return this;
+    }
+
+    /**
+     * Builds orderBy query.
+     *
+     * @param orderBy orderBy
+     * @return QueryBuilder
+     */
+    public QueryBuilder orderBy(String orderBy) {
+        query += " ORDER BY " + orderBy;
+        return this;
+    }
+
+    /**
      * Builds limit query.
      *
      * @param limit limit
      * @return QueryBuilder
      */
-    public QueryBuilder limit(int limit) {
+    public QueryBuilder limit(String limit) {
         query += " LIMIT " + limit;
         return this;
     }
@@ -123,7 +145,7 @@ public class QueryBuilder {
      * @param offset offset
      * @return QueryBuilder
      */
-    public QueryBuilder offset(int offset) {
+    public QueryBuilder offset(String offset) {
         query += " OFFSET " + offset;
         return this;
     }

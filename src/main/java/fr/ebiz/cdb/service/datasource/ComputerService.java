@@ -1,6 +1,7 @@
 package fr.ebiz.cdb.service.datasource;
 
 import fr.ebiz.cdb.dto.DeleteRequest;
+import fr.ebiz.cdb.dto.PageRequest;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.dao.ComputerDAO;
@@ -107,35 +108,48 @@ public enum ComputerService {
     }
 
     /**
-     * Gets computers count.
+     * Gets a frame of computers.
      *
-     * @return computers count
+     * @param search  search
+     * @param orderBy orderBy
+     * @param order   order
+     * @param limit   max number of computers
+     * @param number  number of requested frame
+     * @return frame of computers
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public int countComputers() throws DatasourceException, QueryException {
+    public Page<Computer> pageComputers(String search, String orderBy, String order, int limit, int number)
+            throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
-        int count = computerDAO.count(connection);
+        int computersCount = computerDAO.count(connection, search);
+        int pageCount = (computersCount + limit - 1) / limit;
+        List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
         connectionManager.closeConnection(connection);
-        return count;
+        return new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
     }
 
     /**
      * Gets a frame of computers.
      *
-     * @param limit  max number of computers
-     * @param number number of requested frame
+     * @param pageRequest pageRequest
      * @return frame of computers
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public Page<Computer> pageComputers(int limit, int number) throws DatasourceException, QueryException {
+    public Page<Computer> pageComputers(PageRequest pageRequest) throws DatasourceException, QueryException {
+        int limit = pageRequest.getLimit();
+        int number = pageRequest.getNumber();
+        String search = pageRequest.getSearch();
+        String orderBy = pageRequest.getOrderBy();
+        String order = pageRequest.getOrder();
         Connection connection = connectionManager.getConnection();
-        int computersCount = computerDAO.count(connection);
+        int computersCount = computerDAO.count(connection, search);
         int pageCount = (computersCount + limit - 1) / limit;
-        List<Computer> computers = computerDAO.fetch(connection, limit, number - 1);
+        List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
         connectionManager.closeConnection(connection);
-        return new Page<>(limit, pageCount, number, computers);
+        return new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
     }
+
 
 }

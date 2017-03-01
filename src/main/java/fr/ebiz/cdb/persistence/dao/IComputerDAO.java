@@ -52,20 +52,24 @@ public interface IComputerDAO {
      * Counts computers.
      *
      * @param connection connection to use
+     * @param search     search
      * @return computers' count
      * @throws QueryException an unexpected error occurred
      */
-    int count(Connection connection) throws QueryException;
+    int count(Connection connection, String search) throws QueryException;
 
     /**
      * Fetches computers for a given pagination.
      *
      * @param connection connection to use
+     * @param search     search
+     * @param orderBy    orderBy
+     * @param order      order
      * @param limit      max number of entries
      * @param offset     number of pages to skip
      * @return entries
      * @throws QueryException an unexpected error occurred
      */
-    List<Computer> fetch(Connection connection, int limit, int offset) throws QueryException;
+    List<Computer> fetch(Connection connection, String search, String orderBy, String order, int limit, int offset) throws QueryException;
 
 }

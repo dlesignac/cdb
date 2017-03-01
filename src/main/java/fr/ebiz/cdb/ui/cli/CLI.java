@@ -330,7 +330,7 @@ public class CLI {
      */
     private void callComputers(int offset) {
         try {
-            Page<Computer> computers = computerService.pageComputers(10, offset);
+            Page<Computer> computers = computerService.pageComputers("", "computerName", "ASC", 10, offset);
             this.frame = new FrameBuilder().buildComputers(computers);
             this.status = CLIStatus.COMPUTERS;
         } catch (QueryException | DatasourceException e) {

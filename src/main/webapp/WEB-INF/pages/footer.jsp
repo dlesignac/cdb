@@ -5,7 +5,7 @@
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
 
-        <mylib:pagination limit="${page.limit}" count="${page.count}" number="${page.number}" />
+        <mylib:pagination page="${page}" />
 
     </div>
 </footer>

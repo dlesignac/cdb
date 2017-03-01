@@ -19,8 +19,15 @@ public class RequestParser {
     private static final String PARAMETER_DISCONTINUED = "discontinued";
     private static final String PARAMETER_COMPANY_ID = "companyId";
 
+    private static final String PARAMETER_SEARCH = "search";
+    private static final String PARAMETER_ORDER_BY = "orderBy";
+    private static final String PARAMETER_ORDER = "order";
     private static final String PARAMETER_PAGE_LIMIT = "limit";
     private static final String PARAMETER_PAGE_NUMBER = "page";
+
+    private static final String DEFAULT_SEARCH = "";
+    private static final String DEFAULT_ORDER_BY = "computerName";
+    private static final String DEFAULT_ORDER = "ASC";
     private static final int DEFAULT_LIMIT = 10;
     private static final int DEFAULT_NUMBER = 1;
 
@@ -56,13 +63,19 @@ public class RequestParser {
      * @return PageRequest
      */
     public static PageRequest parsePage(HttpServletRequest req) {
+        String search = req.getParameter(PARAMETER_SEARCH);
+        String orderBy = req.getParameter(PARAMETER_ORDER_BY);
+        String order = req.getParameter(PARAMETER_ORDER);
         String reqLimit = req.getParameter(PARAMETER_PAGE_LIMIT);
         String reqPage = req.getParameter(PARAMETER_PAGE_NUMBER);
 
+        search = search == null ? DEFAULT_SEARCH : search;
+        orderBy = orderBy == null || "".equals(orderBy) ? DEFAULT_ORDER_BY : orderBy;
+        order = order == null || "".equals(order) ? DEFAULT_ORDER : order;
         int pageLimit = reqLimit == null ? DEFAULT_LIMIT : Integer.parseInt(reqLimit);
         int pageNumber = reqPage == null ? DEFAULT_NUMBER : Integer.parseInt(reqPage);
 
-        return new PageRequest(pageLimit, pageNumber);
+        return new PageRequest(search, orderBy, order, pageLimit, pageNumber);
     }
 
     /**
@@ -77,7 +90,9 @@ public class RequestParser {
         List<Integer> ids = new ArrayList<>();
 
         for (String id : delete) {
-            ids.add(Integer.parseInt(id));
+            if (!"".equals(id)) {
+                ids.add(Integer.parseInt(id));
+            }
         }
 
         return new DeleteRequest(ids);

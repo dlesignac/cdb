@@ -1,12 +1,9 @@
 package fr.ebiz.cdb.persistence.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.time.LocalDate;
 import java.util.List;
 
 import fr.ebiz.cdb.persistence.QueryBuilder;
@@ -15,7 +12,6 @@ import fr.ebiz.cdb.persistence.mapper.ComputerRSMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 
 /**
@@ -34,10 +30,14 @@ public enum ComputerDAO implements IComputerDAO {
                 .values("(?, ?, ?, ?)")
                 .build();
 
-        logger.debug(query);
+        Object[] args = {
+                computer.getName(),
+                computer.getIntroduced(),
+                computer.getDiscontinued(),
+                computer.getManufacturer().getId()
+        };
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            prepareInsert(statement, computer);
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("could not insert computer", e);
@@ -52,8 +52,9 @@ public enum ComputerDAO implements IComputerDAO {
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, computer.getId());
+        Object[] args = {computer.getId()};
+
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("could not delete computer", e);
@@ -69,9 +70,15 @@ public enum ComputerDAO implements IComputerDAO {
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            prepareInsert(statement, computer);
-            statement.setInt(5, computer.getId());
+        Object[] args = {
+                computer.getName(),
+                computer.getIntroduced(),
+                computer.getDiscontinued(),
+                computer.getManufacturer().getId(),
+                computer.getId()
+        };
+
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("could not update computer", e);
@@ -92,9 +99,9 @@ public enum ComputerDAO implements IComputerDAO {
                 .where("c1.id = ?")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
+        Object[] args = {id};
 
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             ResultSet rs = statement.executeQuery();
             return new ComputerRSMapper().mapToOne(rs);
         } catch (SQLException e) {
@@ -104,13 +111,20 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public int count(Connection connection) throws QueryException {
+    public int count(Connection connection, String search) throws QueryException {
         String query = new QueryBuilder()
-                .select("count(id)")
-                .from("computer")
+                .select("count(c1.id)")
+                .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
+                .where("c1.name LIKE ?")
+                .or("c2.name LIKE ?")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        Object[] args = {
+                "%" + search + "%",
+                "%" + search + "%"
+        };
+
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             ResultSet rs = statement.executeQuery();
 
             if (rs.first()) {
@@ -124,7 +138,16 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> fetch(Connection connection, int limit, int offset) throws QueryException {
+    public List<Computer> fetch(Connection connection, String search, String orderBy, String order, int limit, int offset)
+            throws QueryException {
+        ComputerColumn orderByEnum = ComputerColumn.of(orderBy);
+        Order orderEnum = Order.of(order);
+
+        if (orderByEnum == null || orderEnum == null) {
+            logger.warn("tried to order by '" + orderBy + "' '" + order + "'");
+            throw new QueryException();
+        }
+
         String query = new QueryBuilder()
                 .select("c1.id AS computer_id, " +
                         "c1.name AS computer_name, " +
@@ -133,11 +156,21 @@ public enum ComputerDAO implements IComputerDAO {
                         "c2.id AS company_id, " +
                         "c2.name AS company_name")
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
-                .limit(limit)
-                .offset(offset * limit)
+                .where("c1.name LIKE ?")
+                .or("c2.name LIKE ?")
+                .orderBy(orderByEnum.getColumn() + " " + orderEnum.getValue())
+                .limit("?")
+                .offset("?")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        Object[] args = {
+                "%" + search + "%",
+                "%" + search + "%",
+                limit,
+                offset
+        };
+
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             ResultSet rs = statement.executeQuery();
             return new ComputerRSMapper().mapToMany(rs);
         } catch (SQLException e) {
@@ -147,39 +180,23 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     /**
-     * Prepares create or update statement.
+     * Prepares statement.
      *
-     * @param statement statement to be prepared
-     * @param computer  computer to prepare
+     * @param connection connection
+     * @param query      query
+     * @param objects    objects
      * @return PreparedStatement
      * @throws SQLException an unexpected error occurred
      */
-    private PreparedStatement prepareInsert(PreparedStatement statement, Computer computer) throws SQLException {
-        statement.setString(1, computer.getName());
+    private PreparedStatement prepare(Connection connection, String query, Object[] objects)
+            throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-        LocalDate introduced = computer.getIntroduced();
-        LocalDate discontinued = computer.getDiscontinued();
-        Company company = computer.getManufacturer();
-
-        if (introduced == null) {
-            statement.setNull(2, Types.DATE);
-        } else {
-            statement.setDate(2, Date.valueOf(introduced));
+        for (int i = 0; i < objects.length; i++) {
+            preparedStatement.setObject(i + 1, objects[i]);
         }
 
-        if (discontinued == null) {
-            statement.setNull(3, Types.DATE);
-        } else {
-            statement.setDate(3, Date.valueOf(discontinued));
-        }
-
-        if (company == null) {
-            statement.setNull(4, Types.INTEGER);
-        } else {
-            statement.setInt(4, company.getId());
-        }
-
-        return statement;
+        return preparedStatement;
     }
 
 }

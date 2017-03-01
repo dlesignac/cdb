@@ -22,14 +22,12 @@ import java.io.IOException;
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
 
-    public static final String URL = "/dashboard";
+    static final String URL = "/dashboard";
 
     private static final String DASHBOARD_JSP = "/WEB-INF/pages/dashboard.jsp";
 
-    private static final String REQUEST_ATTRIBUTE_COMPUTERS_COUNT = "computersCount";
-    private static final String REQUEST_ATTRIBUTE_PAGE = "page";
-
-    private static final String REQUEST_ATTRIBUTE_STATUS = "status";
+    private static final String ATTRIBUTE_PAGE = "page";
+    private static final String ATTRIBUTE_STATUS = "status";
 
     private ComputerService computerService = ComputerService.INSTANCE;
 
@@ -38,11 +36,8 @@ public class DashboardServlet extends HttpServlet {
         PageRequest pageRequest = RequestParser.parsePage(req);
 
         try {
-            int computersCount = computerService.countComputers();
-            Page<Computer> page = computerService.pageComputers(pageRequest.getLimit(), pageRequest.getNumber());
-
-            req.setAttribute(REQUEST_ATTRIBUTE_COMPUTERS_COUNT, computersCount);
-            req.setAttribute(REQUEST_ATTRIBUTE_PAGE, page);
+            Page<Computer> page = computerService.pageComputers(pageRequest);
+            req.setAttribute(ATTRIBUTE_PAGE, page);
 
             getServletContext().getRequestDispatcher(DASHBOARD_JSP).forward(req, resp);
         } catch (DatasourceException | QueryException e) {
@@ -55,11 +50,14 @@ public class DashboardServlet extends HttpServlet {
         DeleteRequest deleteRequest = RequestParser.parseDelete(req);
 
         try {
-            computerService.deleteComputers(deleteRequest);
-            req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "success");
+            if (!deleteRequest.getIds().isEmpty()) {
+                computerService.deleteComputers(deleteRequest);
+                req.setAttribute(ATTRIBUTE_STATUS, "success");
+            }
+
             doGet(req, resp);
         } catch (DatasourceException | QueryException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "error");
+            req.setAttribute(ATTRIBUTE_STATUS, "error");
             doGet(req, resp);
         }
     }
