@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Datasource service.
@@ -19,6 +22,13 @@ public enum ConnectionManager {
 
     INSTANCE;
 
+    private final String PROPERTY_JDBC_DRIVER = "jdbcDriver";
+    private final String PROPERTY_JDBC_URL = "jdbcUrl";
+    private final String PROPERTY_USER = "user";
+    private final String PROPERTY_PASSWORD = "password";
+    private final String PROPERTY_POOL_SIZE = "poolsize";
+    private final String PROPERTY_AUTOCOMMIT = "autocommit";
+
     private Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 
     private DataSource dataSource;
@@ -27,21 +37,28 @@ public enum ConnectionManager {
      * Loads datasource driver and initiates connection pool.
      */
     ConnectionManager() {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream propertiesFile = classLoader.getResourceAsStream("application.properties");
+
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Properties properties = new Properties();
+            properties.load(propertiesFile);
+
+            Class.forName(properties.getProperty(PROPERTY_JDBC_DRIVER));
+
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(properties.getProperty(PROPERTY_JDBC_URL));
+            config.setUsername(properties.getProperty(PROPERTY_USER));
+            config.setPassword(properties.getProperty(PROPERTY_PASSWORD));
+            config.setMaximumPoolSize(Integer.parseInt(properties.getProperty(PROPERTY_POOL_SIZE)));
+            config.setAutoCommit(Boolean.getBoolean(properties.getProperty(PROPERTY_AUTOCOMMIT)));
+
+            dataSource = new HikariDataSource(config);
+        } catch (IOException e) {
+            logger.error("could not read properties file", e);
         } catch (ClassNotFoundException e) {
             logger.error("could not load db driver", e);
         }
-
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/computer-database-db?useSSL=false");
-        config.setUsername("admincdb");
-        config.setPassword("qwerty1234");
-
-        config.setMaximumPoolSize(10);
-        config.setAutoCommit(false);
-
-        dataSource = new HikariDataSource(config);
     }
 
     /**
