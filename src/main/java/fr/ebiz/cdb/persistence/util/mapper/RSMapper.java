@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence.mapper;
+package fr.ebiz.cdb.persistence.util.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

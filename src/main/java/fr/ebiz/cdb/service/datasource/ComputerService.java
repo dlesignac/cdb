@@ -1,13 +1,14 @@
 package fr.ebiz.cdb.service.datasource;
 
-import fr.ebiz.cdb.dto.DeleteRequest;
-import fr.ebiz.cdb.dto.PageRequest;
+import fr.ebiz.cdb.dto.ComputerDeletionDTO;
+import fr.ebiz.cdb.dto.ComputerPageDTO;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.dao.ComputerDAO;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
+import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.persistence.exception.DatasourceException;
-import fr.ebiz.cdb.persistence.exception.QueryException;
+import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -35,61 +36,101 @@ public enum ComputerService {
      * Inserts new computer into datasource.
      *
      * @param computer computer to be inserted
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public void create(Computer computer) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        computerDAO.create(connection, computer);
-        connectionManager.commitTransaction(connection);
-        connectionManager.closeConnection(connection);
+    public void create(Computer computer) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                computerDAO.create(connection, computer);
+                connectionManager.commit(connection);
+            } catch (DatasourceException | DAOQueryException e) {
+                connectionManager.rollback(connection);
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
     /**
      * Deletes computer into datasource.
      *
      * @param computer computer to be deleted
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public void delete(Computer computer) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        computerDAO.delete(connection, computer);
-        connectionManager.commitTransaction(connection);
-        connectionManager.closeConnection(connection);
+    public void delete(Computer computer) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                computerDAO.delete(connection, computer);
+                connectionManager.commit(connection);
+            } catch (DatasourceException | DAOQueryException e) {
+                connectionManager.rollback(connection);
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
     /**
      * Deletes computers into datasource.
      *
-     * @param deleteRequest deleteRequest
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @param computerDeletionDTO computerDeletionDTO
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public void deleteMany(DeleteRequest deleteRequest) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
+    public void deleteMany(ComputerDeletionDTO computerDeletionDTO) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
 
-        for (Integer id : deleteRequest.getIds()) {
-            Computer computer = new Computer();
-            computer.setId(id);
-            computerDAO.delete(connection, computer);
+            try {
+                for (Integer id : computerDeletionDTO.getIds()) {
+                    Computer computer = new Computer();
+                    computer.setId(id);
+                    computerDAO.delete(connection, computer);
+                }
+
+                connectionManager.commit(connection);
+            } catch (DatasourceException | DAOQueryException e) {
+                connectionManager.rollback(connection);
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
         }
-        connectionManager.commitTransaction(connection);
-        connectionManager.closeConnection(connection);
     }
 
     /**
      * Updates computer into datasource.
      *
      * @param computer computer to be updated
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public void update(Computer computer) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        computerDAO.update(connection, computer);
-        connectionManager.commitTransaction(connection);
-        connectionManager.closeConnection(connection);
+    public void update(Computer computer) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                computerDAO.update(connection, computer);
+                connectionManager.commit(connection);
+            } catch (DatasourceException | DAOQueryException e) {
+                connectionManager.rollback(connection);
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
     /**
@@ -97,59 +138,54 @@ public enum ComputerService {
      *
      * @param id computer's id
      * @return computer
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public Computer find(int id) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        Computer computer = computerDAO.find(connection, id);
-        connectionManager.closeConnection(connection);
-        return computer;
+    public Computer find(int id) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                return computerDAO.find(connection, id);
+            } catch (DAOQueryException e) {
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
     /**
      * Gets a frame of computers.
      *
-     * @param search  search
-     * @param orderBy orderBy
-     * @param order   order
-     * @param limit   max number of computers
-     * @param number  number of requested frame
+     * @param computerPageDTO computerPageDTO
      * @return frame of computers
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public Page<Computer> page(String search, String orderBy, String order, int limit, int number)
-            throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        int computersCount = computerDAO.count(connection, search);
-        int pageCount = (computersCount + limit - 1) / limit;
-        List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
-        connectionManager.closeConnection(connection);
-        return new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
-    }
+    public Page<Computer> page(ComputerPageDTO computerPageDTO) throws TransactionFailedException {
+        int limit = computerPageDTO.getLimit();
+        int number = computerPageDTO.getNumber();
+        String search = computerPageDTO.getSearch();
+        String orderBy = computerPageDTO.getOrderBy();
+        String order = computerPageDTO.getOrder();
 
-    /**
-     * Gets a frame of computers.
-     *
-     * @param pageRequest pageRequest
-     * @return frame of computers
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
-     */
-    public Page<Computer> page(PageRequest pageRequest) throws DatasourceException, QueryException {
-        int limit = pageRequest.getLimit();
-        int number = pageRequest.getNumber();
-        String search = pageRequest.getSearch();
-        String orderBy = pageRequest.getOrderBy();
-        String order = pageRequest.getOrder();
-        Connection connection = connectionManager.getConnection();
-        int computersCount = computerDAO.count(connection, search);
-        int pageCount = (computersCount + limit - 1) / limit;
-        List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
-        connectionManager.closeConnection(connection);
-        return new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
-    }
+        try {
+            Connection connection = connectionManager.getConnection();
 
+            try {
+                int computersCount = computerDAO.count(connection, search);
+                int pageCount = (computersCount + limit - 1) / limit;
+                List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
+                return new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
+            } catch (DAOQueryException e) {
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
+    }
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Delete request.
  */
-public class DeleteRequest {
+public class ComputerDeletionDTO {
 
     private List<Integer> ids;
 
@@ -14,7 +14,7 @@ public class DeleteRequest {
      *
      * @param ids ids
      */
-    public DeleteRequest(List<Integer> ids) {
+    public ComputerDeletionDTO(List<Integer> ids) {
         this.ids = ids;
     }
 

@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence;
+package fr.ebiz.cdb.persistence.util;
 
 /**
  * Query builder.

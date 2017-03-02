@@ -16,7 +16,7 @@
     </properties>
 
     <build>
-        <finalName>training-java</finalName>
+        <finalName>computer-database</finalName>
 
         <plugins>
             <!--

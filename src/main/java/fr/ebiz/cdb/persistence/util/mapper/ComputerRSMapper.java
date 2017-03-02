@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence.mapper;
+package fr.ebiz.cdb.persistence.util.mapper;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by ebiz on 27/02/17.
+ * Computer RS mapper.
  */
 public class ComputerRSMapper extends RSMapper<Computer> {
 

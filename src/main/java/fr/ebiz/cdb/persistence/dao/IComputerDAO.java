@@ -2,7 +2,7 @@ package fr.ebiz.cdb.persistence.dao;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.persistence.exception.QueryException;
+import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -17,36 +17,36 @@ public interface IComputerDAO {
      *
      * @param connection connection to use
      * @param computer   computer to be persisted
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    void create(Connection connection, Computer computer) throws QueryException;
+    void create(Connection connection, Computer computer) throws DAOQueryException;
 
     /**
      * Deletes computer into data source.
      *
      * @param connection connection to use
      * @param computer   computer to be deleted
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    void delete(Connection connection, Computer computer) throws QueryException;
+    void delete(Connection connection, Computer computer) throws DAOQueryException;
 
     /**
      * Deletes all computers for a given manufacturer.
      *
      * @param connection connection to use
      * @param company    manufacturer
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    void delete(Connection connection, Company company) throws QueryException;
+    void delete(Connection connection, Company company) throws DAOQueryException;
 
     /**
      * Updates computer into data source.
      *
      * @param connection connection to use
      * @param computer   computer to be updated
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    void update(Connection connection, Computer computer) throws QueryException;
+    void update(Connection connection, Computer computer) throws DAOQueryException;
 
     /**
      * Finds computer by its id.
@@ -54,9 +54,9 @@ public interface IComputerDAO {
      * @param connection connection to use
      * @param id         computer's id
      * @return computer
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    Computer find(Connection connection, int id) throws QueryException;
+    Computer find(Connection connection, int id) throws DAOQueryException;
 
     /**
      * Counts computers.
@@ -64,9 +64,9 @@ public interface IComputerDAO {
      * @param connection connection to use
      * @param search     search
      * @return computers' count
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    int count(Connection connection, String search) throws QueryException;
+    int count(Connection connection, String search) throws DAOQueryException;
 
     /**
      * Fetches computers for a given pagination.
@@ -78,8 +78,8 @@ public interface IComputerDAO {
      * @param limit      max number of entries
      * @param offset     number of pages to skip
      * @return entries
-     * @throws QueryException an unexpected error occurred
+     * @throws DAOQueryException an unexpected error occurred
      */
-    List<Computer> fetch(Connection connection, String search, String orderBy, String order, int limit, int offset) throws QueryException;
+    List<Computer> fetch(Connection connection, String search, String orderBy, String order, int limit, int offset) throws DAOQueryException;
 
 }

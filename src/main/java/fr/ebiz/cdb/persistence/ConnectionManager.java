@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -64,7 +65,7 @@ public enum ConnectionManager {
      * @param connection connection to commit
      * @throws DatasourceException an unexpected error occurred
      */
-    public void commitTransaction(Connection connection) throws DatasourceException {
+    public void commit(Connection connection) throws DatasourceException {
         try {
             connection.commit();
         } catch (SQLException e) {
@@ -74,16 +75,48 @@ public enum ConnectionManager {
     }
 
     /**
+     * Rollback transaction.
+     *
+     * @param connection connection to rollback
+     */
+    public void rollback(Connection connection) {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            logger.error("could not rollback transaction", e);
+        }
+    }
+
+    /**
      * Closes connection.
      *
      * @param connection connection to commit
      */
-    public void closeConnection(Connection connection) {
+    public void close(Connection connection) {
         try {
             connection.close();
         } catch (SQLException e) {
-            logger.error("could not close transaction", e);
+            logger.error("could not close connection", e);
         }
+    }
+
+    /**
+     * Prepares statement.
+     *
+     * @param connection connection
+     * @param query      query
+     * @param objects    objects
+     * @return PreparedStatement
+     * @throws SQLException an unexpected error occurred
+     */
+    public PreparedStatement prepareStatement(Connection connection, String query, Object... objects) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        for (int i = 0; i < objects.length; i++) {
+            preparedStatement.setObject(i + 1, objects[i]);
+        }
+
+        return preparedStatement;
     }
 
 }

@@ -3,7 +3,7 @@ package fr.ebiz.cdb.dto;
 /**
  * Page request.
  */
-public class PageRequest {
+public class ComputerPageDTO {
 
     private String search;
     private String orderBy;
@@ -20,7 +20,7 @@ public class PageRequest {
      * @param limit   limit
      * @param number  number
      */
-    public PageRequest(String search, String orderBy, String order, int limit, int number) {
+    public ComputerPageDTO(String search, String orderBy, String order, int limit, int number) {
         this.search = search;
         this.order = order;
         this.orderBy = orderBy;

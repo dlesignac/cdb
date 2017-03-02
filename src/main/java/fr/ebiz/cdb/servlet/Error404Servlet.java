@@ -13,11 +13,11 @@ import java.io.IOException;
 @WebServlet("/error404")
 public class Error404Servlet extends HttpServlet {
 
-    private static final String ERROR_404_JSP = "/WEB-INF/pages/404.jsp";
+    private static final String VIEW = "/WEB-INF/pages/404.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher(ERROR_404_JSP).forward(req, resp);
+        getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
     }
 
 }

@@ -1,18 +1,16 @@
 package fr.ebiz.cdb.persistence.dao;
 
+import fr.ebiz.cdb.model.Company;
+import fr.ebiz.cdb.persistence.ConnectionManager;
+import fr.ebiz.cdb.persistence.util.QueryBuilder;
+import fr.ebiz.cdb.persistence.exception.DAOQueryException;
+import fr.ebiz.cdb.persistence.util.mapper.CompanyRSMapper;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import fr.ebiz.cdb.persistence.QueryBuilder;
-import fr.ebiz.cdb.persistence.exception.QueryException;
-import fr.ebiz.cdb.persistence.mapper.CompanyRSMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fr.ebiz.cdb.model.Company;
 
 /**
  * Company DAO.
@@ -21,80 +19,51 @@ public enum CompanyDAO implements ICompanyDAO {
 
     INSTANCE;
 
-    private static final String TABLE_COMPANY = "company";
-
-    private Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+    private ConnectionManager connectionManager = ConnectionManager.INSTANCE;
 
     @Override
-    public void delete(Connection connection, Company company) throws QueryException {
+    public void delete(Connection connection, Company company) throws DAOQueryException {
         String query = new QueryBuilder()
                 .deleteFrom("company")
                 .where("id = ?")
                 .build();
 
-        Object[] args = {company.getId()};
-
-        try (PreparedStatement statement = prepare(connection, query, args)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, company.getId())) {
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("could not delete company", e);
-            throw new QueryException();
+            throw new DAOQueryException("could not delete company " + company.toString(), e);
         }
     }
 
     @Override
-    public Company find(Connection connection, int id) throws QueryException {
+    public Company find(Connection connection, int id) throws DAOQueryException {
         String query = new QueryBuilder()
                 .select("*")
-                .from(TABLE_COMPANY)
+                .from("company")
                 .where("id = ?")
                 .build();
 
-        Object[] args = {id};
-
-        try (PreparedStatement statement = prepare(connection, query, args)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, id)) {
             ResultSet rs = statement.executeQuery();
             return new CompanyRSMapper().mapToOne(rs);
         } catch (SQLException e) {
-            logger.error("could not find company", e);
-            throw new QueryException();
+            throw new DAOQueryException("could not find company by id " + id, e);
         }
     }
 
     @Override
-    public List<Company> fetch(Connection connection) throws QueryException {
+    public List<Company> fetch(Connection connection) throws DAOQueryException {
         String query = new QueryBuilder()
                 .select("*")
-                .from(TABLE_COMPANY)
+                .from("company")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query)) {
             ResultSet rs = statement.executeQuery();
             return new CompanyRSMapper().mapToMany(rs);
         } catch (SQLException e) {
-            logger.error("could not find companies", e);
-            throw new QueryException();
+            throw new DAOQueryException("could not fetch companies", e);
         }
-    }
-
-    /**
-     * Prepares statement.
-     *
-     * @param connection connection
-     * @param query      query
-     * @param objects    objects
-     * @return PreparedStatement
-     * @throws SQLException an unexpected error occurred
-     */
-    private PreparedStatement prepare(Connection connection, String query, Object[] objects)
-            throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-        for (int i = 0; i < objects.length; i++) {
-            preparedStatement.setObject(i + 1, objects[i]);
-        }
-
-        return preparedStatement;
     }
 
 }

@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.mapper;
 
-import fr.ebiz.cdb.dto.ComputerRequest;
+import fr.ebiz.cdb.dto.ComputerDTO;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
@@ -20,18 +20,18 @@ public abstract class ComputerMapper {
     /**
      * Maps string parameters to a computer.
      *
-     * @param computerRequest computerRequest
+     * @param computerDTO computerDTO
      * @return computer
      * @throws ValidationException one or more entries are invalid
      */
-    public static Computer map(ComputerRequest computerRequest) throws ValidationException {
+    public static Computer map(ComputerDTO computerDTO) throws ValidationException {
         boolean valid = true;
 
-        String id = computerRequest.getId();
-        String name = computerRequest.getName();
-        String introduced = computerRequest.getIntroduced();
-        String discontinued = computerRequest.getDiscontinued();
-        String companyId = computerRequest.getCompanyId();
+        String id = computerDTO.getId();
+        String name = computerDTO.getName();
+        String introduced = computerDTO.getIntroduced();
+        String discontinued = computerDTO.getDiscontinued();
+        String companyId = computerDTO.getCompanyId();
 
         if (!ComputerValidator.validateId(id)) {
             LOGGER.warn("tried to set computer id : " + id);

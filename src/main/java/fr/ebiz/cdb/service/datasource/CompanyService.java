@@ -6,8 +6,9 @@ import fr.ebiz.cdb.persistence.dao.CompanyDAO;
 import fr.ebiz.cdb.persistence.dao.ComputerDAO;
 import fr.ebiz.cdb.persistence.dao.ICompanyDAO;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
+import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.persistence.exception.DatasourceException;
-import fr.ebiz.cdb.persistence.exception.QueryException;
+import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -36,15 +37,25 @@ public enum CompanyService {
      * Deletes company into datasource.
      *
      * @param company company to be deleted
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public void delete(Company company) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        computerDAO.delete(connection, company);
-        companyDAO.delete(connection, company);
-        connectionManager.commitTransaction(connection);
-        connectionManager.closeConnection(connection);
+    public void delete(Company company) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                computerDAO.delete(connection, company);
+                companyDAO.delete(connection, company);
+                connectionManager.commit(connection);
+            } catch (DatasourceException | DAOQueryException e) {
+                connectionManager.rollback(connection);
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
     /**
@@ -52,28 +63,44 @@ public enum CompanyService {
      *
      * @param id company's id
      * @return company
-     * @throws QueryException      an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public Company find(int id) throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        Company company = companyDAO.find(connection, id);
-        connectionManager.closeConnection(connection);
-        return company;
+    public Company find(int id) throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                return companyDAO.find(connection, id);
+            } catch (DAOQueryException e) {
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
     /**
      * Fetches companies.
      *
      * @return companies
-     * @throws QueryException      an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    public List<Company> list() throws DatasourceException, QueryException {
-        Connection connection = connectionManager.getConnection();
-        List<Company> companies = companyDAO.fetch(connection);
-        connectionManager.closeConnection(connection);
-        return companies;
+    public List<Company> list() throws TransactionFailedException {
+        try {
+            Connection connection = connectionManager.getConnection();
+
+            try {
+                return companyDAO.fetch(connection);
+            } catch (DAOQueryException e) {
+                throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
+            } finally {
+                connectionManager.close(connection);
+            }
+        } catch (DatasourceException e) {
+            throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
+        }
     }
 
 }

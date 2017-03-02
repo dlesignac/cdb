@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence.mapper;
+package fr.ebiz.cdb.persistence.util.mapper;
 
 import fr.ebiz.cdb.model.Company;
 
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by ebiz on 27/02/17.
+ * Company RS mapper.
  */
 public class CompanyRSMapper extends RSMapper<Company> {
 

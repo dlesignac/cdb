@@ -3,7 +3,7 @@ package fr.ebiz.cdb.dto;
 /**
  * Computer DTO.
  */
-public class ComputerRequest {
+public class ComputerDTO {
 
     private String id;
     private String name;
@@ -16,7 +16,7 @@ public class ComputerRequest {
      *
      * @param builder builder
      */
-    private ComputerRequest(Builder builder) {
+    private ComputerDTO(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.introduced = builder.introduced;
@@ -88,12 +88,12 @@ public class ComputerRequest {
         }
 
         /**
-         * Builds ComputerRequest.
+         * Builds ComputerDTO.
          *
-         * @return ComputerRequest
+         * @return ComputerDTO
          */
-        public ComputerRequest build() {
-            return new ComputerRequest(this);
+        public ComputerDTO build() {
+            return new ComputerDTO(this);
         }
     }
 

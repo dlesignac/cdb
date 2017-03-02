@@ -1,27 +1,26 @@
 package fr.ebiz.cdb.ui.cli;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Scanner;
-
-import fr.ebiz.cdb.persistence.exception.DatasourceException;
-import fr.ebiz.cdb.persistence.exception.QueryException;
+import fr.ebiz.cdb.dto.ComputerPageDTO;
+import fr.ebiz.cdb.model.Company;
+import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.service.datasource.CompanyService;
 import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.Page;
+import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.ui.cli.frame.Frame;
-import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
 import fr.ebiz.cdb.ui.cli.frame.FrameCompany;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputer;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputerChange;
+import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputers;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.model.Computer;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Command Line Interface.
@@ -163,7 +162,7 @@ public class CLI {
             } else {
                 callErrorInvalidInput();
             }
-        } catch (QueryException | DatasourceException e) {
+        } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -180,7 +179,7 @@ public class CLI {
             try {
                 deleteComputer();
                 callComputers(1);
-            } catch (DatasourceException | QueryException e) {
+            } catch (TransactionFailedException e) {
                 callErrorInternalServerError(e);
             }
         } else if (CLIOptions.EDIT.equals(input[0])) {
@@ -217,7 +216,7 @@ public class CLI {
             } else {
                 callErrorInvalidInput();
             }
-        } catch (QueryException | DatasourceException e) {
+        } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -234,7 +233,7 @@ public class CLI {
             try {
                 deleteCompany();
                 callCompanies();
-            } catch (DatasourceException | QueryException e) {
+            } catch (TransactionFailedException e) {
                 callErrorInternalServerError(e);
             }
         } else {
@@ -255,7 +254,7 @@ public class CLI {
                 Computer computer = getComputerFromPage();
                 computerService.update(computer);
                 callComputer(computer);
-            } catch (DatasourceException | QueryException e) {
+            } catch (TransactionFailedException e) {
                 callErrorInternalServerError(e);
             }
         } else {
@@ -276,7 +275,7 @@ public class CLI {
                 Computer computer = getComputerFromPage();
                 computerService.create(computer);
                 callComputer(computer);
-            } catch (DatasourceException | QueryException e) {
+            } catch (TransactionFailedException e) {
                 callErrorInternalServerError(e);
             }
         } else {
@@ -353,7 +352,7 @@ public class CLI {
             } else {
                 callErrorInvalidInput();
             }
-        } catch (QueryException | DatasourceException e) {
+        } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -373,10 +372,11 @@ public class CLI {
      */
     private void callComputers(int offset) {
         try {
-            Page<Computer> computers = computerService.page("", "computerName", "ASC", 10, offset);
+            ComputerPageDTO dto = new ComputerPageDTO("", "computerName", "ASC", 10, offset);
+            Page<Computer> computers = computerService.page(dto);
             this.frame = new FrameBuilder().buildComputers(computers);
             this.status = CLIStatus.COMPUTERS;
-        } catch (QueryException | DatasourceException e) {
+        } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
 
@@ -400,7 +400,7 @@ public class CLI {
             List<Company> companies = companyService.list();
             this.frame = new FrameBuilder().buildCompanies(companies);
             this.status = CLIStatus.COMPANIES;
-        } catch (QueryException | DatasourceException e) {
+        } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -432,7 +432,7 @@ public class CLI {
             Computer computer = getComputerFromPage();
             computer = this.getComputerById(computer.getId());
             callComputer(computer);
-        } catch (QueryException | DatasourceException e) {
+        } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
     }
@@ -481,10 +481,9 @@ public class CLI {
     /**
      * Deletes computer.
      *
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    private void deleteComputer() throws DatasourceException, QueryException {
+    private void deleteComputer() throws TransactionFailedException {
         Computer computer = getComputerFromPage();
         computerService.delete(computer);
     }
@@ -492,10 +491,9 @@ public class CLI {
     /**
      * Deletes company.
      *
-     * @throws DatasourceException an unexpected error occurred
-     * @throws QueryException      an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    private void deleteCompany() throws DatasourceException, QueryException {
+    private void deleteCompany() throws TransactionFailedException {
         Company company = getCompanyFromPage();
         companyService.delete(company);
     }
@@ -505,10 +503,9 @@ public class CLI {
      *
      * @param id computer's id
      * @return object computer
-     * @throws QueryException      an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    private Computer getComputerById(int id) throws QueryException, DatasourceException {
+    private Computer getComputerById(int id) throws TransactionFailedException {
         return computerService.find(id);
     }
 
@@ -517,10 +514,9 @@ public class CLI {
      *
      * @param id company's id
      * @return object company
-     * @throws QueryException      an unexpected error occurred
-     * @throws DatasourceException an unexpected error occurred
+     * @throws TransactionFailedException an unexpected error occurred
      */
-    private Company getCompanyById(int id) throws QueryException, DatasourceException {
+    private Company getCompanyById(int id) throws TransactionFailedException {
         return companyService.find(id);
     }
 

@@ -1,8 +1,8 @@
 package fr.ebiz.cdb.service.request;
 
-import fr.ebiz.cdb.dto.ComputerRequest;
-import fr.ebiz.cdb.dto.DeleteRequest;
-import fr.ebiz.cdb.dto.PageRequest;
+import fr.ebiz.cdb.dto.ComputerDTO;
+import fr.ebiz.cdb.dto.ComputerDeletionDTO;
+import fr.ebiz.cdb.dto.ComputerPageDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -35,19 +35,19 @@ public class RequestParser {
     private static final String DELETE_SEPARATOR = ",";
 
     /**
-     * Parses request to get ComputerRequest.
+     * Parses request to get ComputerDTO.
      *
      * @param req request
-     * @return ComputerRequest
+     * @return ComputerDTO
      */
-    public static ComputerRequest parseComputer(HttpServletRequest req) {
+    public static ComputerDTO parseComputer(HttpServletRequest req) {
         String id = req.getParameter(PARAMETER_COMPUTER_ID);
         String computerName = req.getParameter(PARAMETER_COMPUTER_NAME);
         String introduced = req.getParameter(PARAMETER_INTRODUCED);
         String discontinued = req.getParameter(PARAMETER_DISCONTINUED);
         String companyId = req.getParameter(PARAMETER_COMPANY_ID);
 
-        return new ComputerRequest
+        return new ComputerDTO
                 .Builder(computerName)
                 .setId(id)
                 .setIntroduced(introduced)
@@ -57,12 +57,12 @@ public class RequestParser {
     }
 
     /**
-     * Parses request to get PageRequest.
+     * Parses request to get ComputerPageDTO.
      *
      * @param req request
-     * @return PageRequest
+     * @return ComputerPageDTO
      */
-    public static PageRequest parsePage(HttpServletRequest req) {
+    public static ComputerPageDTO parsePage(HttpServletRequest req) {
         String search = req.getParameter(PARAMETER_SEARCH);
         String orderBy = req.getParameter(PARAMETER_ORDER_BY);
         String order = req.getParameter(PARAMETER_ORDER);
@@ -75,16 +75,16 @@ public class RequestParser {
         int pageLimit = reqLimit == null ? DEFAULT_LIMIT : Integer.parseInt(reqLimit);
         int pageNumber = reqPage == null ? DEFAULT_NUMBER : Integer.parseInt(reqPage);
 
-        return new PageRequest(search, orderBy, order, pageLimit, pageNumber);
+        return new ComputerPageDTO(search, orderBy, order, pageLimit, pageNumber);
     }
 
     /**
-     * Parses request to get DeleteRequest.
+     * Parses request to get ComputerDeletionDTO.
      *
      * @param req request
-     * @return DeleteRequest
+     * @return ComputerDeletionDTO
      */
-    public static DeleteRequest parseDelete(HttpServletRequest req) {
+    public static ComputerDeletionDTO parseDelete(HttpServletRequest req) {
         String[] delete = req.getParameter(PARAMETER_PAGE_DELETE).split(DELETE_SEPARATOR);
 
         List<Integer> ids = new ArrayList<>();
@@ -95,7 +95,7 @@ public class RequestParser {
             }
         }
 
-        return new DeleteRequest(ids);
+        return new ComputerDeletionDTO(ids);
     }
 
 }

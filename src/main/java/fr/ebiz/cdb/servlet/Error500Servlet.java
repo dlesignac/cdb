@@ -15,11 +15,11 @@ public class Error500Servlet extends HttpServlet {
 
     static final String URL = "/error500";
 
-    private static final String ERROR_500_JSP = "/WEB-INF/pages/500.jsp";
+    private static final String VIEW = "/WEB-INF/pages/500.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher(ERROR_500_JSP).forward(req, resp);
+        getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
     }
 
 }
