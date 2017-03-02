@@ -68,9 +68,10 @@ public class ComputerValidator {
         LocalDate introduced = computer.getIntroduced();
         LocalDate discontinued = computer.getDiscontinued();
 
-        return (introduced == null && discontinued == null) ||
-                (introduced != null && introduced.isBefore(LocalDate.now()) &&
-                        (discontinued == null || (discontinued.isBefore(LocalDate.now()) && discontinued.isAfter(introduced))));
+        return computer.getName() != null && !"".equals(computer.getName()) &&
+                ((introduced == null && discontinued == null) ||
+                        (introduced != null && introduced.isBefore(LocalDate.now()) &&
+                                (discontinued == null || (discontinued.isBefore(LocalDate.now()) && discontinued.isAfter(introduced)))));
     }
 
     /**

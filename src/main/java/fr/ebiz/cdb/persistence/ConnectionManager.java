@@ -22,12 +22,12 @@ public enum ConnectionManager {
 
     INSTANCE;
 
-    private final String PROPERTY_JDBC_DRIVER = "jdbcDriver";
-    private final String PROPERTY_JDBC_URL = "jdbcUrl";
-    private final String PROPERTY_USER = "user";
-    private final String PROPERTY_PASSWORD = "password";
-    private final String PROPERTY_POOL_SIZE = "poolsize";
-    private final String PROPERTY_AUTOCOMMIT = "autocommit";
+    private final String PROPERTY_JDBC_DRIVER = "jdbc.driver";
+    private final String PROPERTY_DATASOURCE_URL = "datasource.url";
+    private final String PROPERTY_DATASOURCE_USERNAME = "datasource.username";
+    private final String PROPERTY_DATASOURCE_PASSWORD = "datasource.password";
+    private final String PROPERTY_DATASOURCE_POOLSIZE = "datasource.poolsize";
+    private final String PROPERTY_DATASOURCE_AUTOCOMMIT = "datasource.autocommit";
 
     private Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 
@@ -47,11 +47,11 @@ public enum ConnectionManager {
             Class.forName(properties.getProperty(PROPERTY_JDBC_DRIVER));
 
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(properties.getProperty(PROPERTY_JDBC_URL));
-            config.setUsername(properties.getProperty(PROPERTY_USER));
-            config.setPassword(properties.getProperty(PROPERTY_PASSWORD));
-            config.setMaximumPoolSize(Integer.parseInt(properties.getProperty(PROPERTY_POOL_SIZE)));
-            config.setAutoCommit(Boolean.getBoolean(properties.getProperty(PROPERTY_AUTOCOMMIT)));
+            config.setJdbcUrl(properties.getProperty(PROPERTY_DATASOURCE_URL));
+            config.setUsername(properties.getProperty(PROPERTY_DATASOURCE_USERNAME));
+            config.setPassword(properties.getProperty(PROPERTY_DATASOURCE_PASSWORD));
+            config.setMaximumPoolSize(Integer.parseInt(properties.getProperty(PROPERTY_DATASOURCE_POOLSIZE)));
+            config.setAutoCommit(Boolean.getBoolean(properties.getProperty(PROPERTY_DATASOURCE_AUTOCOMMIT)));
 
             dataSource = new HikariDataSource(config);
         } catch (IOException e) {
