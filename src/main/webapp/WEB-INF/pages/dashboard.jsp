@@ -15,7 +15,7 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
-					    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+					    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${page.search}"/>
                         <input type="hidden" name="limit" value="${page.limit}"/>
                         <input type="hidden" name="page" value="1"/>
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
@@ -36,8 +36,6 @@
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<!-- Table header for Computer Name -->
 						<th class="editMode" style="width: 60px; height: 22px;">
 						    <input type="checkbox" id="selectall" />
 						    <span style="vertical-align: top;">
@@ -47,11 +45,10 @@
 							    </a>
 						    </span>
 						</th>
-						<th>
-						    Computer name <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='computerName' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
-						<th>Introduced <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='introduced' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
-						<th>Discontinued date <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='discontinued' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
-						<th>Company <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='companyName' order='ASC' limit='${page.limit}' page='${page.number}'/>"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></a></th>
+						<th>Computer name <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='computerName' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+						<th>Introduced <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='introduced' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+						<th>Discontinued date <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='discontinued' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+						<th>Company <a href="<mylib:link target='dashboard' search='${page.search}' orderBy='companyName' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->

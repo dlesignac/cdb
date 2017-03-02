@@ -12,6 +12,15 @@ import java.util.List;
 public interface ICompanyDAO {
 
     /**
+     * Deletes company.
+     *
+     * @param connection connection to use
+     * @param company    to be deleted
+     * @throws QueryException an unexpected error occurred
+     */
+    void delete(Connection connection, Company company) throws QueryException;
+
+    /**
      * Finds company by its id.
      *
      * @param connection connection to use
@@ -20,15 +29,6 @@ public interface ICompanyDAO {
      * @throws QueryException an unexpected error occurred
      */
     Company find(Connection connection, int id) throws QueryException;
-
-    /**
-     * Counts companies.
-     *
-     * @param connection connection to use
-     * @return companies' count
-     * @throws QueryException an unexpected error occurred
-     */
-    int count(Connection connection) throws QueryException;
 
     /**
      * Fetches companies.

@@ -41,8 +41,8 @@ public class EditComputerServlet extends HttpServlet {
         String id = req.getParameter(PARAMETER_COMPUTER_ID);
 
         try {
-            Computer computer = computerService.findComputer(Integer.parseInt(id));
-            List<Company> companies = companyService.listCompanies();
+            Computer computer = computerService.find(Integer.parseInt(id));
+            List<Company> companies = companyService.list();
             req.setAttribute(REQUEST_ATTRIBUTE_COMPUTER, computer);
             req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
             getServletContext().getRequestDispatcher(EDIT_COMPUTER_JSP).forward(req, resp);
@@ -58,7 +58,7 @@ public class EditComputerServlet extends HttpServlet {
 
         try {
             Computer computer = ComputerMapper.map(computerRequest);
-            computerService.updateComputer(computer);
+            computerService.update(computer);
             req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "success");
             resp.sendRedirect(req.getContextPath() + DashboardServlet.URL);
         } catch (DatasourceException | QueryException e) {

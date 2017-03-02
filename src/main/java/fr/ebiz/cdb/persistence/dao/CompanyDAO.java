@@ -26,6 +26,23 @@ public enum CompanyDAO implements ICompanyDAO {
     private Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
     @Override
+    public void delete(Connection connection, Company company) throws QueryException {
+        String query = new QueryBuilder()
+                .deleteFrom("company")
+                .where("id = ?")
+                .build();
+
+        Object[] args = {company.getId()};
+
+        try (PreparedStatement statement = prepare(connection, query, args)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("could not delete company", e);
+            throw new QueryException();
+        }
+    }
+
+    @Override
     public Company find(Connection connection, int id) throws QueryException {
         String query = new QueryBuilder()
                 .select("*")
@@ -33,35 +50,15 @@ public enum CompanyDAO implements ICompanyDAO {
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
+        Object[] args = {id};
 
+        try (PreparedStatement statement = prepare(connection, query, args)) {
             ResultSet rs = statement.executeQuery();
             return new CompanyRSMapper().mapToOne(rs);
         } catch (SQLException e) {
             logger.error("could not find company", e);
             throw new QueryException();
         }
-    }
-
-    @Override
-    public int count(Connection connection) throws QueryException {
-        String query = new QueryBuilder()
-                .select("count(id)")
-                .from(TABLE_COMPANY)
-                .build();
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet rs = statement.executeQuery();
-
-            if (rs.first()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            logger.error("could not count companies", e);
-        }
-
-        throw new QueryException();
     }
 
     @Override
@@ -78,6 +75,26 @@ public enum CompanyDAO implements ICompanyDAO {
             logger.error("could not find companies", e);
             throw new QueryException();
         }
+    }
+
+    /**
+     * Prepares statement.
+     *
+     * @param connection connection
+     * @param query      query
+     * @param objects    objects
+     * @return PreparedStatement
+     * @throws SQLException an unexpected error occurred
+     */
+    private PreparedStatement prepare(Connection connection, String query, Object[] objects)
+            throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        for (int i = 0; i < objects.length; i++) {
+            preparedStatement.setObject(i + 1, objects[i]);
+        }
+
+        return preparedStatement;
     }
 
 }

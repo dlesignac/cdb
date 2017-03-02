@@ -1,5 +1,6 @@
 package fr.ebiz.cdb.persistence.dao;
 
+import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.exception.QueryException;
 
@@ -28,6 +29,15 @@ public interface IComputerDAO {
      * @throws QueryException an unexpected error occurred
      */
     void delete(Connection connection, Computer computer) throws QueryException;
+
+    /**
+     * Deletes all computers for a given manufacturer.
+     *
+     * @param connection connection to use
+     * @param company    manufacturer
+     * @throws QueryException an unexpected error occurred
+     */
+    void delete(Connection connection, Company company) throws QueryException;
 
     /**
      * Updates computer into data source.

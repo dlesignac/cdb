@@ -31,6 +31,11 @@ enum CLIStatus {
     COMPANIES,
 
     /**
+     * CLI is currently running the Company Details frame.
+     */
+    COMPANY,
+
+    /**
      * CLI is currently running the Computer Edit frame.
      */
     COMPUTER_EDIT,

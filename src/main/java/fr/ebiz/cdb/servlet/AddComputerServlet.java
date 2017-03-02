@@ -36,7 +36,7 @@ public class AddComputerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Company> companies = companyService.listCompanies();
+            List<Company> companies = companyService.list();
             req.setAttribute(REQUEST_ATTRIBUTE_COMPANIES, companies);
             getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(req, resp);
         } catch (DatasourceException | QueryException e) {
@@ -50,7 +50,7 @@ public class AddComputerServlet extends HttpServlet {
 
         try {
             Computer computer = ComputerMapper.map(computerRequest);
-            computerService.createComputer(computer);
+            computerService.create(computer);
             req.setAttribute(REQUEST_ATTRIBUTE_STATUS, "success");
             doGet(req, resp);
         } catch (DatasourceException | QueryException e) {

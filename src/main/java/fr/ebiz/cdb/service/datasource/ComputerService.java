@@ -38,7 +38,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public void createComputer(Computer computer) throws DatasourceException, QueryException {
+    public void create(Computer computer) throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         computerDAO.create(connection, computer);
         connectionManager.commitTransaction(connection);
@@ -52,7 +52,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public void deleteComputer(Computer computer) throws DatasourceException, QueryException {
+    public void delete(Computer computer) throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         computerDAO.delete(connection, computer);
         connectionManager.commitTransaction(connection);
@@ -66,7 +66,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public void deleteComputers(DeleteRequest deleteRequest) throws DatasourceException, QueryException {
+    public void deleteMany(DeleteRequest deleteRequest) throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
 
         for (Integer id : deleteRequest.getIds()) {
@@ -85,7 +85,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public void updateComputer(Computer computer) throws DatasourceException, QueryException {
+    public void update(Computer computer) throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         computerDAO.update(connection, computer);
         connectionManager.commitTransaction(connection);
@@ -100,7 +100,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public Computer findComputer(int id) throws DatasourceException, QueryException {
+    public Computer find(int id) throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         Computer computer = computerDAO.find(connection, id);
         connectionManager.closeConnection(connection);
@@ -119,7 +119,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public Page<Computer> pageComputers(String search, String orderBy, String order, int limit, int number)
+    public Page<Computer> page(String search, String orderBy, String order, int limit, int number)
             throws DatasourceException, QueryException {
         Connection connection = connectionManager.getConnection();
         int computersCount = computerDAO.count(connection, search);
@@ -137,7 +137,7 @@ public enum ComputerService {
      * @throws DatasourceException an unexpected error occurred
      * @throws QueryException      an unexpected error occurred
      */
-    public Page<Computer> pageComputers(PageRequest pageRequest) throws DatasourceException, QueryException {
+    public Page<Computer> page(PageRequest pageRequest) throws DatasourceException, QueryException {
         int limit = pageRequest.getLimit();
         int number = pageRequest.getNumber();
         String search = pageRequest.getSearch();

@@ -36,7 +36,7 @@ public class DashboardServlet extends HttpServlet {
         PageRequest pageRequest = RequestParser.parsePage(req);
 
         try {
-            Page<Computer> page = computerService.pageComputers(pageRequest);
+            Page<Computer> page = computerService.page(pageRequest);
             req.setAttribute(ATTRIBUTE_PAGE, page);
 
             getServletContext().getRequestDispatcher(DASHBOARD_JSP).forward(req, resp);
@@ -51,7 +51,7 @@ public class DashboardServlet extends HttpServlet {
 
         try {
             if (!deleteRequest.getIds().isEmpty()) {
-                computerService.deleteComputers(deleteRequest);
+                computerService.deleteMany(deleteRequest);
                 req.setAttribute(ATTRIBUTE_STATUS, "success");
             }
 

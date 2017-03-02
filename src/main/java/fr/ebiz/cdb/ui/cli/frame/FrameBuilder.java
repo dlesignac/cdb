@@ -171,6 +171,32 @@ public class FrameBuilder {
         frame.setCompanies(companies);
 
         List<Option> options = new ArrayList<>();
+        options.add(new Option(CLIOptions.SHOW, "show company"));
+        options.add(new Option(CLIOptions.BACK, "back"));
+        frame.setOptions(options);
+
+        return frame;
+    }
+
+    /**
+     * Builds company frame.
+     *
+     * @param company company to display
+     * @return company frame
+     */
+    public Frame buildCompany(Company company) {
+        FrameCompany frame = new FrameCompany();
+
+        List<String> levels = new ArrayList<>();
+        levels.add("CDB");
+        levels.add("company");
+        levels.add(String.valueOf(company.getId()));
+        frame.setLevels(levels);
+
+        frame.setCompany(company);
+
+        List<Option> options = new ArrayList<>();
+        options.add(new Option(CLIOptions.DELETE, "delete company"));
         options.add(new Option(CLIOptions.BACK, "back"));
         frame.setOptions(options);
 

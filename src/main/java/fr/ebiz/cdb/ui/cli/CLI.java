@@ -12,6 +12,7 @@ import fr.ebiz.cdb.service.datasource.Page;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.ui.cli.frame.Frame;
 import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
+import fr.ebiz.cdb.ui.cli.frame.FrameCompany;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputer;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputerChange;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputers;
@@ -94,6 +95,9 @@ public class CLI {
                 break;
             case COMPANIES:
                 doCompanies(input);
+                break;
+            case COMPANY:
+                doCompany(input);
                 break;
             case COMPUTER_EDIT:
                 doComputerEdit(input);
@@ -192,8 +196,47 @@ public class CLI {
      * @param input user input
      */
     private void doCompanies(String[] input) {
+        try {
+            if (CLIOptions.BACK.equals(input[0])) {
+                callIndex();
+            } else if (CLIOptions.SHOW.equals(input[0])) {
+                if (input.length < 2) {
+                    callErrorMissingParameter();
+                } else if (!StringUtils.isNumeric(input[1])) {
+                    callErrorInvalidParameter();
+                } else {
+                    int id = Integer.parseInt(input[1]);
+                    Company company = getCompanyById(id);
+
+                    if (company == null) {
+                        callErrorInvalidParameter();
+                    } else {
+                        callCompany(company);
+                    }
+                }
+            } else {
+                callErrorInvalidInput();
+            }
+        } catch (QueryException | DatasourceException e) {
+            callErrorInternalServerError(e);
+        }
+    }
+
+    /**
+     * Action listener for company details frame.
+     *
+     * @param input user input
+     */
+    private void doCompany(String[] input) {
         if (CLIOptions.BACK.equals(input[0])) {
-            callIndex();
+            callCompanies();
+        } else if (CLIOptions.DELETE.equals(input[0])) {
+            try {
+                deleteCompany();
+                callCompanies();
+            } catch (DatasourceException | QueryException e) {
+                callErrorInternalServerError(e);
+            }
         } else {
             callErrorInvalidInput();
         }
@@ -210,7 +253,7 @@ public class CLI {
         } else if (CLIOptions.SAVE.equals(input[0])) {
             try {
                 Computer computer = getComputerFromPage();
-                computerService.updateComputer(computer);
+                computerService.update(computer);
                 callComputer(computer);
             } catch (DatasourceException | QueryException e) {
                 callErrorInternalServerError(e);
@@ -231,7 +274,7 @@ public class CLI {
         } else if (CLIOptions.SAVE.equals(input[0])) {
             try {
                 Computer computer = getComputerFromPage();
-                computerService.createComputer(computer);
+                computerService.create(computer);
                 callComputer(computer);
             } catch (DatasourceException | QueryException e) {
                 callErrorInternalServerError(e);
@@ -297,7 +340,7 @@ public class CLI {
 
                 if (input.length >= 2) {
                     int companyId = Integer.parseInt(input[1]);
-                    manufacturer = companyService.findCompany(companyId);
+                    manufacturer = companyService.find(companyId);
 
                     if (manufacturer == null) {
                         this.frame.setError("No company found for this id");
@@ -306,7 +349,7 @@ public class CLI {
 
                 Computer computer = getComputerFromPage();
                 computer.setManufacturer(manufacturer);
-                computerService.updateComputer(computer);
+                computerService.update(computer);
             } else {
                 callErrorInvalidInput();
             }
@@ -330,7 +373,7 @@ public class CLI {
      */
     private void callComputers(int offset) {
         try {
-            Page<Computer> computers = computerService.pageComputers("", "computerName", "ASC", 10, offset);
+            Page<Computer> computers = computerService.page("", "computerName", "ASC", 10, offset);
             this.frame = new FrameBuilder().buildComputers(computers);
             this.status = CLIStatus.COMPUTERS;
         } catch (QueryException | DatasourceException e) {
@@ -354,12 +397,22 @@ public class CLI {
      */
     private void callCompanies() {
         try {
-            List<Company> companies = companyService.listCompanies();
+            List<Company> companies = companyService.list();
             this.frame = new FrameBuilder().buildCompanies(companies);
             this.status = CLIStatus.COMPANIES;
         } catch (QueryException | DatasourceException e) {
             callErrorInternalServerError(e);
         }
+    }
+
+    /**
+     * Calls company details frame.
+     *
+     * @param company company to be detailed.
+     */
+    private void callCompany(Company company) {
+        this.frame = new FrameBuilder().buildCompany(company);
+        this.status = CLIStatus.COMPANY;
     }
 
     /**
@@ -433,19 +486,42 @@ public class CLI {
      */
     private void deleteComputer() throws DatasourceException, QueryException {
         Computer computer = getComputerFromPage();
-        computerService.deleteComputer(computer);
+        computerService.delete(computer);
     }
 
     /**
-     * Gets computer by id using DAO.
+     * Deletes company.
+     *
+     * @throws DatasourceException an unexpected error occurred
+     * @throws QueryException      an unexpected error occurred
+     */
+    private void deleteCompany() throws DatasourceException, QueryException {
+        Company company = getCompanyFromPage();
+        companyService.delete(company);
+    }
+
+    /**
+     * Gets computer by id.
      *
      * @param id computer's id
      * @return object computer
-     * @throws QueryException      unexpected exception
+     * @throws QueryException      an unexpected error occurred
      * @throws DatasourceException an unexpected error occurred
      */
     private Computer getComputerById(int id) throws QueryException, DatasourceException {
-        return computerService.findComputer(id);
+        return computerService.find(id);
+    }
+
+    /**
+     * Gets company by id.
+     *
+     * @param id company's id
+     * @return object company
+     * @throws QueryException      an unexpected error occurred
+     * @throws DatasourceException an unexpected error occurred
+     */
+    private Company getCompanyById(int id) throws QueryException, DatasourceException {
+        return companyService.find(id);
     }
 
     /**
@@ -461,6 +537,16 @@ public class CLI {
             FrameComputerChange frame = (FrameComputerChange) this.frame;
             return frame.getComputer();
         }
+    }
+
+    /**
+     * Gets company held by last frame.
+     *
+     * @return object company
+     */
+    private Company getCompanyFromPage() {
+        FrameCompany frame = (FrameCompany) this.frame;
+        return frame.getCompany();
     }
 
 }

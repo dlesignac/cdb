@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.QueryBuilder;
 import fr.ebiz.cdb.persistence.exception.QueryException;
 import fr.ebiz.cdb.persistence.mapper.ComputerRSMapper;
@@ -53,6 +54,23 @@ public enum ComputerDAO implements IComputerDAO {
                 .build();
 
         Object[] args = {computer.getId()};
+
+        try (PreparedStatement statement = prepare(connection, query, args)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("could not delete computer", e);
+            throw new QueryException();
+        }
+    }
+
+    @Override
+    public void delete(Connection connection, Company company) throws QueryException {
+        String query = new QueryBuilder()
+                .deleteFrom("computer")
+                .where("company_id = ?")
+                .build();
+
+        Object[] args = {company.getId()};
 
         try (PreparedStatement statement = prepare(connection, query, args)) {
             statement.executeUpdate();
