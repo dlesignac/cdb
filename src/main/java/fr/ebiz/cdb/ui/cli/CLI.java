@@ -5,7 +5,7 @@ import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.service.datasource.CompanyService;
 import fr.ebiz.cdb.service.datasource.ComputerService;
-import fr.ebiz.cdb.service.datasource.Page;
+import fr.ebiz.cdb.model.Page;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.ui.cli.frame.Frame;
@@ -26,7 +26,6 @@ import java.util.Scanner;
  * Command Line Interface.
  */
 public class CLI {
-
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
 
     /**
@@ -44,7 +43,6 @@ public class CLI {
     private Frame frame;
     private CLIStatus status;
 
-
     /**
      * Default constructor.
      */
@@ -56,18 +54,17 @@ public class CLI {
         this.status = CLIStatus.INDEX;
     }
 
-
     /**
      * Main loop. Prints pages and waits for user inputs.
      */
     private void loop() {
-        while (this.status != CLIStatus.EXIT) {
-            this.frame.display();
+        while (status != CLIStatus.EXIT) {
+            frame.display();
 
             try {
                 listen();
             } catch (Exception e) {
-                this.frame.setError("An error occurred");
+                frame.setError("An error occurred");
                 logger.error("caught exception while running CLI", e);
             }
         }
@@ -75,12 +72,11 @@ public class CLI {
         this.in.close();
     }
 
-
     /**
      * Waits for and manages user inputs.
      */
     private void listen() {
-        String[] input = this.in.nextLine().split(" ");
+        String[] input = in.nextLine().split(" ");
 
         switch (this.status) {
             case INDEX:
@@ -116,7 +112,7 @@ public class CLI {
      */
     private void doIndex(String[] input) {
         if (CLIOptions.QUIT.equals(input[0])) {
-            this.status = CLIStatus.EXIT;
+            status = CLIStatus.EXIT;
         } else if (CLIOptions.LIST_COMPUTERS.equals(input[0])) {
             callComputers(1);
         } else if (CLIOptions.LIST_COMPANIES.equals(input[0])) {
@@ -127,7 +123,6 @@ public class CLI {
             callErrorInvalidInput();
         }
     }
-
 
     /**
      * Action listener for computer list frame.
@@ -298,7 +293,7 @@ public class CLI {
                         Computer computer = getComputerFromPage();
                         computer.setName(input[1]);
                     } else {
-                        this.frame.setError("Incorrect name specified");
+                        frame.setError("Incorrect name specified");
                     }
                 }
             } else if (CLIOptions.NEW_INTRODUCED.equals(input[0])) {
@@ -312,12 +307,12 @@ public class CLI {
                         LocalDate introduced = LocalDate.parse(date);
                         computer.setIntroduced(introduced);
                     } else {
-                        this.frame.setError("Incorrect introduction date specified");
+                        frame.setError("Incorrect introduction date specified");
                     }
                 } else {
                     computer.setIntroduced(null);
                     computer.setDiscontinued(null);
-                    this.frame.setError("Discontinuation date was automatically removed");
+                    frame.setError("Discontinuation date was automatically removed");
                 }
             } else if (CLIOptions.NEW_DISCONTINUED.equals(input[0])) {
                 Computer computer = getComputerFromPage();
@@ -329,7 +324,7 @@ public class CLI {
                         LocalDate discontinued = LocalDate.parse(date);
                         computer.setDiscontinued(discontinued);
                     } else {
-                        this.frame.setError("Incorrect discontinuation date specified");
+                        frame.setError("Incorrect discontinuation date specified");
                     }
                 } else {
                     computer.setDiscontinued(null);
@@ -342,7 +337,7 @@ public class CLI {
                     manufacturer = companyService.find(companyId);
 
                     if (manufacturer == null) {
-                        this.frame.setError("No company found for this id");
+                        frame.setError("No company found for this id");
                     }
                 }
 
@@ -361,8 +356,8 @@ public class CLI {
      * Calls index frame.
      */
     private void callIndex() {
-        this.frame = new FrameBuilder().buildIndex();
-        this.status = CLIStatus.INDEX;
+        frame = new FrameBuilder().buildIndex();
+        status = CLIStatus.INDEX;
     }
 
     /**
@@ -374,8 +369,8 @@ public class CLI {
         try {
             ComputerPageDTO dto = new ComputerPageDTO("", "computerName", "ASC", 10, offset);
             Page<Computer> computers = computerService.page(dto);
-            this.frame = new FrameBuilder().buildComputers(computers);
-            this.status = CLIStatus.COMPUTERS;
+            frame = new FrameBuilder().buildComputers(computers);
+            status = CLIStatus.COMPUTERS;
         } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
@@ -388,8 +383,8 @@ public class CLI {
      * @param computer computer to be detailed.
      */
     private void callComputer(Computer computer) {
-        this.frame = new FrameBuilder().buildComputer(computer);
-        this.status = CLIStatus.COMPUTER;
+        frame = new FrameBuilder().buildComputer(computer);
+        status = CLIStatus.COMPUTER;
     }
 
     /**
@@ -398,8 +393,8 @@ public class CLI {
     private void callCompanies() {
         try {
             List<Company> companies = companyService.list();
-            this.frame = new FrameBuilder().buildCompanies(companies);
-            this.status = CLIStatus.COMPANIES;
+            frame = new FrameBuilder().buildCompanies(companies);
+            status = CLIStatus.COMPANIES;
         } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
         }
@@ -411,8 +406,8 @@ public class CLI {
      * @param company company to be detailed.
      */
     private void callCompany(Company company) {
-        this.frame = new FrameBuilder().buildCompany(company);
-        this.status = CLIStatus.COMPANY;
+        frame = new FrameBuilder().buildCompany(company);
+        status = CLIStatus.COMPANY;
     }
 
     /**
@@ -420,8 +415,8 @@ public class CLI {
      */
     private void callComputerEdit() {
         Computer computer = getComputerFromPage();
-        this.frame = new FrameBuilder().buildComputerEdit(computer);
-        this.status = CLIStatus.COMPUTER_EDIT;
+        frame = new FrameBuilder().buildComputerEdit(computer);
+        status = CLIStatus.COMPUTER_EDIT;
     }
 
     /**
@@ -430,7 +425,7 @@ public class CLI {
     private void callComputerBack() {
         try {
             Computer computer = getComputerFromPage();
-            computer = this.getComputerById(computer.getId());
+            computer = getComputerById(computer.getId());
             callComputer(computer);
         } catch (TransactionFailedException e) {
             callErrorInternalServerError(e);
@@ -443,29 +438,29 @@ public class CLI {
      * @param computer the computer to be created.
      */
     private void callComputerCreate(Computer computer) {
-        this.frame = new FrameBuilder().buildComputerCreate(computer);
-        this.status = CLIStatus.COMPUTER_CREATE;
+        frame = new FrameBuilder().buildComputerCreate(computer);
+        status = CLIStatus.COMPUTER_CREATE;
     }
 
     /**
      * Calls invalid input frame component.
      */
     private void callErrorInvalidInput() {
-        this.frame.setError("Invalid input");
+        frame.setError("Invalid input");
     }
 
     /**
      * Calls missing parameter frame component.
      */
     private void callErrorMissingParameter() {
-        this.frame.setError("Missing parameter");
+        frame.setError("Missing parameter");
     }
 
     /**
      * Calls invalid parameter frame component.
      */
     private void callErrorInvalidParameter() {
-        this.frame.setError("Invalid parameter");
+        frame.setError("Invalid parameter");
     }
 
     /**
@@ -475,7 +470,7 @@ public class CLI {
      */
     private void callErrorInternalServerError(Exception e) {
         logger.error("an unexpected error occurred", e);
-        this.frame.setError("Internal server error");
+        frame.setError("Internal server error");
     }
 
     /**
@@ -544,5 +539,4 @@ public class CLI {
         FrameCompany frame = (FrameCompany) this.frame;
         return frame.getCompany();
     }
-
 }

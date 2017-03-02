@@ -12,7 +12,6 @@ import java.io.IOException;
  */
 @WebServlet("/error500")
 public class Error500Servlet extends HttpServlet {
-
     static final String URL = "/error500";
 
     private static final String VIEW = "/WEB-INF/pages/500.jsp";
@@ -21,5 +20,4 @@ public class Error500Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
     }
-
 }

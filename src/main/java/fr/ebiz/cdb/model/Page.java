@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.service.datasource;
+package fr.ebiz.cdb.model;
 
 import java.util.List;
 

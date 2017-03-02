@@ -9,6 +9,8 @@ import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.List;
 public enum CompanyService {
 
     INSTANCE;
+
+    private final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
     private ConnectionManager connectionManager;
     private ICompanyDAO companyDAO;
@@ -47,6 +51,7 @@ public enum CompanyService {
                 computerDAO.delete(connection, company);
                 companyDAO.delete(connection, company);
                 connectionManager.commit(connection);
+                logger.debug("successfully updated computer " + company.getId());
             } catch (DatasourceException | DAOQueryException e) {
                 connectionManager.rollback(connection);
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);

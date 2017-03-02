@@ -1,8 +1,10 @@
-package fr.ebiz.cdb.service.request;
+package fr.ebiz.cdb.mapper.request;
 
 import fr.ebiz.cdb.dto.ComputerDTO;
 import fr.ebiz.cdb.dto.ComputerDeletionDTO;
 import fr.ebiz.cdb.dto.ComputerPageDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Request parser.
  */
-public class RequestParser {
+public class RequestMapper {
 
     private static final String PARAMETER_COMPUTER_ID = "id";
     private static final String PARAMETER_COMPUTER_NAME = "computerName";
@@ -34,6 +36,8 @@ public class RequestParser {
     private static final String PARAMETER_PAGE_DELETE = "selection";
     private static final String DELETE_SEPARATOR = ",";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestMapper.class);
+
     /**
      * Parses request to get ComputerDTO.
      *
@@ -47,13 +51,17 @@ public class RequestParser {
         String discontinued = req.getParameter(PARAMETER_DISCONTINUED);
         String companyId = req.getParameter(PARAMETER_COMPANY_ID);
 
-        return new ComputerDTO
+        ComputerDTO dto = new ComputerDTO
                 .Builder(computerName)
                 .setId(id)
                 .setIntroduced(introduced)
                 .setDiscontinued(discontinued)
                 .setCompanyId(companyId)
                 .build();
+
+        LOGGER.debug("request parsed into " + dto.toString());
+
+        return dto;
     }
 
     /**
@@ -75,7 +83,11 @@ public class RequestParser {
         int pageLimit = reqLimit == null ? DEFAULT_LIMIT : Integer.parseInt(reqLimit);
         int pageNumber = reqPage == null ? DEFAULT_NUMBER : Integer.parseInt(reqPage);
 
-        return new ComputerPageDTO(search, orderBy, order, pageLimit, pageNumber);
+        ComputerPageDTO dto = new ComputerPageDTO(search, orderBy, order, pageLimit, pageNumber);
+
+        LOGGER.debug("request parsed into " + dto.toString());
+
+        return dto;
     }
 
     /**
@@ -95,7 +107,11 @@ public class RequestParser {
             }
         }
 
-        return new ComputerDeletionDTO(ids);
+        ComputerDeletionDTO dto = new ComputerDeletionDTO(ids);
+
+        LOGGER.debug("request parsed into " + dto.toString());
+
+        return dto;
     }
 
 }

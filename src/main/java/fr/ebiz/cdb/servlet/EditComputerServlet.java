@@ -1,14 +1,12 @@
 package fr.ebiz.cdb.servlet;
 
 import fr.ebiz.cdb.dto.ComputerDTO;
-import fr.ebiz.cdb.mapper.ComputerMapper;
-import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.mapper.dto.ComputerDTOMapper;
 import fr.ebiz.cdb.service.datasource.CompanyService;
 import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
-import fr.ebiz.cdb.service.request.RequestParser;
-import fr.ebiz.cdb.service.validator.exception.ValidationException;
+import fr.ebiz.cdb.mapper.request.RequestMapper;
+import fr.ebiz.cdb.mapper.exception.ValidationException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,14 +14,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Edit computer servlet.
  */
 @WebServlet("/edit-computer")
 public class EditComputerServlet extends HttpServlet {
-
     private static final String VIEW = "/WEB-INF/pages/editComputer.jsp";
 
     private static final String ATTRIBUTE_STATUS = "status";
@@ -40,10 +36,8 @@ public class EditComputerServlet extends HttpServlet {
         String id = req.getParameter(PARAMETER_COMPUTER_ID);
 
         try {
-            Computer computer = computerService.find(Integer.parseInt(id));
-            List<Company> companies = companyService.list();
-            req.setAttribute(ATTRIBUTE_COMPUTER, computer);
-            req.setAttribute(ATTRIBUTE_COMPANIES, companies);
+            req.setAttribute(ATTRIBUTE_COMPUTER, computerService.find(Integer.parseInt(id)));
+            req.setAttribute(ATTRIBUTE_COMPANIES, companyService.list());
             getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
         } catch (TransactionFailedException e) {
             resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
@@ -52,12 +46,10 @@ public class EditComputerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        ComputerDTO computerDTO = RequestParser.parseComputer(req);
+        ComputerDTO computerDTO = RequestMapper.parseComputer(req);
 
         try {
-            Computer computer = ComputerMapper.map(computerDTO);
-            computerService.update(computer);
+            computerService.update(ComputerDTOMapper.mapDTO(computerDTO));
             req.setAttribute(ATTRIBUTE_STATUS, "success");
             resp.sendRedirect(req.getContextPath() + DashboardServlet.URL);
         } catch (TransactionFailedException e) {

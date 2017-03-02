@@ -9,7 +9,6 @@ import java.util.List;
  * Computers frame.
  */
 public class FrameComputers extends Frame {
-
     private int pageNumber;
     private List<Computer> computers;
 
@@ -35,7 +34,7 @@ public class FrameComputers extends Frame {
 
         String display = "";
 
-        for (Computer computer : this.computers) {
+        for (Computer computer : computers) {
             display += StringUtils.leftPad(String.valueOf(computer.getId()), 6);
             display += ". ";
             display += computer.getName();
@@ -47,5 +46,4 @@ public class FrameComputers extends Frame {
         displayOptions();
         displayError();
     }
-
 }

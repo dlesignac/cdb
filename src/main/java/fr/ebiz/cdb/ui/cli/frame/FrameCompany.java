@@ -6,7 +6,6 @@ import fr.ebiz.cdb.model.Company;
  * Frame company.
  */
 public class FrameCompany extends Frame {
-
     private Company company;
 
     public Company getCompany() {
@@ -20,15 +19,8 @@ public class FrameCompany extends Frame {
     @Override
     public void display() {
         displayHeader();
-
-        String name = this.company.getName();
-
-        String display = "Name         : " + name + "\n";
-
-        System.out.print(display);
-
+        System.out.print("Name         : " + company.getName() + "\n");
         displayOptions();
         displayError();
     }
-
 }

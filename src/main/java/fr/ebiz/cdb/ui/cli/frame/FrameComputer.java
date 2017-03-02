@@ -6,7 +6,6 @@ import fr.ebiz.cdb.model.Computer;
  * Computer frame.
  */
 public class FrameComputer extends Frame {
-
     private Computer computer;
 
     public Computer getComputer() {
@@ -21,24 +20,19 @@ public class FrameComputer extends Frame {
     public void display() {
         displayHeader();
 
-        String name = this.computer.getName();
-        String introduced = this.computer.getIntroduced() == null ? "UNKNOWN" :
-                this.computer.getIntroduced().toString();
-        String discontinued = this.computer.getDiscontinued() == null ? "UNKNOWN" :
-                this.computer.getDiscontinued().toString();
-        String manufacturer = this.computer.getManufacturer() == null ? "UNKNOWN" :
-                this.computer.getManufacturer().getName();
+        String name = computer.getName();
+        String introduced = computer.getIntroduced() == null ? "UNKNOWN" : computer.getIntroduced().toString();
+        String discontinued = computer.getDiscontinued() == null ? "UNKNOWN" : computer.getDiscontinued().toString();
+        String manufacturer = computer.getManufacturer() == null ? "UNKNOWN" : computer.getManufacturer().getName();
 
-        String display = "Name         : " +
-                name + "\n" + "Introduced   : " +
-                introduced + "\n" + "Discontinued : " +
-                discontinued + "\n" + "Manufacturer : " +
-                manufacturer + "\n";
+        String display = "Name         : " + name + "\n" +
+                "Introduced   : " + introduced + "\n" +
+                "Discontinued : " + discontinued + "\n" +
+                "Manufacturer : " + manufacturer + "\n";
 
         System.out.print(display);
 
         displayOptions();
         displayError();
     }
-
 }

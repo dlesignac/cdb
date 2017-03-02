@@ -1,7 +1,6 @@
 package fr.ebiz.cdb.ui.cli;
 
 public abstract class CLIOptions {
-
     public static final String QUIT = "q";
     public static final String LIST_COMPUTERS = "1";
     public static final String LIST_COMPANIES = "2";
@@ -18,5 +17,4 @@ public abstract class CLIOptions {
     public static final String NEW_MANUFACTURER = "4";
     public static final String PREVIOUS_PAGE = "<";
     public static final String NEXT_PAGE = ">";
-
 }

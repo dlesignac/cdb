@@ -3,12 +3,15 @@ package fr.ebiz.cdb.service.datasource;
 import fr.ebiz.cdb.dto.ComputerDeletionDTO;
 import fr.ebiz.cdb.dto.ComputerPageDTO;
 import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.model.Page;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.dao.ComputerDAO;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.List;
 public enum ComputerService {
 
     INSTANCE;
+
+    private final Logger logger = LoggerFactory.getLogger(ComputerService.class);
 
     private ConnectionManager connectionManager;
     private IComputerDAO computerDAO;
@@ -45,6 +50,7 @@ public enum ComputerService {
             try {
                 computerDAO.create(connection, computer);
                 connectionManager.commit(connection);
+                logger.debug("successfully created computer " + computer.toString());
             } catch (DatasourceException | DAOQueryException e) {
                 connectionManager.rollback(connection);
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
@@ -69,6 +75,7 @@ public enum ComputerService {
             try {
                 computerDAO.delete(connection, computer);
                 connectionManager.commit(connection);
+                logger.debug("successfully deleted computer " + computer.getId());
             } catch (DatasourceException | DAOQueryException e) {
                 connectionManager.rollback(connection);
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
@@ -98,6 +105,7 @@ public enum ComputerService {
                 }
 
                 connectionManager.commit(connection);
+                logger.debug("successfully deleted computers " + computerDeletionDTO.getIds());
             } catch (DatasourceException | DAOQueryException e) {
                 connectionManager.rollback(connection);
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
@@ -122,6 +130,7 @@ public enum ComputerService {
             try {
                 computerDAO.update(connection, computer);
                 connectionManager.commit(connection);
+                logger.debug("successfully updated computer " + computer.getId());
             } catch (DatasourceException | DAOQueryException e) {
                 connectionManager.rollback(connection);
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
@@ -145,7 +154,9 @@ public enum ComputerService {
             Connection connection = connectionManager.getConnection();
 
             try {
-                return computerDAO.find(connection, id);
+                Computer computer = computerDAO.find(connection, id);
+                logger.debug("found computer " + computer.toString());
+                return computer;
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
@@ -177,7 +188,9 @@ public enum ComputerService {
                 int computersCount = computerDAO.count(connection, search);
                 int pageCount = (computersCount + limit - 1) / limit;
                 List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
-                return new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
+                Page<Computer> page = new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
+                logger.debug("successfully created page from dto " + computerPageDTO.toString());
+                return page;
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {

@@ -12,12 +12,10 @@ import java.io.IOException;
  */
 @WebServlet("/error403")
 public class Error403Servlet extends HttpServlet {
-
     private static final String VIEW = "/WEB-INF/pages/403.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
     }
-
 }

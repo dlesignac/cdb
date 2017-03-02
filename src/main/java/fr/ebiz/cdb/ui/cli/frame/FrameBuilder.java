@@ -2,10 +2,11 @@ package fr.ebiz.cdb.ui.cli.frame;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.service.datasource.Page;
+import fr.ebiz.cdb.model.Page;
 import fr.ebiz.cdb.ui.cli.CLIOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,10 +21,7 @@ public class FrameBuilder {
      */
     public Frame buildIndex() {
         Frame frame = new Frame();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        frame.setLevels(levels);
+        frame.setLevels(buildLevels("CDB"));
 
         List<Option> options = new ArrayList<>();
         options.add(new Option(CLIOptions.LIST_COMPUTERS, "list computers"));
@@ -43,12 +41,7 @@ public class FrameBuilder {
      */
     public Frame buildComputers(Page<Computer> page) {
         FrameComputers frame = new FrameComputers();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        levels.add("computers");
-        frame.setLevels(levels);
-
+        frame.setLevels(buildLevels("CDB", "computers"));
         frame.setPageNumber(page.getNumber());
         frame.setComputers(page.getEntries());
 
@@ -77,13 +70,7 @@ public class FrameBuilder {
      */
     public Frame buildComputer(Computer computer) {
         FrameComputer frame = new FrameComputer();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        levels.add("computer");
-        levels.add(String.valueOf(computer.getId()));
-        frame.setLevels(levels);
-
+        frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computer.getId())));
         frame.setComputer(computer);
 
         List<Option> options = new ArrayList<>();
@@ -103,13 +90,7 @@ public class FrameBuilder {
      */
     public Frame buildComputerCreate(Computer computer) {
         FrameComputerChange frame = new FrameComputerChange();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        levels.add("computer");
-        levels.add("new");
-        frame.setLevels(levels);
-
+        frame.setLevels(buildLevels("CDB", "computer", "new"));
         frame.setComputer(computer);
 
         List<Option> options = new ArrayList<>();
@@ -132,14 +113,7 @@ public class FrameBuilder {
      */
     public Frame buildComputerEdit(Computer computer) {
         FrameComputerChange frame = new FrameComputerChange();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        levels.add("computer");
-        levels.add(String.valueOf(computer.getId()));
-        levels.add("edit");
-        frame.setLevels(levels);
-
+        frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computer.getId()), "edit"));
         frame.setComputer(computer);
 
         List<Option> options = new ArrayList<>();
@@ -162,12 +136,7 @@ public class FrameBuilder {
      */
     public Frame buildCompanies(List<Company> companies) {
         FrameCompanies frame = new FrameCompanies();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        levels.add("companies");
-        frame.setLevels(levels);
-
+        frame.setLevels(buildLevels("CDB", "companies"));
         frame.setCompanies(companies);
 
         List<Option> options = new ArrayList<>();
@@ -186,13 +155,7 @@ public class FrameBuilder {
      */
     public Frame buildCompany(Company company) {
         FrameCompany frame = new FrameCompany();
-
-        List<String> levels = new ArrayList<>();
-        levels.add("CDB");
-        levels.add("company");
-        levels.add(String.valueOf(company.getId()));
-        frame.setLevels(levels);
-
+        frame.setLevels(buildLevels("CDB", "company", String.valueOf(company.getId())));
         frame.setCompany(company);
 
         List<Option> options = new ArrayList<>();
@@ -203,4 +166,15 @@ public class FrameBuilder {
         return frame;
     }
 
+    /**
+     * Builds levels component.
+     *
+     * @param levels levels
+     * @return levels component
+     */
+    private List<String> buildLevels(String... levels) {
+        List<String> l = new ArrayList<>();
+        Collections.addAll(l, levels);
+        return l;
+    }
 }

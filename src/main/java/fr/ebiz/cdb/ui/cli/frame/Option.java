@@ -4,7 +4,6 @@ package fr.ebiz.cdb.ui.cli.frame;
  * Navigation Option.
  */
 public class Option {
-
     private String id;
     private String description;
 
@@ -26,5 +25,4 @@ public class Option {
     public String getDescription() {
         return this.description;
     }
-
 }

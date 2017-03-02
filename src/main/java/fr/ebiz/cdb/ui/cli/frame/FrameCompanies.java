@@ -9,7 +9,6 @@ import java.util.List;
  * Companies frame.
  */
 public class FrameCompanies extends Frame {
-
     private List<Company> companies;
 
     public List<Company> getCompanies() {
@@ -26,7 +25,7 @@ public class FrameCompanies extends Frame {
 
         String display = "";
 
-        for (Company company : this.companies) {
+        for (Company company : companies) {
             display += StringUtils.leftPad(String.valueOf(company.getId()), 6);
             display += ". ";
             display += company.getName();
@@ -38,5 +37,4 @@ public class FrameCompanies extends Frame {
         displayOptions();
         displayError();
     }
-
 }

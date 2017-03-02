@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.persistence.util.mapper;
+package fr.ebiz.cdb.mapper.rs;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;

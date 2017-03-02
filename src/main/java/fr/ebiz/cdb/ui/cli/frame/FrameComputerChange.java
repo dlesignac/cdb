@@ -6,7 +6,6 @@ import fr.ebiz.cdb.model.Computer;
  * Computer change frame.
  */
 public class FrameComputerChange extends Frame {
-
     private Computer computer;
 
     public Computer getComputer() {
@@ -21,21 +20,19 @@ public class FrameComputerChange extends Frame {
     public void display() {
         displayHeader();
 
-        String name = this.computer.getName() == null ? "" : this.computer.getName();
-        String introduced = this.computer.getIntroduced() == null ? "" : this.computer.getIntroduced().toString();
-        String discontinued = this.computer.getDiscontinued() == null ? "" : this.computer.getDiscontinued().toString();
-        String manufacturer = this.computer.getManufacturer() == null ? "" : this.computer.getManufacturer().getName();
+        String name = computer.getName() == null ? "" : computer.getName();
+        String introduced = computer.getIntroduced() == null ? "" : computer.getIntroduced().toString();
+        String discontinued = computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString();
+        String manufacturer = computer.getManufacturer() == null ? "" : computer.getManufacturer().getName();
 
-        String display = "Name         : " +
-                name + "\n" + "Introduced   : " +
-                introduced + "\n" + "Discontinued : "
-                + discontinued + "\n" + "Manufacturer : "
-                + manufacturer + "\n";
+        String display = "Name         : " + name + "\n" +
+                "Introduced   : " + introduced + "\n" +
+                "Discontinued : " + discontinued + "\n" +
+                "Manufacturer : " + manufacturer + "\n";
 
         System.out.print(display);
 
         displayOptions();
         displayError();
     }
-
 }

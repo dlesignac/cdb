@@ -10,7 +10,7 @@ import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.util.QueryBuilder;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
-import fr.ebiz.cdb.persistence.util.mapper.ComputerRSMapper;
+import fr.ebiz.cdb.mapper.rs.ComputerRSMapper;
 
 import fr.ebiz.cdb.model.Computer;
 

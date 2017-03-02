@@ -4,7 +4,7 @@ import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.util.QueryBuilder;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
-import fr.ebiz.cdb.persistence.util.mapper.CompanyRSMapper;
+import fr.ebiz.cdb.mapper.rs.CompanyRSMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

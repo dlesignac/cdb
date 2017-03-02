@@ -1,5 +1,5 @@
 
-<%@ attribute name="page" type="fr.ebiz.cdb.service.datasource.Page" required="true" %>
+<%@ attribute name="page" type="fr.ebiz.cdb.model.Page" required="true" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>

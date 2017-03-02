@@ -6,7 +6,6 @@ import java.util.List;
  * Frame.
  */
 public class Frame {
-
     private List<String> levels;
     private List<Option> options;
     protected String error;
@@ -39,13 +38,12 @@ public class Frame {
      * Displays header.
      */
     void displayHeader() {
-        String display = this.levels.get(0);
+        String display = levels.get(0);
 
-        int size = this.levels.size();
+        int size = levels.size();
 
         for (int i = 1; i < size; i++) {
-            display += " > ";
-            display += this.levels.get(i);
+            display += " > " + levels.get(i);
         }
 
         display += "\n";
@@ -59,11 +57,8 @@ public class Frame {
     void displayOptions() {
         String display = "";
 
-        for (Option option : this.options) {
-            display += option.getId();
-            display += " -> ";
-            display += option.getDescription();
-            display += "\n";
+        for (Option option : options) {
+            display += option.getId() + " -> " + option.getDescription() + "\n";
         }
 
         System.out.print(display);
@@ -75,8 +70,8 @@ public class Frame {
     void displayError() {
         String display = "";
 
-        if (this.error != null) {
-            display += this.error + "\n\n";
+        if (error != null) {
+            display += error + "\n\n";
         }
 
         System.out.print(display);
@@ -90,5 +85,4 @@ public class Frame {
         displayOptions();
         displayError();
     }
-
 }
