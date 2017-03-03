@@ -21,15 +21,15 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name" value="${computer.name}">
+                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name" value="<c:out value="${computer.name}"/>">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date" value="${computer.introduced}">
+                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date" value="<c:out value="${computer.introduced}"/>">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" value="${computer.discontinued}">
+                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" value="<c:out value="${computer.discontinued}"/>">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
