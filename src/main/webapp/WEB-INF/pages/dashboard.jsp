@@ -56,7 +56,7 @@
 				    <c:forEach items="${page.entries}" var="computer">
 				        <tr>
                     		<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
-                    		<td><a href="${pageContext.request.contextPath}/edit-computer?id=${computer.id}"><c:out value="${computer.name}"/></a></td>
+                    		<td><a href="edit-computer?id=${computer.id}"><c:out value="${computer.name}"/></a></td>
                             <td><c:out value="${computer.introduced}"/></td>
                             <td><c:out value="${computer.discontinued}"/></td>
                             <td><c:out value="${computer.manufacturer.name}"/></td>
