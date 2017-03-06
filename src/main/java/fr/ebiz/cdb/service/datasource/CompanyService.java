@@ -12,7 +12,6 @@ import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -45,18 +44,18 @@ public enum CompanyService {
      */
     public void delete(Company company) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                computerDAO.delete(connection, company);
-                companyDAO.delete(connection, company);
-                connectionManager.commit(connection);
+                computerDAO.delete(company);
+                companyDAO.delete(company);
+                connectionManager.commit();
                 logger.debug("successfully updated computer " + company.getId());
             } catch (DatasourceException | DAOQueryException e) {
-                connectionManager.rollback(connection);
+                connectionManager.rollback();
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -72,14 +71,14 @@ public enum CompanyService {
      */
     public Company find(int id) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                return companyDAO.find(connection, id);
+                return companyDAO.find(id);
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -94,14 +93,14 @@ public enum CompanyService {
      */
     public List<Company> list() throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                return companyDAO.fetch(connection);
+                return companyDAO.fetch();
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);

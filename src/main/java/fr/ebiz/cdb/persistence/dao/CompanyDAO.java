@@ -1,12 +1,11 @@
 package fr.ebiz.cdb.persistence.dao;
 
+import fr.ebiz.cdb.mapper.rs.CompanyRSMapper;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.ConnectionManager;
-import fr.ebiz.cdb.persistence.util.QueryBuilder;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
-import fr.ebiz.cdb.mapper.rs.CompanyRSMapper;
+import fr.ebiz.cdb.persistence.util.QueryBuilder;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,13 +21,13 @@ public enum CompanyDAO implements ICompanyDAO {
     private ConnectionManager connectionManager = ConnectionManager.INSTANCE;
 
     @Override
-    public void delete(Connection connection, Company company) throws DAOQueryException {
+    public void delete(Company company) throws DAOQueryException {
         String query = new QueryBuilder()
                 .deleteFrom("company")
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, company.getId())) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query, company.getId())) {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOQueryException("could not delete company " + company.toString(), e);
@@ -36,14 +35,14 @@ public enum CompanyDAO implements ICompanyDAO {
     }
 
     @Override
-    public Company find(Connection connection, int id) throws DAOQueryException {
+    public Company find(int id) throws DAOQueryException {
         String query = new QueryBuilder()
                 .select("*")
                 .from("company")
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, id)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query, id)) {
             ResultSet rs = statement.executeQuery();
             return new CompanyRSMapper().mapToOne(rs);
         } catch (SQLException e) {
@@ -52,13 +51,13 @@ public enum CompanyDAO implements ICompanyDAO {
     }
 
     @Override
-    public List<Company> fetch(Connection connection) throws DAOQueryException {
+    public List<Company> fetch() throws DAOQueryException {
         String query = new QueryBuilder()
                 .select("*")
                 .from("company")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query)) {
             ResultSet rs = statement.executeQuery();
             return new CompanyRSMapper().mapToMany(rs);
         } catch (SQLException e) {

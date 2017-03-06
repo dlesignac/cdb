@@ -13,7 +13,6 @@ import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -45,17 +44,17 @@ public enum ComputerService {
      */
     public void create(Computer computer) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                computerDAO.create(connection, computer);
-                connectionManager.commit(connection);
+                computerDAO.create(computer);
+                connectionManager.commit();
                 logger.debug("successfully created computer " + computer.toString());
             } catch (DatasourceException | DAOQueryException e) {
-                connectionManager.rollback(connection);
+                connectionManager.rollback();
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -70,17 +69,17 @@ public enum ComputerService {
      */
     public void delete(Computer computer) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                computerDAO.delete(connection, computer);
-                connectionManager.commit(connection);
+                computerDAO.delete(computer);
+                connectionManager.commit();
                 logger.debug("successfully deleted computer " + computer.getId());
             } catch (DatasourceException | DAOQueryException e) {
-                connectionManager.rollback(connection);
+                connectionManager.rollback();
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -95,22 +94,22 @@ public enum ComputerService {
      */
     public void deleteMany(ComputerDeletionDTO computerDeletionDTO) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
                 for (Integer id : computerDeletionDTO.getIds()) {
                     Computer computer = new Computer();
                     computer.setId(id);
-                    computerDAO.delete(connection, computer);
+                    computerDAO.delete(computer);
                 }
 
-                connectionManager.commit(connection);
+                connectionManager.commit();
                 logger.debug("successfully deleted computers " + computerDeletionDTO.getIds());
             } catch (DatasourceException | DAOQueryException e) {
-                connectionManager.rollback(connection);
+                connectionManager.rollback();
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -125,17 +124,17 @@ public enum ComputerService {
      */
     public void update(Computer computer) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                computerDAO.update(connection, computer);
-                connectionManager.commit(connection);
+                computerDAO.update(computer);
+                connectionManager.commit();
                 logger.debug("successfully updated computer " + computer.getId());
             } catch (DatasourceException | DAOQueryException e) {
-                connectionManager.rollback(connection);
+                connectionManager.rollback();
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -151,16 +150,16 @@ public enum ComputerService {
      */
     public Computer find(int id) throws TransactionFailedException {
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                Computer computer = computerDAO.find(connection, id);
+                Computer computer = computerDAO.find(id);
                 logger.debug("found computer " + computer.toString());
                 return computer;
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);
@@ -182,19 +181,19 @@ public enum ComputerService {
         String order = computerPageDTO.getOrder();
 
         try {
-            Connection connection = connectionManager.getConnection();
+            connectionManager.getConnection();
 
             try {
-                int computersCount = computerDAO.count(connection, search);
+                int computersCount = computerDAO.count(search);
                 int pageCount = (computersCount + limit - 1) / limit;
-                List<Computer> computers = computerDAO.fetch(connection, search, orderBy, order, limit, (number - 1) * limit);
+                List<Computer> computers = computerDAO.fetch(search, orderBy, order, limit, (number - 1) * limit);
                 Page<Computer> page = new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
                 logger.debug("successfully created page from dto " + computerPageDTO.toString());
                 return page;
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);
             } finally {
-                connectionManager.close(connection);
+                connectionManager.close();
             }
         } catch (DatasourceException e) {
             throw new TransactionFailedException(TransactionFailedException.FAILURE_OPENING, e);

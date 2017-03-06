@@ -1,6 +1,5 @@
 package fr.ebiz.cdb.persistence.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,13 +23,13 @@ public enum ComputerDAO implements IComputerDAO {
     private ConnectionManager connectionManager = ConnectionManager.INSTANCE;
 
     @Override
-    public void create(Connection connection, Computer computer) throws DAOQueryException {
+    public void create(Computer computer) throws DAOQueryException {
         String query = new QueryBuilder()
                 .insertInto("computer(name, introduced, discontinued, company_id)")
                 .values("(?, ?, ?, ?)")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query,
+        try (PreparedStatement statement = connectionManager.prepareStatement(query,
                 computer.getName(),
                 computer.getIntroduced(),
                 computer.getDiscontinued(),
@@ -42,13 +41,13 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public void delete(Connection connection, Computer computer) throws DAOQueryException {
+    public void delete(Computer computer) throws DAOQueryException {
         String query = new QueryBuilder()
                 .deleteFrom("computer")
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, computer.getId())) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query, computer.getId())) {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOQueryException("could not delete computer " + computer.toString(), e);
@@ -56,13 +55,13 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public void delete(Connection connection, Company company) throws DAOQueryException {
+    public void delete(Company company) throws DAOQueryException {
         String query = new QueryBuilder()
                 .deleteFrom("computer")
                 .where("company_id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, company.getId())) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query, company.getId())) {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOQueryException("could not delete computers for company " + company.toString(), e);
@@ -70,14 +69,14 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public void update(Connection connection, Computer computer) throws DAOQueryException {
+    public void update(Computer computer) throws DAOQueryException {
         String query = new QueryBuilder()
                 .update("computer")
                 .set("name = ?, introduced = ?, discontinued = ?, company_id = ?")
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query,
+        try (PreparedStatement statement = connectionManager.prepareStatement(query,
                 computer.getName(),
                 computer.getIntroduced(),
                 computer.getDiscontinued(),
@@ -90,7 +89,7 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public Computer find(Connection connection, int id) throws DAOQueryException {
+    public Computer find(int id) throws DAOQueryException {
         String query = new QueryBuilder()
                 .select("c1.id AS computer_id, " +
                         "c1.name AS computer_name, " +
@@ -102,7 +101,7 @@ public enum ComputerDAO implements IComputerDAO {
                 .where("c1.id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query, id)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query, id)) {
             ResultSet rs = statement.executeQuery();
             return new ComputerRSMapper().mapToOne(rs);
         } catch (SQLException e) {
@@ -111,7 +110,7 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public int count(Connection connection, String search) throws DAOQueryException {
+    public int count(String search) throws DAOQueryException {
         String query = new QueryBuilder()
                 .select("count(c1.id)")
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
@@ -121,7 +120,7 @@ public enum ComputerDAO implements IComputerDAO {
 
         search = "%" + search + "%";
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query,
+        try (PreparedStatement statement = connectionManager.prepareStatement(query,
                 search,
                 search)) {
             ResultSet rs = statement.executeQuery();
@@ -133,7 +132,7 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> fetch(Connection connection, String search, String orderBy, String order, int limit, int offset)
+    public List<Computer> fetch(String search, String orderBy, String order, int limit, int offset)
             throws DAOQueryException {
         ComputerColumn orderByEnum = ComputerColumn.of(orderBy);
         Order orderEnum = Order.of(order);
@@ -160,7 +159,7 @@ public enum ComputerDAO implements IComputerDAO {
 
         search = "%" + search + "%";
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(connection, query,
+        try (PreparedStatement statement = connectionManager.prepareStatement(query,
                 search,
                 search,
                 limit,

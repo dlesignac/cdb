@@ -22,12 +22,14 @@ public enum ConnectionManager {
 
     INSTANCE;
 
-    private final String PROPERTY_JDBC_DRIVER = "jdbc.driver";
-    private final String PROPERTY_DATASOURCE_URL = "datasource.url";
-    private final String PROPERTY_DATASOURCE_USERNAME = "datasource.username";
-    private final String PROPERTY_DATASOURCE_PASSWORD = "datasource.password";
-    private final String PROPERTY_DATASOURCE_POOLSIZE = "datasource.poolsize";
-    private final String PROPERTY_DATASOURCE_AUTOCOMMIT = "datasource.autocommit";
+    private static final String PROPERTY_JDBC_DRIVER = "jdbc.driver";
+    private static final String PROPERTY_DATASOURCE_URL = "datasource.url";
+    private static final String PROPERTY_DATASOURCE_USERNAME = "datasource.username";
+    private static final String PROPERTY_DATASOURCE_PASSWORD = "datasource.password";
+    private static final String PROPERTY_DATASOURCE_POOLSIZE = "datasource.poolsize";
+    private static final String PROPERTY_DATASOURCE_AUTOCOMMIT = "datasource.autocommit";
+
+    private static final ThreadLocal<Connection> CONNECTIONS = new ThreadLocal<>();
 
     private Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 
@@ -68,23 +70,26 @@ public enum ConnectionManager {
      * @throws DatasourceException an unexpected error occurred
      */
     public Connection getConnection() throws DatasourceException {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            logger.error("could not get connection from datasource", e);
-            throw new DatasourceException();
+        if (CONNECTIONS.get() == null) {
+            try {
+                CONNECTIONS.set(dataSource.getConnection());
+            } catch (SQLException e) {
+                logger.error("could not get connection from datasource", e);
+                throw new DatasourceException();
+            }
         }
+
+        return CONNECTIONS.get();
     }
 
     /**
      * Commits transaction.
      *
-     * @param connection connection to commit
      * @throws DatasourceException an unexpected error occurred
      */
-    public void commit(Connection connection) throws DatasourceException {
+    public void commit() throws DatasourceException {
         try {
-            connection.commit();
+            CONNECTIONS.get().commit();
         } catch (SQLException e) {
             logger.error("could not commit transaction", e);
             throw new DatasourceException();
@@ -93,12 +98,10 @@ public enum ConnectionManager {
 
     /**
      * Rollback transaction.
-     *
-     * @param connection connection to rollback
      */
-    public void rollback(Connection connection) {
+    public void rollback() {
         try {
-            connection.commit();
+            CONNECTIONS.get().commit();
         } catch (SQLException e) {
             logger.error("could not rollback transaction", e);
         }
@@ -106,12 +109,11 @@ public enum ConnectionManager {
 
     /**
      * Closes connection.
-     *
-     * @param connection connection to commit
      */
-    public void close(Connection connection) {
+    public void close() {
         try {
-            connection.close();
+            CONNECTIONS.get().close();
+            CONNECTIONS.remove();
         } catch (SQLException e) {
             logger.error("could not close connection", e);
         }
@@ -120,14 +122,13 @@ public enum ConnectionManager {
     /**
      * Prepares statement.
      *
-     * @param connection connection
-     * @param query      query
-     * @param objects    objects
+     * @param query   query
+     * @param objects objects
      * @return PreparedStatement
      * @throws SQLException an unexpected error occurred
      */
-    public PreparedStatement prepareStatement(Connection connection, String query, Object... objects) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
+    public PreparedStatement prepareStatement(String query, Object... objects) throws SQLException {
+        PreparedStatement preparedStatement = CONNECTIONS.get().prepareStatement(query);
 
         for (int i = 0; i < objects.length; i++) {
             preparedStatement.setObject(i + 1, objects[i]);
