@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,6 +30,7 @@ public enum ConnectionManager {
     private static final String PROPERTY_DATASOURCE_PASSWORD = "datasource.password";
     private static final String PROPERTY_DATASOURCE_POOLSIZE = "datasource.poolsize";
     private static final String PROPERTY_DATASOURCE_AUTOCOMMIT = "datasource.autocommit";
+    private static final String PROPERTY_LOCAL_PROPERTIES = "local.properties.file";
 
     private static final ThreadLocal<Connection> CONNECTIONS = new ThreadLocal<>();
 
@@ -40,27 +43,46 @@ public enum ConnectionManager {
      */
     ConnectionManager() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream propertiesFile = classLoader.getResourceAsStream("application.properties");
+        InputStream globalPropertiesFile = classLoader.getResourceAsStream("application.properties");
 
         try {
-            Properties properties = new Properties();
-            properties.load(propertiesFile);
+            Properties global = new Properties();
+            global.load(globalPropertiesFile);
 
-            Class.forName(properties.getProperty(PROPERTY_JDBC_DRIVER));
+            File localPropertiesFile = new File(global.getProperty(PROPERTY_LOCAL_PROPERTIES));
 
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(properties.getProperty(PROPERTY_DATASOURCE_URL));
-            config.setUsername(properties.getProperty(PROPERTY_DATASOURCE_USERNAME));
-            config.setPassword(properties.getProperty(PROPERTY_DATASOURCE_PASSWORD));
-            config.setMaximumPoolSize(Integer.parseInt(properties.getProperty(PROPERTY_DATASOURCE_POOLSIZE)));
-            config.setAutoCommit(Boolean.getBoolean(properties.getProperty(PROPERTY_DATASOURCE_AUTOCOMMIT)));
-
-            dataSource = new HikariDataSource(config);
+            if (localPropertiesFile.exists()) {
+                Properties local = new Properties();
+                local.load(new FileInputStream(localPropertiesFile));
+                loadProperties(local);
+            } else {
+                loadProperties(global);
+            }
         } catch (IOException e) {
             logger.error("could not read properties file", e);
+        }
+    }
+
+    /**
+     * Load properties.
+     *
+     * @param properties properties
+     */
+    private void loadProperties(Properties properties) {
+        try {
+            Class.forName(properties.getProperty(PROPERTY_JDBC_DRIVER));
         } catch (ClassNotFoundException e) {
             logger.error("could not load db driver", e);
         }
+
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(properties.getProperty(PROPERTY_DATASOURCE_URL));
+        config.setUsername(properties.getProperty(PROPERTY_DATASOURCE_USERNAME));
+        config.setPassword(properties.getProperty(PROPERTY_DATASOURCE_PASSWORD));
+        config.setMaximumPoolSize(Integer.parseInt(properties.getProperty(PROPERTY_DATASOURCE_POOLSIZE)));
+        config.setAutoCommit(Boolean.getBoolean(properties.getProperty(PROPERTY_DATASOURCE_AUTOCOMMIT)));
+
+        dataSource = new HikariDataSource(config);
     }
 
     /**
