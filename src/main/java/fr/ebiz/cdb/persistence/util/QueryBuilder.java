@@ -5,7 +5,7 @@ package fr.ebiz.cdb.persistence.util;
  */
 public class QueryBuilder {
 
-    private String query = "";
+    private StringBuilder query = new StringBuilder();
 
     /**
      * Builds select query.
@@ -14,7 +14,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder select(String select) {
-        query = "SELECT " + select;
+        query.append("SELECT ").append(select);
         return this;
     }
 
@@ -25,7 +25,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder from(String from) {
-        query += " FROM " + from;
+        query.append(" FROM ").append(from);
         return this;
     }
 
@@ -36,7 +36,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder insertInto(String insert) {
-        query = "INSERT INTO " + insert;
+        query.append("INSERT INTO ").append(insert);
         return this;
     }
 
@@ -47,7 +47,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder values(String values) {
-        query += " VALUES " + values;
+        query.append(" VALUES ").append(values);
         return this;
     }
 
@@ -58,7 +58,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder deleteFrom(String delete) {
-        query = "DELETE FROM " + delete;
+        query.append("DELETE FROM ").append(delete);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder update(String update) {
-        query = "UPDATE " + update;
+        query.append("UPDATE ").append(update);
         return this;
     }
 
@@ -80,7 +80,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder set(String set) {
-        query += " SET " + set;
+        query.append(" SET ").append(set);
         return this;
     }
 
@@ -91,7 +91,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder where(String where) {
-        query += " WHERE " + where;
+        query.append(" WHERE ").append(where);
         return this;
     }
 
@@ -102,7 +102,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder and(String and) {
-        query += " AND " + and;
+        query.append(" AND ").append(and);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder or(String or) {
-        query += " OR " + or;
+        query.append(" OR ").append(or);
         return this;
     }
 
@@ -124,7 +124,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder orderBy(String orderBy) {
-        query += " ORDER BY " + orderBy;
+        query.append(" ORDER BY ").append(orderBy);
         return this;
     }
 
@@ -135,7 +135,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder limit(String limit) {
-        query += " LIMIT " + limit;
+        query.append(" LIMIT ").append(limit);
         return this;
     }
 
@@ -146,7 +146,7 @@ public class QueryBuilder {
      * @return QueryBuilder
      */
     public QueryBuilder offset(String offset) {
-        query += " OFFSET " + offset;
+        query.append(" OFFSET ").append(offset);
         return this;
     }
 
@@ -156,7 +156,7 @@ public class QueryBuilder {
      * @return built query
      */
     public String build() {
-        return query;
+        return query.toString();
     }
 
 }

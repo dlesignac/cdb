@@ -13,7 +13,7 @@ public interface ICompanyDAO {
     /**
      * Deletes company.
      *
-     * @param company    to be deleted
+     * @param company to be deleted
      * @throws DAOQueryException an unexpected error occurred
      */
     void delete(Company company) throws DAOQueryException;
@@ -21,7 +21,7 @@ public interface ICompanyDAO {
     /**
      * Finds company by its id.
      *
-     * @param id         company's id
+     * @param id company's id
      * @return company
      * @throws DAOQueryException an unexpected error occurred
      */
