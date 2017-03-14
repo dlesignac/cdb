@@ -52,7 +52,7 @@ public class FrameBuilder {
             options.add(new Option(CLIOptions.PREVIOUS_PAGE, "previous frame"));
         }
 
-        if (page.getNumber() < page.getMaxNumber()) {
+        if (page.getNumber() < page.getLast()) {
             options.add(new Option(CLIOptions.NEXT_PAGE, "next frame"));
         }
 

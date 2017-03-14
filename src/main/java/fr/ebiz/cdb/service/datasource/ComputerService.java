@@ -169,26 +169,30 @@ public enum ComputerService {
     /**
      * Gets a frame of computers.
      *
-     * @param computerPageDTO computerPageDTO
+     * @param pageRequest computerPageDTO
      * @return frame of computers
      * @throws TransactionFailedException an unexpected error occurred
      */
-    public Page<Computer> page(ComputerPageDTO computerPageDTO) throws TransactionFailedException {
-        int limit = computerPageDTO.getLimit();
-        int number = computerPageDTO.getNumber();
-        String search = computerPageDTO.getSearch();
-        String orderBy = computerPageDTO.getOrderBy();
-        String order = computerPageDTO.getOrder();
-
+    public Page<Computer> page(ComputerPageDTO pageRequest) throws TransactionFailedException {
         try {
             connectionManager.getConnection();
 
             try {
-                int computersCount = computerDAO.count(search);
-                int pageCount = (computersCount + limit - 1) / limit;
-                List<Computer> computers = computerDAO.fetch(search, orderBy, order, limit, (number - 1) * limit);
-                Page<Computer> page = new Page<>(number, pageCount, limit, computersCount, search, orderBy, computers);
-                logger.debug("successfully created page from dto " + computerPageDTO.toString());
+                int computersCount = computerDAO.count(pageRequest.getFilter());
+                int pageCount = (computersCount + pageRequest.getLimit() - 1) / pageRequest.getLimit();
+                List<Computer> computers = computerDAO.fetch(pageRequest);
+
+                Page<Computer> page = new Page<>();
+                page.setNumber(pageRequest.getNumber());
+                page.setLast(pageCount);
+                page.setCount(computersCount);
+                page.setLimit(pageRequest.getLimit());
+                page.setFilter(pageRequest.getFilter());
+                page.setSort(pageRequest.getSort().getName());
+                page.setOrder(pageRequest.getOrder().getName());
+                page.setEntries(computers);
+
+                logger.debug("successfully created page from dto " + pageRequest.toString());
                 return page;
             } catch (DAOQueryException e) {
                 throw new TransactionFailedException(TransactionFailedException.FAILURE_QUERYING, e);

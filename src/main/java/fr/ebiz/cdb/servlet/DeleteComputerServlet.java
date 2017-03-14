@@ -4,6 +4,8 @@ import fr.ebiz.cdb.dto.ComputerDeletionDTO;
 import fr.ebiz.cdb.mapper.request.RequestMapper;
 import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,22 +20,23 @@ import java.io.IOException;
 @WebServlet("/delete-computers")
 public class DeleteComputerServlet extends HttpServlet {
 
-    private static final String ATTRIBUTE_STATUS = "status";
+    private static final String ATTRIBUTE_ERRORS = "errors";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeleteComputerServlet.class);
 
     private ComputerService computerService = ComputerService.INSTANCE;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ComputerDeletionDTO computerDeletionDTO = RequestMapper.parseDelete(req);
-
         try {
+            ComputerDeletionDTO computerDeletionDTO = RequestMapper.parseDelete(req);
             computerService.deleteMany(computerDeletionDTO);
-            req.setAttribute(ATTRIBUTE_STATUS, "success");
         } catch (TransactionFailedException e) {
-            req.setAttribute(ATTRIBUTE_STATUS, "error");
+            LOGGER.error("could not post on delete-computers page", e);
+            req.setAttribute(ATTRIBUTE_ERRORS, ""); // TODO
+        } finally {
+            resp.sendRedirect(req.getContextPath() + DashboardServlet.URL);
         }
-
-        resp.sendRedirect(req.getContextPath() + DashboardServlet.URL);
     }
 
 }

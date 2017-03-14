@@ -5,56 +5,27 @@ import java.util.List;
 public class Page<T> {
 
     private int number;
-    private int maxNumber;
-    private int limit;
+    private int last;
     private int count;
-    private String search;
-    private String orderBy;
+    private int limit;
+    private String filter;
+    private String sort;
+    private String order;
     private List<T> entries;
 
     /**
      * Constructor.
-     *
-     * @param number    current frame number
-     * @param maxNumber max number
-     * @param limit     max number of entries
-     * @param count     number of pages
-     * @param search    search
-     * @param orderBy   orderBy
-     * @param entries   entry list
-     */
-    public Page(int number, int maxNumber, int limit, int count, String search, String orderBy, List<T> entries) {
-        if (number < 1) {
-            throw new RuntimeException("page number must be greater or equal to one");
-        }
-        if (maxNumber < 0) {
-            throw new RuntimeException("page number must be greater or equal to one");
-        }
-        if (limit <= 0) {
-            throw new RuntimeException("page limit must be greater than zero");
-        }
-        if (count < 0) {
-            throw new RuntimeException("page count must be greater or equal to zero");
-        }
-        if (entries == null) {
-            throw new NullPointerException("page entries must not be null");
-        }
+     **/
+    public Page() {
 
-        this.number = number;
-        this.maxNumber = maxNumber;
-        this.limit = limit;
-        this.count = count;
-        this.search = search;
-        this.orderBy = orderBy;
-        this.entries = entries;
     }
 
     public int getNumber() {
         return number;
     }
 
-    public int getMaxNumber() {
-        return maxNumber;
+    public int getLast() {
+        return last;
     }
 
     public int getLimit() {
@@ -65,16 +36,52 @@ public class Page<T> {
         return count;
     }
 
-    public String getSearch() {
-        return search;
+    public String getFilter() {
+        return filter;
     }
 
-    public String getOrderBy() {
-        return orderBy;
+    public String getSort() {
+        return sort;
+    }
+
+    public String getOrder() {
+        return order;
     }
 
     public List<T> getEntries() {
         return entries;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public void setLast(int last) {
+        this.last = last;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public void setEntries(List<T> entries) {
+        this.entries = entries;
     }
 
 }

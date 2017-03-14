@@ -1,5 +1,6 @@
 package fr.ebiz.cdb.persistence.dao;
 
+import fr.ebiz.cdb.dto.ComputerPageDTO;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
@@ -64,14 +65,10 @@ public interface IComputerDAO {
     /**
      * Fetches computers for a given pagination.
      *
-     * @param search  search
-     * @param orderBy orderBy
-     * @param order   order
-     * @param limit   max number of entries
-     * @param offset  number of pages to skip
+     * @param pageRequest page request
      * @return entries
      * @throws DAOQueryException an unexpected error occurred
      */
-    List<Computer> fetch(String search, String orderBy, String order, int limit, int offset) throws DAOQueryException;
+    List<Computer> fetch(ComputerPageDTO pageRequest) throws DAOQueryException;
 
 }

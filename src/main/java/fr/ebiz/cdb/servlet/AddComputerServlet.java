@@ -2,12 +2,14 @@ package fr.ebiz.cdb.servlet;
 
 import fr.ebiz.cdb.dto.ComputerDTO;
 import fr.ebiz.cdb.mapper.dto.ComputerDTOMapper;
+import fr.ebiz.cdb.mapper.exception.ValidationException;
+import fr.ebiz.cdb.mapper.request.RequestMapper;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.service.datasource.CompanyService;
 import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
-import fr.ebiz.cdb.mapper.request.RequestMapper;
-import fr.ebiz.cdb.mapper.exception.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,9 +23,12 @@ import java.io.IOException;
  */
 @WebServlet("/add-computer")
 public class AddComputerServlet extends HttpServlet {
+
     private static final String VIEW = "/WEB-INF/pages/addComputer.jsp";
     private static final String ATTRIBUTE_COMPANIES = "companies";
-    private static final String ATTRIBUTE_STATUS = "status";
+    private static final String ATTRIBUTE_ERRORS = "errors";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddComputerServlet.class);
 
     private CompanyService companyService = CompanyService.INSTANCE;
     private ComputerService computerService = ComputerService.INSTANCE;
@@ -33,25 +38,24 @@ public class AddComputerServlet extends HttpServlet {
         try {
             req.setAttribute(ATTRIBUTE_COMPANIES, companyService.list());
             getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
-        } catch (TransactionFailedException e) {
-            resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
+        } catch (Exception e) {
+            LOGGER.error("could not get add-computer page", e);
+            throw new ServletException("caught an exception while getting add-computer page", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ComputerDTO computerDTO = RequestMapper.parseComputer(req);
-
         try {
+            ComputerDTO computerDTO = RequestMapper.parseComputer(req);
             Computer computer = ComputerDTOMapper.mapDTO(computerDTO);
             computerService.create(computer);
-            req.setAttribute(ATTRIBUTE_STATUS, "success");
+        } catch (ValidationException | TransactionFailedException e) {
+            LOGGER.error("could not post on add-computer page", e);
+            req.setAttribute(ATTRIBUTE_ERRORS, ""); // TODO
+        } finally {
             doGet(req, resp);
-        } catch (TransactionFailedException e) {
-            req.setAttribute(ATTRIBUTE_STATUS, "error");
-            doGet(req, resp);
-        } catch (ValidationException e) {
-            resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
         }
     }
+
 }

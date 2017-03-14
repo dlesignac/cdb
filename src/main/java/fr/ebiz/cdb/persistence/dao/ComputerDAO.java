@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import fr.ebiz.cdb.dto.ComputerPageDTO;
+import fr.ebiz.cdb.model.Column;
 import fr.ebiz.cdb.model.Company;
+import fr.ebiz.cdb.model.Order;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.util.QueryBuilder;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
@@ -120,9 +123,7 @@ public enum ComputerDAO implements IComputerDAO {
 
         search = "%" + search + "%";
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(query,
-                search,
-                search)) {
+        try (PreparedStatement statement = connectionManager.prepareStatement(query, search, search)) {
             ResultSet rs = statement.executeQuery();
             rs.first();
             return rs.getInt(1);
@@ -132,15 +133,9 @@ public enum ComputerDAO implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> fetch(String search, String orderBy, String order, int limit, int offset)
-            throws DAOQueryException {
-        ComputerColumn orderByEnum = ComputerColumn.of(orderBy);
-        Order orderEnum = Order.of(order);
-
-        if (orderByEnum == null || orderEnum == null) {
-            throw new DAOQueryException("tried to order by '" + orderBy + "' '" + order + "'");
-            // TODO no validation here !
-        }
+    public List<Computer> fetch(ComputerPageDTO pageRequest) throws DAOQueryException {
+        String sortString = getColumnName(pageRequest.getSort());
+        String orderString = getOrder(pageRequest.getOrder());
 
         String query = new QueryBuilder()
                 .select("c1.id AS computer_id, " +
@@ -152,23 +147,61 @@ public enum ComputerDAO implements IComputerDAO {
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
                 .where("c1.name LIKE ?")
                 .or("c2.name LIKE ?")
-                .orderBy(orderByEnum.getColumn() + " " + orderEnum.getValue())
+                .orderBy(sortString + " " + orderString)
                 .limit("?")
                 .offset("?")
                 .build();
 
-        search = "%" + search + "%";
+        String search = "%" + pageRequest.getFilter() + "%";
 
         try (PreparedStatement statement = connectionManager.prepareStatement(query,
                 search,
                 search,
-                limit,
-                offset)) {
+                pageRequest.getLimit(),
+                (pageRequest.getNumber() - 1) * pageRequest.getLimit())) {
             ResultSet rs = statement.executeQuery();
             return new ComputerRSMapper().mapToMany(rs);
         } catch (SQLException e) {
             throw new DAOQueryException("could not find computers", e); // TODO more details here
         }
+    }
+
+    /**
+     * Gets column name.
+     *
+     * @param column column
+     * @return column name
+     */
+    private static String getColumnName(Column column) {
+        switch (column) {
+            case COMPUTER_NAME:
+                return "c1.name";
+            case INTRODUCED:
+                return "introduced";
+            case DISCONTINUED:
+                return "discontinued";
+            case COMPANY_NAME:
+                return "c2.name";
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets order.
+     *
+     * @param order order
+     * @return order
+     */
+    private static String getOrder(Order order) {
+        switch (order) {
+            case ASC:
+                return "ASC";
+            case DESC:
+                return "DESC";
+        }
+
+        return null;
     }
 
 }

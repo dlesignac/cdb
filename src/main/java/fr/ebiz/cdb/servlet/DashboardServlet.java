@@ -3,7 +3,6 @@ package fr.ebiz.cdb.servlet;
 import fr.ebiz.cdb.dto.ComputerPageDTO;
 import fr.ebiz.cdb.mapper.request.RequestMapper;
 import fr.ebiz.cdb.service.datasource.ComputerService;
-import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,14 +29,14 @@ public class DashboardServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ComputerPageDTO computerPageDTO = RequestMapper.parsePage(req);
-
         try {
+            ComputerPageDTO computerPageDTO = RequestMapper.parsePage(req);
+
             req.setAttribute(ATTRIBUTE_PAGE, computerService.page(computerPageDTO));
             getServletContext().getRequestDispatcher(VIEW).forward(req, resp);
-        } catch (TransactionFailedException e) {
+        } catch (Exception e) {
             LOGGER.error("failed to get dashboard page", e);
-            resp.sendRedirect(req.getContextPath() + Error500Servlet.URL);
+            throw new ServletException("caught an exception while getting dashboard", e);
         }
     }
 

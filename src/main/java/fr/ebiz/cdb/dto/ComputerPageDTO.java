@@ -1,42 +1,45 @@
 package fr.ebiz.cdb.dto;
 
+import fr.ebiz.cdb.model.Column;
+import fr.ebiz.cdb.model.Order;
+
 /**
  * Page request.
  */
 public class ComputerPageDTO {
 
-    private String search;
-    private String orderBy;
-    private String order;
+    private String filter;
+    private Column sort;
+    private Order order;
     private int limit;
     private int number;
 
     /**
      * Constructor.
      *
-     * @param search  search
-     * @param orderBy orderBy
-     * @param order   order
-     * @param limit   limit
-     * @param number  number
+     * @param filter filter
+     * @param sort   sort
+     * @param order  order
+     * @param limit  limit
+     * @param number number
      */
-    public ComputerPageDTO(String search, String orderBy, String order, int limit, int number) {
-        this.search = search;
+    public ComputerPageDTO(String filter, Column sort, Order order, int limit, int number) {
+        this.filter = filter;
+        this.sort = sort;
         this.order = order;
-        this.orderBy = orderBy;
         this.limit = limit;
         this.number = number;
     }
 
-    public String getSearch() {
-        return search;
+    public String getFilter() {
+        return filter;
     }
 
-    public String getOrderBy() {
-        return orderBy;
+    public Column getSort() {
+        return sort;
     }
 
-    public String getOrder() {
+    public Order getOrder() {
         return order;
     }
 

@@ -1,18 +1,20 @@
 package fr.ebiz.cdb.ui.cli;
 
 import fr.ebiz.cdb.dto.ComputerPageDTO;
+import fr.ebiz.cdb.model.Column;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.model.Order;
+import fr.ebiz.cdb.model.Page;
 import fr.ebiz.cdb.service.datasource.CompanyService;
 import fr.ebiz.cdb.service.datasource.ComputerService;
-import fr.ebiz.cdb.model.Page;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
 import fr.ebiz.cdb.ui.cli.frame.Frame;
+import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
 import fr.ebiz.cdb.ui.cli.frame.FrameCompany;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputer;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputerChange;
-import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
 import fr.ebiz.cdb.ui.cli.frame.FrameComputers;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -367,7 +369,7 @@ public class CLI {
      */
     private void callComputers(int offset) {
         try {
-            ComputerPageDTO dto = new ComputerPageDTO("", "computerName", "ASC", 10, offset);
+            ComputerPageDTO dto = new ComputerPageDTO("", Column.COMPUTER_NAME, Order.ASC, 10, offset);
             Page<Computer> computers = computerService.page(dto);
             frame = new FrameBuilder().buildComputers(computers);
             status = CLIStatus.COMPUTERS;
