@@ -2,9 +2,6 @@ package fr.ebiz.cdb.persistence.exception;
 
 import java.sql.SQLException;
 
-/**
- * Persistence exception.
- */
 public class DAOQueryException extends Exception {
 
     /**

@@ -2,31 +2,16 @@
 <html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <jsp:include page="/WEB-INF/pages/head.jsp" />
 
 <body>
 	<jsp:include page="/WEB-INF/pages/header.jsp" />
 
+	<mylib:errors success="Computer added successfully"/>
+
     <section id="main">
         <div class="container">
-            <div class="row">
-                <div class="col-xs-8 col-xs-offset-2 box">
-                    <c:choose>
-                        <c:when test="${not empty status && status == 'error'}">
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <strong>Failure !</strong> Please retry later.
-                            </div>
-                        </c:when>
-                        <c:when test="${not empty status && status == 'success'}">
-                            <div class="alert alert-success alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <strong>Success !</strong> Computer was added successfully.
-                            </div>
-                        </c:when>
-                    </c:choose>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>

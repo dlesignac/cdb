@@ -1,6 +1,8 @@
 package fr.ebiz.cdb.ui.cli;
 
+import fr.ebiz.cdb.dto.ComputerDTO;
 import fr.ebiz.cdb.dto.ComputerPageDTO;
+import fr.ebiz.cdb.mapper.dto.ComputerDTOMapper;
 import fr.ebiz.cdb.model.Column;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
@@ -20,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -287,65 +288,27 @@ public class CLI {
      */
     private void doComputerChange(String[] input) {
         try {
+            ComputerDTO computerDTO = getComputerDTOFromPage();
+
             if (CLIOptions.NEW_NAME.equals(input[0])) {
-                if (input.length < 2) {
-                    callErrorMissingParameter();
-                } else {
-                    if (ComputerValidator.validateName(input[1])) {
-                        Computer computer = getComputerFromPage();
-                        computer.setName(input[1]);
-                    } else {
-                        frame.setError("Incorrect name specified");
-                    }
-                }
+                computerDTO.setName(input[1]);
             } else if (CLIOptions.NEW_INTRODUCED.equals(input[0])) {
-                Computer computer = getComputerFromPage();
-
-                if (input.length >= 2) {
-                    String date = input[1];
-
-                    if (ComputerValidator.validateIntroduced(date)) {
-
-                        LocalDate introduced = LocalDate.parse(date);
-                        computer.setIntroduced(introduced);
-                    } else {
-                        frame.setError("Incorrect introduction date specified");
-                    }
-                } else {
-                    computer.setIntroduced(null);
-                    computer.setDiscontinued(null);
-                    frame.setError("Discontinuation date was automatically removed");
-                }
+                computerDTO.setIntroduced(input[1]);
             } else if (CLIOptions.NEW_DISCONTINUED.equals(input[0])) {
-                Computer computer = getComputerFromPage();
-
-                if (input.length >= 2) {
-                    String date = input[1];
-
-                    if (ComputerValidator.validateDiscontinued(date)) {
-                        LocalDate discontinued = LocalDate.parse(date);
-                        computer.setDiscontinued(discontinued);
-                    } else {
-                        frame.setError("Incorrect discontinuation date specified");
-                    }
-                } else {
-                    computer.setDiscontinued(null);
-                }
+                computerDTO.setDiscontinued(input[1]);
             } else if (CLIOptions.NEW_MANUFACTURER.equals(input[0])) {
-                Company manufacturer = null;
+                computerDTO.setCompanyId(input[1]);
+            } else if (CLIOptions.SAVE.equals(input[0])) {
+                List<String> errors = ComputerValidator.validate(computerDTO);
 
-                if (input.length >= 2) {
-                    int companyId = Integer.parseInt(input[1]);
-                    manufacturer = companyService.find(companyId);
-
-                    if (manufacturer == null) {
-                        frame.setError("No company found for this id");
-                    }
+                if (!errors.isEmpty()) {
+                    callErrorInvalidInput();
+                } else {
+                    Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
+                    computerService.update(computer);
                 }
-
-                Computer computer = getComputerFromPage();
-                computer.setManufacturer(manufacturer);
-                computerService.update(computer);
+            } else if (CLIOptions.BACK.equals(input[0])) {
+                callComputers(0);
             } else {
                 callErrorInvalidInput();
             }
@@ -523,13 +486,18 @@ public class CLI {
      * @return object computer
      */
     private Computer getComputerFromPage() {
-        if (this.frame instanceof FrameComputer) {
-            FrameComputer frame = (FrameComputer) this.frame;
-            return frame.getComputer();
-        } else {
-            FrameComputerChange frame = (FrameComputerChange) this.frame;
-            return frame.getComputer();
-        }
+        FrameComputer frame = (FrameComputer) this.frame;
+        return frame.getComputer();
+    }
+
+    /**
+     * Gets computers held by last frame.
+     *
+     * @return object computerDTO
+     */
+    private ComputerDTO getComputerDTOFromPage() {
+        FrameComputerChange frame = (FrameComputerChange) this.frame;
+        return frame.getComputerDTO();
     }
 
     /**
@@ -541,4 +509,5 @@ public class CLI {
         FrameCompany frame = (FrameCompany) this.frame;
         return frame.getCompany();
     }
+
 }

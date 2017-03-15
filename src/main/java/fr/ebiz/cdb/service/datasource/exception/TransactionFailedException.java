@@ -1,8 +1,5 @@
 package fr.ebiz.cdb.service.datasource.exception;
 
-/**
- * Company transaction failed exception.
- */
 public class TransactionFailedException extends Exception {
 
     public static final String FAILURE_QUERYING = "an error occurred while querying datasource";

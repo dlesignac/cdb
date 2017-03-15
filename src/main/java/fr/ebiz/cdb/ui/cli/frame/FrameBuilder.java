@@ -1,5 +1,6 @@
 package fr.ebiz.cdb.ui.cli.frame;
 
+import fr.ebiz.cdb.mapper.dto.ComputerDTOMapper;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.model.Page;
@@ -91,7 +92,7 @@ public class FrameBuilder {
     public Frame buildComputerCreate(Computer computer) {
         FrameComputerChange frame = new FrameComputerChange();
         frame.setLevels(buildLevels("CDB", "computer", "new"));
-        frame.setComputer(computer);
+        frame.setComputerDTO(ComputerDTOMapper.mapToDTO(computer));
 
         List<Option> options = new ArrayList<>();
         options.add(new Option(CLIOptions.NEW_NAME, "new name"));
@@ -114,7 +115,7 @@ public class FrameBuilder {
     public Frame buildComputerEdit(Computer computer) {
         FrameComputerChange frame = new FrameComputerChange();
         frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computer.getId()), "edit"));
-        frame.setComputer(computer);
+        frame.setComputerDTO(ComputerDTOMapper.mapToDTO(computer));
 
         List<Option> options = new ArrayList<>();
         options.add(new Option(CLIOptions.NEW_NAME, "new name"));

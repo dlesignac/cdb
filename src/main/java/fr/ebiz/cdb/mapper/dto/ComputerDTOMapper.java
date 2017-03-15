@@ -1,10 +1,8 @@
 package fr.ebiz.cdb.mapper.dto;
 
 import fr.ebiz.cdb.dto.ComputerDTO;
-import fr.ebiz.cdb.mapper.exception.ValidationException;
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.service.validator.ComputerValidator;
 
 import java.time.LocalDate;
 
@@ -18,34 +16,13 @@ public abstract class ComputerDTOMapper {
      *
      * @param computerDTO computerDTO
      * @return computer
-     * @throws ValidationException one or more entries are invalid
      */
-    public static Computer mapDTO(ComputerDTO computerDTO) throws ValidationException {
+    public static Computer mapFromDTO(ComputerDTO computerDTO) {
         String id = computerDTO.getId();
         String name = computerDTO.getName();
         String introduced = computerDTO.getIntroduced();
         String discontinued = computerDTO.getDiscontinued();
         String companyId = computerDTO.getCompanyId();
-
-        if (!ComputerValidator.validateId(id)) {
-            throw new ValidationException("tried to set computer id : " + id);
-        }
-
-        if (!ComputerValidator.validateName(name)) {
-            throw new ValidationException("tried to set computer name : " + name);
-        }
-
-        if (!ComputerValidator.validateIntroduced(introduced)) {
-            throw new ValidationException("tried to set computer introduced : " + introduced);
-        }
-
-        if (!ComputerValidator.validateDiscontinued(discontinued)) {
-            throw new ValidationException("tried to set computer discontinued : " + discontinued);
-        }
-
-        if (!ComputerValidator.validateCompanyId(companyId)) {
-            throw new ValidationException("tried to set computer companyId : " + companyId);
-        }
 
         Computer computer = new Computer();
         computer.setName(name);
@@ -68,11 +45,28 @@ public abstract class ComputerDTOMapper {
             computer.setManufacturer(company);
         }
 
-        if (ComputerValidator.validate(computer)) {
-            return computer;
-        }
+        return computer;
+    }
 
-        throw new ValidationException("tried to insert invalid computer : " + computer);
+    /**
+     * Maps a computer into a DTO.
+     *
+     * @param computer computer
+     * @return computer
+     */
+    public static ComputerDTO mapToDTO(Computer computer) {
+        String id = String.valueOf(computer.getId());
+        String name = computer.getName();
+        String introduced = computer.getIntroduced() == null ? "" : computer.getIntroduced().toString();
+        String discontinued = computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString();
+        String companyId = computer.getManufacturer() == null ? "" : String.valueOf(computer.getManufacturer().getId());
+
+        return new ComputerDTO.Builder(name)
+                .id(id)
+                .introduced(introduced)
+                .discontinued(discontinued)
+                .companyId(companyId)
+                .build();
     }
 
 }

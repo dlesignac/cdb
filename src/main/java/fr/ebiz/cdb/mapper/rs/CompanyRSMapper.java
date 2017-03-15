@@ -10,11 +10,14 @@ import java.sql.SQLException;
  */
 public class CompanyRSMapper extends RSMapper<Company> {
 
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_NAME = "name";
+
     @Override
     protected Company map(ResultSet rs) throws SQLException {
         Company company = new Company();
-        company.setId(rs.getInt("id"));
-        company.setName(rs.getString("name"));
+        company.setId(rs.getInt(COLUMN_ID));
+        company.setName(rs.getString(COLUMN_NAME));
         return company;
     }
 

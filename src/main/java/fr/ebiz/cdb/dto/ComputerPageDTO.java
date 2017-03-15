@@ -51,4 +51,24 @@ public class ComputerPageDTO {
         return number;
     }
 
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+
+    public void setSort(Column sort) {
+        this.sort = sort;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
 }

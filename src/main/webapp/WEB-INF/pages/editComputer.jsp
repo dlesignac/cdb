@@ -2,10 +2,13 @@
 <html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <jsp:include page="/WEB-INF/pages/head.jsp" />
 
 <body>
     <jsp:include page="/WEB-INF/pages/header.jsp" />
+
+    <mylib:errors success="Computer edited successfully"/>
 
     <section id="main">
         <div class="container">

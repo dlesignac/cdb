@@ -49,7 +49,7 @@ public class ComputerDTO {
          * @param id id
          * @return Builder
          */
-        public Builder setId(String id) {
+        public Builder id(String id) {
             this.id = id;
             return this;
         }
@@ -60,7 +60,7 @@ public class ComputerDTO {
          * @param introduced introduced
          * @return Builder
          */
-        public Builder setIntroduced(String introduced) {
+        public Builder introduced(String introduced) {
             this.introduced = introduced;
             return this;
         }
@@ -71,7 +71,7 @@ public class ComputerDTO {
          * @param discontinued discontinued
          * @return Builder
          */
-        public Builder setDiscontinued(String discontinued) {
+        public Builder discontinued(String discontinued) {
             this.discontinued = discontinued;
             return this;
         }
@@ -82,7 +82,7 @@ public class ComputerDTO {
          * @param companyId companyId
          * @return Builder
          */
-        public Builder setCompanyId(String companyId) {
+        public Builder companyId(String companyId) {
             this.companyId = companyId;
             return this;
         }
@@ -115,6 +115,26 @@ public class ComputerDTO {
 
     public String getCompanyId() {
         return companyId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIntroduced(String introduced) {
+        this.introduced = introduced;
+    }
+
+    public void setDiscontinued(String discontinued) {
+        this.discontinued = discontinued;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 
 }

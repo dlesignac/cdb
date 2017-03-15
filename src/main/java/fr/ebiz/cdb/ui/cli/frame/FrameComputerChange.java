@@ -1,29 +1,29 @@
 package fr.ebiz.cdb.ui.cli.frame;
 
-import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.dto.ComputerDTO;
 
 /**
  * Computer change frame.
  */
 public class FrameComputerChange extends Frame {
-    private Computer computer;
+    private ComputerDTO computerDTO;
 
-    public Computer getComputer() {
-        return computer;
+    public ComputerDTO getComputerDTO() {
+        return computerDTO;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    void setComputerDTO(ComputerDTO computerDTO) {
+        this.computerDTO = computerDTO;
     }
 
     @Override
     public void display() {
         displayHeader();
 
-        String name = computer.getName() == null ? "" : computer.getName();
-        String introduced = computer.getIntroduced() == null ? "" : computer.getIntroduced().toString();
-        String discontinued = computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString();
-        String manufacturer = computer.getManufacturer() == null ? "" : computer.getManufacturer().getName();
+        String name = computerDTO.getName() == null ? "" : computerDTO.getName();
+        String introduced = computerDTO.getIntroduced() == null ? "" : computerDTO.getIntroduced();
+        String discontinued = computerDTO.getDiscontinued() == null ? "" : computerDTO.getDiscontinued();
+        String manufacturer = computerDTO.getCompanyId() == null ? "" : computerDTO.getCompanyId();
 
         String display = "Name         : " + name + "\n" +
                 "Introduced   : " + introduced + "\n" +
