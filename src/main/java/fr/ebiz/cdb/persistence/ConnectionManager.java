@@ -7,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -24,13 +22,14 @@ public enum ConnectionManager {
 
     INSTANCE;
 
+    private static final String FILE_PROPERTIES = "application.properties";
+
     private static final String PROPERTY_JDBC_DRIVER = "jdbc.driver";
     private static final String PROPERTY_DATASOURCE_URL = "datasource.url";
     private static final String PROPERTY_DATASOURCE_USERNAME = "datasource.username";
     private static final String PROPERTY_DATASOURCE_PASSWORD = "datasource.password";
     private static final String PROPERTY_DATASOURCE_POOLSIZE = "datasource.poolsize";
     private static final String PROPERTY_DATASOURCE_AUTOCOMMIT = "datasource.autocommit";
-    private static final String PROPERTY_LOCAL_PROPERTIES = "local.properties.file";
 
     private static final ThreadLocal<Connection> CONNECTIONS = new ThreadLocal<>();
 
@@ -42,22 +41,13 @@ public enum ConnectionManager {
      * Loads datasource driver and initiates connection pool.
      */
     ConnectionManager() {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream globalPropertiesFile = classLoader.getResourceAsStream("application.properties");
+        ClassLoader classLoader = ConnectionManager.class.getClassLoader();
+        InputStream globalPropertiesFile = classLoader.getResourceAsStream(FILE_PROPERTIES);
 
         try {
-            Properties global = new Properties();
-            global.load(globalPropertiesFile);
-
-            File localPropertiesFile = new File(global.getProperty(PROPERTY_LOCAL_PROPERTIES));
-
-            if (localPropertiesFile.exists()) {
-                Properties local = new Properties();
-                local.load(new FileInputStream(localPropertiesFile));
-                loadProperties(local);
-            } else {
-                loadProperties(global);
-            }
+            Properties properties = new Properties();
+            properties.load(globalPropertiesFile);
+            loadProperties(properties);
         } catch (IOException e) {
             logger.error("could not read properties file", e);
         }
