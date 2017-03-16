@@ -4,7 +4,7 @@
 
     <groupId>fr.ebiz.cdb</groupId>
     <artifactId>training-java</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.0</version>
     <packaging>war</packaging>
 
     <name>training-java</name>
@@ -24,45 +24,53 @@
         <powermock-mockito-release-full.version>1.6.4</powermock-mockito-release-full.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <junit.version>4.12</junit.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
     </properties>
 
     <dependencies>
+        <!-- Spring context -->
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.4.2</version>
-            <scope>test</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
-        <!-- String utils dependency -->
+        <!-- Spring web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- String utils -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
 
-        <!-- Connection pool dependency -->
+        <!-- Connection pool -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${HikariCP.version}</version>
         </dependency>
 
-        <!-- Java EE dependency -->
+        <!-- JSTL -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>${jstl.version}</version>
         </dependency>
 
-        <!-- Java EE dependency -->
+        <!-- JSP -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
             <version>${javax.servlet.jsp-api.version}</version>
         </dependency>
 
-        <!-- Java EE dependency -->
+        <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -70,7 +78,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Datasource dependency -->
+        <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -78,14 +86,14 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Logging dependency -->
+        <!-- Logging API -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
         </dependency>
 
-        <!-- Logging dependency -->
+        <!-- Logging implementation -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -93,7 +101,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Integration tests dependency -->
+        <!-- Integration tests -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -101,7 +109,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Unit tests dependency -->
+        <!-- Mocking static methods -->
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-mockito-release-full</artifactId>
@@ -110,7 +118,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Unit tests dependency -->
+        <!-- Mocking -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -118,7 +126,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Unit tests dependency -->
+        <!-- Unit tests -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -130,20 +138,10 @@
     <build>
         <finalName>computer-database</finalName>
 
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-
         <plugins>
+            <!--
+            IT tests plugin.
+             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -167,7 +165,6 @@
 
             <!--
             Unit tests plugin.
-            Need it to exclude selenium tests from unit testing.
              -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -206,7 +203,6 @@
 
             <!--
             Packaging plugin.
-            Need it to deactivate default failOnMissingWebXml.
             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
