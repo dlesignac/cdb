@@ -5,20 +5,19 @@ import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.ConnectionManager;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.persistence.util.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Company DAO.
- */
-public enum CompanyDAO implements ICompanyDAO {
+@Component
+public class CompanyDAO implements ICompanyDAO {
 
-    INSTANCE;
-
-    private ConnectionManager connectionManager = ConnectionManager.INSTANCE;
+    @Autowired
+    private ConnectionManager connectionManager;
 
     @Override
     public void delete(Company company) throws DAOQueryException {

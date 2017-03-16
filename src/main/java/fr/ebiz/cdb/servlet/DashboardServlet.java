@@ -7,20 +7,17 @@ import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.validator.PageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Dashboard servlet.
- */
 @WebServlet("/dashboard")
-public class DashboardServlet extends HttpServlet {
+public class DashboardServlet extends AutowiredServlet {
     static final String URL = "/dashboard";
 
     private static final String VIEW = "/WEB-INF/pages/dashboard.jsp";
@@ -35,7 +32,8 @@ public class DashboardServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
-    private ComputerService computerService = ComputerService.INSTANCE;
+    @Autowired
+    private ComputerService computerService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

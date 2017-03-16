@@ -9,10 +9,10 @@ import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.List;
  * Edit computer servlet.
  */
 @WebServlet("/edit-computer")
-public class EditComputerServlet extends HttpServlet {
+public class EditComputerServlet extends AutowiredServlet {
     private static final String VIEW = "/WEB-INF/pages/editComputer.jsp";
 
     private static final String ATTRIBUTE_COMPUTER = "computer";
@@ -38,8 +38,11 @@ public class EditComputerServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditComputerServlet.class);
 
-    private CompanyService companyService = CompanyService.INSTANCE;
-    private ComputerService computerService = ComputerService.INSTANCE;
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private ComputerService computerService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

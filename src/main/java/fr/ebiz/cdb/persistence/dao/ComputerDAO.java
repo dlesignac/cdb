@@ -15,15 +15,14 @@ import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.mapper.rs.ComputerRSMapper;
 
 import fr.ebiz.cdb.model.Computer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-/**
- * Computer DAO.
- */
-public enum ComputerDAO implements IComputerDAO {
+@Component
+public class ComputerDAO implements IComputerDAO {
 
-    INSTANCE;
-
-    private ConnectionManager connectionManager = ConnectionManager.INSTANCE;
+    @Autowired
+    private ConnectionManager connectionManager;
 
     @Override
     public void create(Computer computer) throws DAOQueryException {

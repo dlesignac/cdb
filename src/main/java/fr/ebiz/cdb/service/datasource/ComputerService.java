@@ -5,36 +5,27 @@ import fr.ebiz.cdb.dto.ComputerPageDTO;
 import fr.ebiz.cdb.model.Computer;
 import fr.ebiz.cdb.model.Page;
 import fr.ebiz.cdb.persistence.ConnectionManager;
-import fr.ebiz.cdb.persistence.dao.ComputerDAO;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
 import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Computer service.
- * Gives connection to ComputerDAO and handles transactions.
- */
-public enum ComputerService {
-
-    INSTANCE;
+@Service
+public class ComputerService {
 
     private final Logger logger = LoggerFactory.getLogger(ComputerService.class);
 
+    @Autowired
     private ConnectionManager connectionManager;
-    private IComputerDAO computerDAO;
 
-    /**
-     * Constructor.
-     */
-    ComputerService() {
-        this.connectionManager = ConnectionManager.INSTANCE;
-        this.computerDAO = ComputerDAO.INSTANCE;
-    }
+    @Autowired
+    private IComputerDAO computerDAO;
 
     /**
      * Inserts new computer into datasource.

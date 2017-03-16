@@ -5,10 +5,10 @@ import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,14 +19,15 @@ import java.util.List;
  * Delete computer servlet.
  */
 @WebServlet("/delete-computers")
-public class DeleteComputerServlet extends HttpServlet {
+public class DeleteComputerServlet extends AutowiredServlet {
 
     private static final String PARAMETER_PAGE_DELETE = "selection";
     private static final String DELETE_SEPARATOR = ",";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteComputerServlet.class);
 
-    private ComputerService computerService = ComputerService.INSTANCE;
+    @Autowired
+    private ComputerService computerService;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -2,8 +2,6 @@ package fr.ebiz.cdb.service.datasource;
 
 import fr.ebiz.cdb.model.Company;
 import fr.ebiz.cdb.persistence.ConnectionManager;
-import fr.ebiz.cdb.persistence.dao.CompanyDAO;
-import fr.ebiz.cdb.persistence.dao.ComputerDAO;
 import fr.ebiz.cdb.persistence.dao.ICompanyDAO;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.persistence.exception.DAOQueryException;
@@ -11,30 +9,24 @@ import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Company service.
- */
-public enum CompanyService {
-
-    INSTANCE;
+@Service
+public class CompanyService {
 
     private final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
+    @Autowired
     private ConnectionManager connectionManager;
-    private ICompanyDAO companyDAO;
-    private IComputerDAO computerDAO;
 
-    /**
-     * Constructor.
-     */
-    CompanyService() {
-        this.connectionManager = ConnectionManager.INSTANCE;
-        this.companyDAO = CompanyDAO.INSTANCE;
-        this.computerDAO = ComputerDAO.INSTANCE;
-    }
+    @Autowired
+    private ICompanyDAO companyDAO;
+
+    @Autowired
+    private IComputerDAO computerDAO;
 
     /**
      * Deletes company into datasource.

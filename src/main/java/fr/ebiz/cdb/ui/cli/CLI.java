@@ -12,6 +12,7 @@ import fr.ebiz.cdb.service.datasource.CompanyService;
 import fr.ebiz.cdb.service.datasource.ComputerService;
 import fr.ebiz.cdb.service.datasource.exception.TransactionFailedException;
 import fr.ebiz.cdb.service.validator.ComputerValidator;
+import fr.ebiz.cdb.config.AppConfig;
 import fr.ebiz.cdb.ui.cli.frame.Frame;
 import fr.ebiz.cdb.ui.cli.frame.FrameBuilder;
 import fr.ebiz.cdb.ui.cli.frame.FrameCompany;
@@ -21,15 +22,18 @@ import fr.ebiz.cdb.ui.cli.frame.FrameComputers;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Command Line Interface.
- */
+@Component
 public class CLI {
-    private static Logger logger = LoggerFactory.getLogger(CLI.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CLI.class);
 
     /**
      * CLI entry point.
@@ -37,11 +41,17 @@ public class CLI {
      * @param args entry point arguments
      */
     public static void main(String[] args) {
-        new CLI().loop();
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+        CLI cli = ctx.getBean(CLI.class);
+        cli.loop();
     }
 
+    @Autowired
     private CompanyService companyService;
+
+    @Autowired
     private ComputerService computerService;
+
     private Scanner in;
     private Frame frame;
     private CLIStatus status;
@@ -49,9 +59,7 @@ public class CLI {
     /**
      * Default constructor.
      */
-    private CLI() {
-        this.companyService = CompanyService.INSTANCE;
-        this.computerService = ComputerService.INSTANCE;
+    public CLI() {
         this.in = new Scanner(System.in);
         this.frame = new FrameBuilder().buildIndex();
         this.status = CLIStatus.INDEX;
@@ -68,7 +76,7 @@ public class CLI {
                 listen();
             } catch (Exception e) {
                 frame.setError("An error occurred");
-                logger.error("caught exception while running CLI", e);
+                LOGGER.error("caught exception while running CLI", e);
             }
         }
 
@@ -333,7 +341,9 @@ public class CLI {
     private void callComputers(int offset) {
         try {
             ComputerPageDTO dto = new ComputerPageDTO("", Column.COMPUTER_NAME, Order.ASC, 10, offset);
+            LOGGER.debug("before computerService");
             Page<Computer> computers = computerService.page(dto);
+            LOGGER.debug("after computerService");
             frame = new FrameBuilder().buildComputers(computers);
             status = CLIStatus.COMPUTERS;
         } catch (TransactionFailedException e) {
@@ -434,7 +444,7 @@ public class CLI {
      * @param e unexpected exception
      */
     private void callErrorInternalServerError(Exception e) {
-        logger.error("an unexpected error occurred", e);
+        LOGGER.error("an unexpected error occurred", e);
         frame.setError("Internal server error");
     }
 

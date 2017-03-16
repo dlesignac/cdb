@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import fr.ebiz.cdb.persistence.exception.DatasourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -14,13 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * Datasource service.
- * Loads connection pool and manages connection attribution.
- */
-public enum ConnectionManager {
-
-    INSTANCE;
+@Component
+public class ConnectionManager {
 
     private static final String FILE_PROPERTIES = "application.properties";
 
@@ -40,7 +36,7 @@ public enum ConnectionManager {
     /**
      * Loads datasource driver and initiates connection pool.
      */
-    ConnectionManager() {
+    public ConnectionManager() {
         ClassLoader classLoader = ConnectionManager.class.getClassLoader();
         InputStream globalPropertiesFile = classLoader.getResourceAsStream(FILE_PROPERTIES);
 
