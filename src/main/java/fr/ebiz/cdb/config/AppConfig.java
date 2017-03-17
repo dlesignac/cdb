@@ -1,12 +1,12 @@
 package fr.ebiz.cdb.config;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -18,17 +18,20 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class AppConfig {
 
-    @Value("${spring.datasource.url}")
+    @Value("${app.datasource.url}")
     private String url;
 
-    @Value("${spring.datasource.username}")
+    @Value("${app.datasource.username}")
     private String username;
 
-    @Value("${spring.datasource.password}")
+    @Value("${app.datasource.password}")
     private String password;
 
-    @Value("${spring.datasource.driver-class-name}")
+    @Value("${app.datasource.driver-class-name}")
     private String driverClassName;
+
+    @Value("${app.datasource.pool-size}")
+    private Integer poolSize;
 
     /**
      * DataSource.
@@ -37,11 +40,12 @@ public class AppConfig {
      */
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setDriverClassName(driverClassName);
+        dataSource.setInitialSize(poolSize);
         return dataSource;
     }
 

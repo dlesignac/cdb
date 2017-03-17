@@ -7,18 +7,18 @@ import java.util.List;
  */
 public class ComputerDeletionDTO {
 
-    private List<Integer> ids;
+    private List<String> ids;
 
     /**
      * Constructor.
      *
      * @param ids ids
      */
-    public ComputerDeletionDTO(List<Integer> ids) {
+    public ComputerDeletionDTO(List<String> ids) {
         this.ids = ids;
     }
 
-    public List<Integer> getIds() {
+    public List<String> getIds() {
         return ids;
     }
 

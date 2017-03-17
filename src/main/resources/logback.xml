@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
-            </Pattern>
-        </encoder>
-    </appender>
+
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>logs/cdb.log</file>
         <encoder>
@@ -16,11 +10,8 @@
         </encoder>
     </appender>
 
-    <logger name="fr.ebiz.cdb" level="debug" additivity="false">
-        <appender-ref ref="FILE"/>
-    </logger>
-
-    <root level="debug">
+    <root level="DEBUG">
         <appender-ref ref="FILE"/>
     </root>
+
 </configuration>

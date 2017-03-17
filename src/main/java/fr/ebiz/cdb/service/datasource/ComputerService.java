@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ComputerService {
 
     private final Logger logger = LoggerFactory.getLogger(ComputerService.class);
@@ -92,9 +93,9 @@ public class ComputerService {
             connectionManager.getConnection();
 
             try {
-                for (Integer id : computerDeletionDTO.getIds()) {
+                for (String id : computerDeletionDTO.getIds()) {
                     Computer computer = new Computer();
-                    computer.setId(id);
+                    computer.setId(Integer.parseInt(id));
                     computerDAO.delete(computer);
                 }
 
