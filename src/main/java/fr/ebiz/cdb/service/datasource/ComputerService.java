@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ComputerService {
      * @param computer computer to be inserted
      * @throws TransactionFailedException an unexpected error occurred
      */
+    @Transactional
     public void create(Computer computer) throws TransactionFailedException {
         try {
             connectionManager.getConnection();
@@ -58,6 +60,7 @@ public class ComputerService {
      * @param computer computer to be deleted
      * @throws TransactionFailedException an unexpected error occurred
      */
+    @Transactional
     public void delete(Computer computer) throws TransactionFailedException {
         try {
             connectionManager.getConnection();
@@ -83,6 +86,7 @@ public class ComputerService {
      * @param computerDeletionDTO computerDeletionDTO
      * @throws TransactionFailedException an unexpected error occurred
      */
+    @Transactional
     public void deleteMany(ComputerDeletionDTO computerDeletionDTO) throws TransactionFailedException {
         try {
             connectionManager.getConnection();
@@ -113,6 +117,7 @@ public class ComputerService {
      * @param computer computer to be updated
      * @throws TransactionFailedException an unexpected error occurred
      */
+    @Transactional
     public void update(Computer computer) throws TransactionFailedException {
         try {
             connectionManager.getConnection();
@@ -139,6 +144,7 @@ public class ComputerService {
      * @return computer
      * @throws TransactionFailedException an unexpected error occurred
      */
+    @Transactional(readOnly = true)
     public Computer find(int id) throws TransactionFailedException {
         try {
             connectionManager.getConnection();
@@ -164,6 +170,7 @@ public class ComputerService {
      * @return frame of computers
      * @throws TransactionFailedException an unexpected error occurred
      */
+    @Transactional(readOnly = true)
     public Page<Computer> page(ComputerPageDTO pageRequest) throws TransactionFailedException {
         try {
             connectionManager.getConnection();

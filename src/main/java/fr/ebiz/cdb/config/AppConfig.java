@@ -1,77 +1,58 @@
 package fr.ebiz.cdb.config;
 
-import fr.ebiz.cdb.persistence.ConnectionManager;
-import fr.ebiz.cdb.persistence.dao.CompanyDAO;
-import fr.ebiz.cdb.persistence.dao.ComputerDAO;
-import fr.ebiz.cdb.persistence.dao.ICompanyDAO;
-import fr.ebiz.cdb.persistence.dao.IComputerDAO;
-import fr.ebiz.cdb.service.datasource.CompanyService;
-import fr.ebiz.cdb.service.datasource.ComputerService;
-import fr.ebiz.cdb.ui.cli.CLI;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
 
 @Configuration
+@ComponentScan("fr.ebiz.cdb")
+@PropertySource("classpath:/application.properties")
+@EnableTransactionManagement
 public class AppConfig {
 
+    @Value("${spring.datasource.url}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
+
     /**
-     * ConnectionManager.
+     * DataSource.
      *
-     * @return ConnectionManager
+     * @return DataSource
      */
     @Bean
-    public ConnectionManager connectionManager() {
-        return new ConnectionManager();
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setDriverClassName(driverClassName);
+        return dataSource;
     }
 
     /**
-     * IComputerDAO.
+     * PlatformTransactionManager.
      *
-     * @return IComputerDAO
+     * @return PlatformTransactionManager
      */
     @Bean
-    public IComputerDAO computerDAO() {
-        return new ComputerDAO();
-    }
-
-    /**
-     * ICompanyDAO.
-     *
-     * @return ICompanyDAO
-     */
-    @Bean
-    public ICompanyDAO companyDAO() {
-        return new CompanyDAO();
-    }
-
-    /**
-     * ComputerService.
-     *
-     * @return ComputerService
-     */
-    @Bean
-    public ComputerService computerService() {
-        return new ComputerService();
-    }
-
-    /**
-     * CompanyService.
-     *
-     * @return CompanyService
-     */
-    @Bean
-    public CompanyService companyService() {
-        return new CompanyService();
-    }
-
-    /**
-     * CLI.
-     *
-     * @return CLI
-     */
-    @Bean
-    public CLI cli() {
-        return new CLI();
+    public PlatformTransactionManager txManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
 
 }
