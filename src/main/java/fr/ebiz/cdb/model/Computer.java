@@ -7,20 +7,13 @@ import java.time.LocalDate;
  */
 public class Computer {
 
-    private int id;
+    private Integer id;
     private String name;
     private LocalDate introduced;
     private LocalDate discontinued;
     private Company manufacturer;
 
-    /**
-     * Default constructor.
-     */
-    public Computer() {
-
-    }
-
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
@@ -40,7 +33,7 @@ public class Computer {
         return this.manufacturer;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

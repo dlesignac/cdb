@@ -1,15 +1,12 @@
 package fr.ebiz.cdb.dto;
 
-/**
- * Computer DTO.
- */
 public class ComputerDTO {
 
-    private String id;
+    private Integer id;
     private String name;
     private String introduced;
     private String discontinued;
-    private String companyId;
+    private Integer companyId;
 
     /**
      * Constructor.
@@ -28,20 +25,12 @@ public class ComputerDTO {
      * Builder.
      */
     public static class Builder {
-        private String id;
+
+        private Integer id;
         private String name;
         private String introduced;
         private String discontinued;
-        private String companyId;
-
-        /**
-         * Constructor.
-         *
-         * @param name name
-         */
-        public Builder(String name) {
-            this.name = name;
-        }
+        private Integer companyId;
 
         /**
          * Set id.
@@ -49,8 +38,19 @@ public class ComputerDTO {
          * @param id id
          * @return Builder
          */
-        public Builder id(String id) {
+        public Builder id(Integer id) {
             this.id = id;
+            return this;
+        }
+
+        /**
+         * Set name.
+         *
+         * @param name name
+         * @return Builder
+         */
+        public Builder name(String name) {
+            this.name = name;
             return this;
         }
 
@@ -82,7 +82,7 @@ public class ComputerDTO {
          * @param companyId companyId
          * @return Builder
          */
-        public Builder companyId(String companyId) {
+        public Builder companyId(Integer companyId) {
             this.companyId = companyId;
             return this;
         }
@@ -95,9 +95,10 @@ public class ComputerDTO {
         public ComputerDTO build() {
             return new ComputerDTO(this);
         }
+
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -113,11 +114,11 @@ public class ComputerDTO {
         return discontinued;
     }
 
-    public String getCompanyId() {
+    public Integer getCompanyId() {
         return companyId;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -133,7 +134,7 @@ public class ComputerDTO {
         this.discontinued = discontinued;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 

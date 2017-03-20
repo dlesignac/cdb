@@ -3,7 +3,7 @@
 <%@ attribute name="success" type="java.lang.String" required="true" %>
 
 <c:if test="${errors ne null}">
-    <div class="col-xs-6 col-xs-offset-3 box">
+    <div class="container">
         <c:choose>
             <c:when test="${not empty errors}">
                 <c:forEach items="${errors}" var="error">

@@ -1,8 +1,5 @@
 package fr.ebiz.cdb.model;
 
-/**
- * Order.
- */
 public enum Order {
 
     ASC("ASC"),

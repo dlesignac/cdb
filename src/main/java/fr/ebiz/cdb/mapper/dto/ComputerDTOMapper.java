@@ -18,18 +18,15 @@ public abstract class ComputerDTOMapper {
      * @return computer
      */
     public static Computer mapFromDTO(ComputerDTO computerDTO) {
-        String id = computerDTO.getId();
+        Integer id = computerDTO.getId();
         String name = computerDTO.getName();
         String introduced = computerDTO.getIntroduced();
         String discontinued = computerDTO.getDiscontinued();
-        String companyId = computerDTO.getCompanyId();
+        Integer companyId = computerDTO.getCompanyId();
 
         Computer computer = new Computer();
         computer.setName(name);
-
-        if (id != null && !"".equals(id)) {
-            computer.setId(Integer.parseInt(id));
-        }
+        computer.setId(id);
 
         if (introduced != null && !"".equals(introduced)) {
             computer.setIntroduced(LocalDate.parse(introduced));
@@ -39,9 +36,9 @@ public abstract class ComputerDTOMapper {
             computer.setDiscontinued(LocalDate.parse(discontinued));
         }
 
-        if (companyId != null && !"".equals(companyId)) {
+        if (companyId != null) {
             Company company = new Company();
-            company.setId(Integer.parseInt(companyId));
+            company.setId(companyId);
             computer.setManufacturer(company);
         }
 
@@ -55,14 +52,15 @@ public abstract class ComputerDTOMapper {
      * @return computer
      */
     public static ComputerDTO mapToDTO(Computer computer) {
-        String id = String.valueOf(computer.getId());
+        Integer id = computer.getId();
         String name = computer.getName();
         String introduced = computer.getIntroduced() == null ? "" : computer.getIntroduced().toString();
         String discontinued = computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString();
-        String companyId = computer.getManufacturer() == null ? "" : String.valueOf(computer.getManufacturer().getId());
+        Integer companyId = computer.getManufacturer() == null ? null : computer.getManufacturer().getId();
 
-        return new ComputerDTO.Builder(name)
+        return new ComputerDTO.Builder()
                 .id(id)
+                .name(name)
                 .introduced(introduced)
                 .discontinued(discontinued)
                 .companyId(companyId)

@@ -1,8 +1,5 @@
 package fr.ebiz.cdb.model;
 
-/**
- * Computer column.
- */
 public enum Column {
 
     COMPUTER_NAME("computerName"),

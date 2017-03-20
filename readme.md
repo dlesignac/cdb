@@ -1,7 +1,5 @@
 
 # Computer Database
-========================================================================================================================
-
 ## Installation
 ### MySQL
 In order to work, this app needs an access to a MySQL server and use the

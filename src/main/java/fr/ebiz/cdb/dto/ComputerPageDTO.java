@@ -11,25 +11,8 @@ public class ComputerPageDTO {
     private String filter;
     private Column sort;
     private Order order;
-    private int limit;
-    private int number;
-
-    /**
-     * Constructor.
-     *
-     * @param filter filter
-     * @param sort   sort
-     * @param order  order
-     * @param limit  limit
-     * @param number number
-     */
-    public ComputerPageDTO(String filter, Column sort, Order order, int limit, int number) {
-        this.filter = filter;
-        this.sort = sort;
-        this.order = order;
-        this.limit = limit;
-        this.number = number;
-    }
+    private Integer limit;
+    private Integer number;
 
     public String getFilter() {
         return filter;
@@ -43,11 +26,11 @@ public class ComputerPageDTO {
         return order;
     }
 
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -63,11 +46,11 @@ public class ComputerPageDTO {
         this.order = order;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 

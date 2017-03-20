@@ -1,118 +1,86 @@
 package fr.ebiz.cdb.persistence.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import fr.ebiz.cdb.dto.ComputerPageDTO;
 import fr.ebiz.cdb.model.Column;
 import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.model.Order;
-import fr.ebiz.cdb.persistence.ConnectionManager;
-import fr.ebiz.cdb.persistence.util.QueryBuilder;
-import fr.ebiz.cdb.persistence.exception.DAOQueryException;
-import fr.ebiz.cdb.mapper.rs.ComputerRSMapper;
-
 import fr.ebiz.cdb.model.Computer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import fr.ebiz.cdb.model.Order;
+import fr.ebiz.cdb.persistence.mapper.ComputerMapper;
+import fr.ebiz.cdb.persistence.util.QueryBuilder;
+import org.springframework.stereotype.Repository;
 
-@Component
-public class ComputerDAO implements IComputerDAO {
+import java.util.List;
 
-    @Autowired
-    private ConnectionManager connectionManager;
+@Repository
+public class ComputerDAO extends AbstractJDBCTemplateDAO implements IComputerDAO {
 
     @Override
-    public void create(Computer computer) throws DAOQueryException {
+    public void create(Computer computer) {
         String query = new QueryBuilder()
                 .insertInto("computer(name, introduced, discontinued, company_id)")
                 .values("(?, ?, ?, ?)")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(query,
+        Object[] params = {
                 computer.getName(),
                 computer.getIntroduced(),
                 computer.getDiscontinued(),
-                computer.getManufacturer() == null ? null : computer.getManufacturer().getId())) {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOQueryException("could create computer " + computer.toString(), e);
-        }
+                computer.getManufacturer() == null ? null : computer.getManufacturer().getId()
+        };
+        this.jdbcTemplate.update(query, params);
     }
 
     @Override
-    public void delete(Computer computer) throws DAOQueryException {
+    public void delete(Computer computer) {
         String query = new QueryBuilder()
                 .deleteFrom("computer")
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(query, computer.getId())) {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOQueryException("could not delete computer " + computer.toString(), e);
-        }
+        this.jdbcTemplate.update(query, computer.getId());
     }
 
     @Override
-    public void delete(Company company) throws DAOQueryException {
+    public void delete(Company company) {
         String query = new QueryBuilder()
                 .deleteFrom("computer")
                 .where("company_id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(query, company.getId())) {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOQueryException("could not delete computers for company " + company.toString(), e);
-        }
+        this.jdbcTemplate.update(query, company.getId());
     }
 
     @Override
-    public void update(Computer computer) throws DAOQueryException {
+    public void update(Computer computer) {
         String query = new QueryBuilder()
                 .update("computer")
                 .set("name = ?, introduced = ?, discontinued = ?, company_id = ?")
                 .where("id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(query,
+        Object[] params = {
                 computer.getName(),
                 computer.getIntroduced(),
                 computer.getDiscontinued(),
                 computer.getManufacturer() == null ? null : computer.getManufacturer().getId(),
-                computer.getId())) {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOQueryException("could not update computer " + computer.toString(), e);
-        }
+                computer.getId()
+        };
+        this.jdbcTemplate.update(query, params);
     }
 
     @Override
-    public Computer find(int id) throws DAOQueryException {
+    public Computer find(int id) {
         String query = new QueryBuilder()
-                .select("c1.id AS computer_id, " +
-                        "c1.name AS computer_name, " +
-                        "c1.introduced, " +
-                        "c1.discontinued, " +
-                        "c2.id AS company_id, " +
-                        "c2.name AS company_name")
+                .select("c1.id AS computer_id, c1.name AS computer_name, c1.introduced, c1.discontinued, c2.id AS company_id, c2.name AS company_name")
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
                 .where("c1.id = ?")
                 .build();
 
-        try (PreparedStatement statement = connectionManager.prepareStatement(query, id)) {
-            ResultSet rs = statement.executeQuery();
-            return new ComputerRSMapper().mapToOne(rs);
-        } catch (SQLException e) {
-            throw new DAOQueryException("could not find computer by id " + id, e);
-        }
+        return this.jdbcTemplate.queryForObject(query, new Object[]{id}, new ComputerMapper());
     }
 
     @Override
-    public int count(String search) throws DAOQueryException {
+    public int count(String search) {
         String query = new QueryBuilder()
                 .select("count(c1.id)")
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
@@ -121,48 +89,25 @@ public class ComputerDAO implements IComputerDAO {
                 .build();
 
         search = "%" + search + "%";
-
-        try (PreparedStatement statement = connectionManager.prepareStatement(query, search, search)) {
-            ResultSet rs = statement.executeQuery();
-            rs.first();
-            return rs.getInt(1);
-        } catch (SQLException e) {
-            throw new DAOQueryException("could not count computers with search " + search, e);
-        }
+        Object[] params = {search, search};
+        return this.jdbcTemplate.queryForObject(query, params, (resultSet, i) -> resultSet.getInt(1));
     }
 
     @Override
-    public List<Computer> fetch(ComputerPageDTO pageRequest) throws DAOQueryException {
-        String sortString = getColumnName(pageRequest.getSort());
-        String orderString = getOrder(pageRequest.getOrder());
-
+    public List<Computer> fetch(ComputerPageDTO pageRequest) {
         String query = new QueryBuilder()
-                .select("c1.id AS computer_id, " +
-                        "c1.name AS computer_name, " +
-                        "c1.introduced, " +
-                        "c1.discontinued, " +
-                        "c2.id AS company_id, " +
-                        "c2.name AS company_name")
+                .select("c1.id AS computer_id, c1.name AS computer_name, c1.introduced, c1.discontinued, c2.id AS company_id, c2.name AS company_name")
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
                 .where("c1.name LIKE ?")
                 .or("c2.name LIKE ?")
-                .orderBy(sortString + " " + orderString)
+                .orderBy(getColumnName(pageRequest.getSort()) + " " + getOrder(pageRequest.getOrder()))
                 .limit("?")
                 .offset("?")
                 .build();
 
         String search = "%" + pageRequest.getFilter() + "%";
-
-        try (PreparedStatement statement = connectionManager.prepareStatement(query,
-                search,
-                search,
-                pageRequest.getLimit(),
-                (pageRequest.getNumber() - 1) * pageRequest.getLimit())) {
-            ResultSet rs = statement.executeQuery();
-            return new ComputerRSMapper().mapToMany(rs);
-        } catch (SQLException e) {
-            throw new DAOQueryException("could not find computers", e); // TODO more details here
-        }
+        Object[] params = {search, search, pageRequest.getLimit(), (pageRequest.getNumber() - 1) * pageRequest.getLimit()};
+        return this.jdbcTemplate.query(query, params, new ComputerMapper());
     }
 
     /**

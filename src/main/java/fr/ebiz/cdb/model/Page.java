@@ -13,13 +13,6 @@ public class Page<T> {
     private String order;
     private List<T> entries;
 
-    /**
-     * Constructor.
-     **/
-    public Page() {
-
-    }
-
     public int getNumber() {
         return number;
     }
