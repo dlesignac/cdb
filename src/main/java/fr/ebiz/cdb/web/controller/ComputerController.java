@@ -1,12 +1,12 @@
 package fr.ebiz.cdb.web.controller;
 
-import fr.ebiz.cdb.dto.ComputerDTO;
-import fr.ebiz.cdb.mapper.dto.ComputerDTOMapper;
-import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.service.ICompanyService;
-import fr.ebiz.cdb.service.IComputerService;
-import fr.ebiz.cdb.service.exception.TransactionFailedException;
-import fr.ebiz.cdb.validator.ComputerValidator;
+import fr.ebiz.cdb.core.dto.ComputerDTO;
+import fr.ebiz.cdb.core.dto.ComputerDTOMapper;
+import fr.ebiz.cdb.core.model.Computer;
+import fr.ebiz.cdb.core.service.ICompanyService;
+import fr.ebiz.cdb.core.service.IComputerService;
+import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
+import fr.ebiz.cdb.core.validator.ComputerValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,12 +73,11 @@ public class ComputerController {
             @RequestParam(value = "discontinued") String discontinued,
             @RequestParam(value = "companyId") Integer companyId
     ) {
-        ComputerDTO computerDTO = new ComputerDTO.Builder()
-                .name(name)
-                .introduced(introduced)
-                .discontinued(discontinued)
-                .companyId(companyId)
-                .build();
+        ComputerDTO computerDTO = new ComputerDTO();
+        computerDTO.setName(name);
+        computerDTO.setIntroduced(introduced);
+        computerDTO.setDiscontinued(discontinued);
+        computerDTO.setCompanyId(companyId);
 
         List<String> errors = ComputerValidator.validate(computerDTO);
 
@@ -94,7 +93,7 @@ public class ComputerController {
         }
 
         model.addAttribute(ATTRIBUTE_ERRORS, errors);
-        return "addComputer";
+        return getAdd(model);
     }
 
     /**
@@ -105,10 +104,7 @@ public class ComputerController {
      * @return edit
      */
     @GetMapping("/{id}")
-    public String getEdit(
-            ModelMap model,
-            @PathVariable Integer id
-    ) {
+    public String getEdit(ModelMap model, @PathVariable Integer id) {
         try {
             model.addAttribute(ATTRIBUTE_COMPUTER, computerService.find(id));
             model.addAttribute(ATTRIBUTE_COMPANIES, companyService.list());
@@ -140,13 +136,11 @@ public class ComputerController {
             @RequestParam(value = "discontinued") String discontinued,
             @RequestParam(value = "companyId") Integer companyId
     ) {
-        ComputerDTO computerDTO = new ComputerDTO.Builder()
-                .id(id)
-                .name(name)
-                .introduced(introduced)
-                .discontinued(discontinued)
-                .companyId(companyId)
-                .build();
+        ComputerDTO computerDTO = new ComputerDTO();
+        computerDTO.setName(name);
+        computerDTO.setIntroduced(introduced);
+        computerDTO.setDiscontinued(discontinued);
+        computerDTO.setCompanyId(companyId);
 
         List<String> errors = ComputerValidator.validate(computerDTO);
 

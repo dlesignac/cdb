@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -13,8 +12,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"fr.ebiz.cdb"}, excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.REGEX, pattern = "fr.ebiz.cdb.web.*")})
+@ComponentScan("fr.ebiz.cdb.core")
+@ComponentScan("fr.ebiz.cdb.cli")
 @PropertySource("classpath:/application.properties")
 public class CDBRootConfig {
 

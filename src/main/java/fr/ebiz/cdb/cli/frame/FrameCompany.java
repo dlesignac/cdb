@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.cli.frame;
 
-import fr.ebiz.cdb.model.Company;
+import fr.ebiz.cdb.core.model.Company;
 
 /**
  * Frame company.

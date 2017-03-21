@@ -15,8 +15,9 @@
 				Error 500: An error has occurred !
 				<br/>
 				<!--
-                    ${pageContext.exception}
-                    <c:forEach var="trace" items="${pageContext.exception.stackTrace}">
+				    At ${url}
+                    ${exception}
+                    <c:forEach var="trace" items="${exception.stackTrace}">
                         ${trace}
                     </c:forEach>
 				-->

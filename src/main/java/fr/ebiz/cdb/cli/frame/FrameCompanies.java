@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.cli.frame;
 
-import fr.ebiz.cdb.model.Company;
+import fr.ebiz.cdb.core.model.Company;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

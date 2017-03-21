@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.cli.frame;
 
-import fr.ebiz.cdb.dto.ComputerDTO;
+import fr.ebiz.cdb.core.dto.ComputerDTO;
 
 public class FrameComputerChange extends Frame {
 

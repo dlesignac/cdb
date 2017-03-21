@@ -1,13 +1,13 @@
 package fr.ebiz.cdb.web.controller;
 
-import fr.ebiz.cdb.dto.ComputerDeletionDTO;
-import fr.ebiz.cdb.dto.ComputerPageDTO;
-import fr.ebiz.cdb.model.Column;
-import fr.ebiz.cdb.model.Order;
-import fr.ebiz.cdb.service.IComputerService;
-import fr.ebiz.cdb.service.exception.TransactionFailedException;
-import fr.ebiz.cdb.validator.ComputerDeletionValidator;
-import fr.ebiz.cdb.validator.PageValidator;
+import fr.ebiz.cdb.core.dto.ComputerDeletionDTO;
+import fr.ebiz.cdb.core.dto.ComputerPageDTO;
+import fr.ebiz.cdb.core.model.Column;
+import fr.ebiz.cdb.core.model.Order;
+import fr.ebiz.cdb.core.service.IComputerService;
+import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
+import fr.ebiz.cdb.core.validator.ComputerDeletionValidator;
+import fr.ebiz.cdb.core.validator.PageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-<%@ attribute name="page" type="fr.ebiz.cdb.model.Page" required="true" %>
+<%@ attribute name="page" type="fr.ebiz.cdb.core.model.Page" required="true" %>
 <%@ attribute name="target" type="java.lang.String" required="true" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

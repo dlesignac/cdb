@@ -1,10 +1,10 @@
 package fr.ebiz.cdb.cli.frame;
 
 import fr.ebiz.cdb.cli.CLIOptions;
-import fr.ebiz.cdb.mapper.dto.ComputerDTOMapper;
-import fr.ebiz.cdb.model.Company;
-import fr.ebiz.cdb.model.Computer;
-import fr.ebiz.cdb.model.Page;
+import fr.ebiz.cdb.core.dto.ComputerDTOMapper;
+import fr.ebiz.cdb.core.model.Company;
+import fr.ebiz.cdb.core.model.Computer;
+import fr.ebiz.cdb.core.model.Page;
 
 
 import java.util.ArrayList;

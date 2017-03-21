@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.cli.frame;
 
-import fr.ebiz.cdb.model.Computer;
+import fr.ebiz.cdb.core.model.Computer;
 
 public class FrameComputer extends Frame {
 
