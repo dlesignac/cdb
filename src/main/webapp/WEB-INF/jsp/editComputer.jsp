@@ -2,13 +2,14 @@
 <html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <jsp:include page="/WEB-INF/jsp/head.jsp" />
 
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
 
-    <mylib:errors success="Computer edited successfully"/>
+    <mylib:errors success='<spring:message code="editcomputer.computer_edited_successfully"/>'/>
 
     <section id="main">
         <div class="container">
@@ -17,25 +18,25 @@
                     <div class="label label-default pull-right">
                         id: ${computer.id}
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1><spring:message code="editcomputer.edit_computer"/></h1>
 
                     <form id="computerForm" action="#" method="POST">
                         <input type="hidden" value="${computer.id}" name="id" id="id"/>
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Computer name" value="<c:out value="${computer.name}"/>">
+                                <label for="computerName"><spring:message code="editcomputer.computer_name"/></label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="<spring:message code="editcomputer.computer_name"/>" value="<c:out value="${computer.name}"/>">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date" value="<c:out value="${computer.introduced}"/>">
+                                <label for="introduced"><spring:message code="editcomputer.introduced_date"/></label>
+                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="<spring:message code="editcomputer.introduced_date"/>" value="<c:out value="${computer.introduced}"/>">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" value="<c:out value="${computer.discontinued}"/>">
+                                <label for="discontinued"><spring:message code="editcomputer.discontinued_date"/></label>
+                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="<spring:message code="editcomputer.discontinued_date"/>" value="<c:out value="${computer.discontinued}"/>">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="editcomputer.company"/></label>
                                 <select class="form-control" name="companyId" id="companyId" >
                                     <option value=""></option>
                                     <c:forEach items="${companies}" var="company">
@@ -45,9 +46,9 @@
                             </div>
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="editcomputer.edit"/>" class="btn btn-primary">
                             or
-                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-default">Cancel</a>
+                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-default"><spring:message code="editcomputer.cancel"/></a>
                         </div>
                     </form>
                 </div>

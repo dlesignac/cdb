@@ -3,8 +3,6 @@
 
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
-
         <mylib:pagination page="${page}" target="dashboard" />
-
     </div>
 </footer>

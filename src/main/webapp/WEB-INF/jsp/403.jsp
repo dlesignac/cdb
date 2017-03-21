@@ -9,9 +9,7 @@
     <section id="main">
         <div class="container">
             <div class="alert alert-danger">
-                Error 403: Access denied!
-                <br/>
-                <!-- stacktrace -->
+                <spring:message code="error403.error_403"/>
             </div>
         </div>
     </section>

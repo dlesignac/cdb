@@ -1,5 +1,6 @@
 <%@ page isErrorPage="true" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 500: An error has occurred !
+				<spring:message code="error500.error_500"/>
 				<br/>
 				<!--
 				    At ${url}
