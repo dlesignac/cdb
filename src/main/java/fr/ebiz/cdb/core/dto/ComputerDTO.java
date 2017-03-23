@@ -1,9 +1,12 @@
 package fr.ebiz.cdb.core.dto;
 
+import javax.validation.constraints.Size;
+
 public class ComputerDTO {
 
     private Integer id;
 
+    @Size(min = 1, max = 255)
     private String name;
 
     private String introduced;

@@ -2,23 +2,23 @@ package fr.ebiz.cdb.web.controller;
 
 import fr.ebiz.cdb.core.dto.ComputerDTO;
 import fr.ebiz.cdb.core.dto.ComputerDTOMapper;
+import fr.ebiz.cdb.core.dto.ComputerDeleteRequest;
 import fr.ebiz.cdb.core.model.Computer;
 import fr.ebiz.cdb.core.service.ICompanyService;
 import fr.ebiz.cdb.core.service.IComputerService;
-import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
-import fr.ebiz.cdb.core.validator.ComputerValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/computer")
@@ -28,8 +28,7 @@ public class ComputerController {
 
     private static final String ATTRIBUTE_COMPANIES = "companies";
     private static final String ATTRIBUTE_COMPUTER = "computer";
-    private static final String ATTRIBUTE_ERRORS = "errors";
-    private static final String ATTRIBUTE_EXCEPTION = "exception";
+    private static final String ATTRIBUTE_SUCCESS = "success";
 
     @Autowired
     private IComputerService computerService;
@@ -45,54 +44,32 @@ public class ComputerController {
      */
     @GetMapping("/add")
     public String getAdd(ModelMap model) {
-        try {
-            model.addAttribute(ATTRIBUTE_COMPANIES, companyService.list());
-            return "addComputer";
-        } catch (TransactionFailedException e) {
-            LOGGER.error("failed to load companies", e);
-            model.addAttribute(ATTRIBUTE_EXCEPTION, e);
-            return "500";
-        }
+        model.addAttribute(ATTRIBUTE_COMPANIES, companyService.list());
+        return "addComputer";
     }
 
     /**
      * Post add.
      *
-     * @param model        model
-     * @param name         name
-     * @param introduced   introduced
-     * @param discontinued discontinued
-     * @param companyId    companyId
+     * @param computerDTO   computerDTO
+     * @param bindingResult bindingResult
+     * @param model         model
      * @return add
      */
     @PostMapping("/add")
     public String postAdd(
-            ModelMap model,
-            @RequestParam(value = "name") String name,
-            @RequestParam(value = "introduced") String introduced,
-            @RequestParam(value = "discontinued") String discontinued,
-            @RequestParam(value = "companyId") Integer companyId
+            @Valid ComputerDTO computerDTO,
+            BindingResult bindingResult,
+            ModelMap model
     ) {
-        ComputerDTO computerDTO = new ComputerDTO();
-        computerDTO.setName(name);
-        computerDTO.setIntroduced(introduced);
-        computerDTO.setDiscontinued(discontinued);
-        computerDTO.setCompanyId(companyId);
-
-        List<String> errors = ComputerValidator.validate(computerDTO);
-
-        if (errors.isEmpty()) {
+        if (!bindingResult.hasErrors()) {
             Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-
-            try {
-                computerService.create(computer);
-            } catch (TransactionFailedException e) {
-                LOGGER.error("failed to add computer", e);
-                errors.add(e.getMessage());
-            }
+            computerService.create(computer);
+            model.addAttribute(ATTRIBUTE_SUCCESS, true);
+        } else {
+            model.addAttribute(ATTRIBUTE_SUCCESS, false);
         }
 
-        model.addAttribute(ATTRIBUTE_ERRORS, errors);
         return getAdd(model);
     }
 
@@ -105,58 +82,60 @@ public class ComputerController {
      */
     @GetMapping("/{id}")
     public String getEdit(ModelMap model, @PathVariable Integer id) {
-        try {
-            model.addAttribute(ATTRIBUTE_COMPUTER, computerService.find(id));
-            model.addAttribute(ATTRIBUTE_COMPANIES, companyService.list());
-            return "editComputer";
-        } catch (TransactionFailedException e) {
-            LOGGER.error("failed to load companies", e);
-            model.addAttribute(ATTRIBUTE_EXCEPTION, e);
-            return "500";
-        }
+        model.addAttribute(ATTRIBUTE_COMPUTER, computerService.find(id));
+        model.addAttribute(ATTRIBUTE_COMPANIES, companyService.list());
+        return "editComputer";
     }
 
     /**
      * Post edit.
      *
-     * @param model        model
-     * @param id           id
-     * @param name         name
-     * @param introduced   introduced
-     * @param discontinued discontinued
-     * @param companyId    companyId
+     * @param id            id
+     * @param computerDTO   computerDTO
+     * @param bindingResult bindingResult
+     * @param model         model
      * @return edit
      */
     @PostMapping("/{id}")
     public String postEdit(
-            ModelMap model,
             @PathVariable Integer id,
-            @RequestParam(value = "name") String name,
-            @RequestParam(value = "introduced") String introduced,
-            @RequestParam(value = "discontinued") String discontinued,
-            @RequestParam(value = "companyId") Integer companyId
+            @Valid ComputerDTO computerDTO,
+            BindingResult bindingResult,
+            ModelMap model
     ) {
-        ComputerDTO computerDTO = new ComputerDTO();
-        computerDTO.setName(name);
-        computerDTO.setIntroduced(introduced);
-        computerDTO.setDiscontinued(discontinued);
-        computerDTO.setCompanyId(companyId);
-
-        List<String> errors = ComputerValidator.validate(computerDTO);
-
-        if (errors.isEmpty()) {
+        if (!bindingResult.hasErrors()) {
             Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-
-            try {
-                computerService.update(computer);
-            } catch (TransactionFailedException e) {
-                LOGGER.error("failed to update computer", e);
-                errors.add(e.getMessage());
-            }
+            computerService.update(computer);
+            model.addAttribute(ATTRIBUTE_SUCCESS, true);
+        } else {
+            model.addAttribute(ATTRIBUTE_SUCCESS, false);
         }
 
-        model.addAttribute(ATTRIBUTE_ERRORS, errors);
         return getEdit(model, id);
+    }
+
+    /**
+     * Post dashboard.
+     *
+     * @param computerDeleteRequest computerDeleteRequest
+     * @param bindingResult         bindingResult
+     * @param redirectAttributes    redirectAttributes
+     * @return dashboard
+     */
+    @PostMapping("/delete")
+    public String postDelete(
+            @Valid ComputerDeleteRequest computerDeleteRequest,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (!bindingResult.hasErrors()) {
+            computerService.deleteMany(computerDeleteRequest);
+            redirectAttributes.addFlashAttribute(ATTRIBUTE_SUCCESS, true);
+        } else {
+            redirectAttributes.addFlashAttribute(ATTRIBUTE_SUCCESS, false);
+        }
+
+        return "redirect:/dashboard";
     }
 
 }

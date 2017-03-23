@@ -4,12 +4,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
-<jsp:include page="/WEB-INF/jsp/head.jsp" />
+<jsp:include page="/WEB-INF/jsp/common/head.jsp" />
 
 <body>
-    <jsp:include page="/WEB-INF/jsp/header.jsp" />
+    <jsp:include page="/WEB-INF/jsp/common/header.jsp" />
 
-    <mylib:errors success='<spring:message code="editcomputer.computer_edited_successfully"/>'/>
+    <mylib:errors successMessage="editcomputer.computer_edited_successfully" errorMessage="editcomputer.could_not_edit_computer"/>
 
     <section id="main">
         <div class="container">

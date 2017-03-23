@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.core.persistence.dao;
 
-import fr.ebiz.cdb.core.dto.ComputerPageDTO;
+import fr.ebiz.cdb.core.dto.ComputerPageRequest;
 import fr.ebiz.cdb.core.model.Column;
 import fr.ebiz.cdb.core.model.Company;
 import fr.ebiz.cdb.core.model.Computer;
@@ -90,11 +90,11 @@ public class ComputerDAO extends AbstractJDBCTemplateDAO implements IComputerDAO
 
         search = "%" + search + "%";
         Object[] params = {search, search};
-        return this.jdbcTemplate.queryForObject(query, params, (resultSet, i) -> resultSet.getInt(1));
+        return this.jdbcTemplate.queryForObject(query, params, Integer.class);
     }
 
     @Override
-    public List<Computer> fetch(ComputerPageDTO pageRequest) {
+    public List<Computer> fetch(ComputerPageRequest pageRequest) {
         String query = new QueryBuilder()
                 .select("c1.id AS computer_id, c1.name AS computer_name, c1.introduced, c1.discontinued, c2.id AS company_id, c2.name AS company_name")
                 .from("computer c1 LEFT OUTER JOIN company c2 ON c1.company_id = c2.id")
@@ -106,7 +106,7 @@ public class ComputerDAO extends AbstractJDBCTemplateDAO implements IComputerDAO
                 .build();
 
         String search = "%" + pageRequest.getFilter() + "%";
-        Object[] params = {search, search, pageRequest.getLimit(), (pageRequest.getNumber() - 1) * pageRequest.getLimit()};
+        Object[] params = {search, search, pageRequest.getLimit(), (pageRequest.getPage() - 1) * pageRequest.getLimit()};
         return this.jdbcTemplate.query(query, params, new ComputerMapper());
     }
 

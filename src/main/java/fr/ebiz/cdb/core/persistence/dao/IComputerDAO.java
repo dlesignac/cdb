@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.core.persistence.dao;
 
-import fr.ebiz.cdb.core.dto.ComputerPageDTO;
+import fr.ebiz.cdb.core.dto.ComputerPageRequest;
 import fr.ebiz.cdb.core.model.Company;
 import fr.ebiz.cdb.core.model.Computer;
 
@@ -61,6 +61,6 @@ public interface IComputerDAO {
      * @param pageRequest page request
      * @return entries
      */
-    List<Computer> fetch(ComputerPageDTO pageRequest);
+    List<Computer> fetch(ComputerPageRequest pageRequest);
 
 }

@@ -4,7 +4,6 @@ import fr.ebiz.cdb.CDBRootConfig;
 import fr.ebiz.cdb.core.model.Computer;
 import fr.ebiz.cdb.core.service.ComputerService;
 import fr.ebiz.cdb.core.service.IComputerService;
-import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -33,7 +32,7 @@ public class ITTestComputerService {
     }
 
     @Test
-    public void testCreate() throws TransactionFailedException {
+    public void testCreate() {
         Computer computer = new Computer();
         computer.setName("Test computer");
 

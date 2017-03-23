@@ -3,7 +3,6 @@ package fr.ebiz.cdb.core.service;
 import fr.ebiz.cdb.core.model.Company;
 import fr.ebiz.cdb.core.persistence.dao.ICompanyDAO;
 import fr.ebiz.cdb.core.persistence.dao.IComputerDAO;
-import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -25,18 +24,18 @@ public class CompanyService implements ICompanyService {
 
     @Override
     @Transactional(rollbackFor = java.lang.Exception.class)
-    public void delete(Company company) throws TransactionFailedException {
+    public void delete(Company company) {
         computerDAO.delete(company);
         companyDAO.delete(company);
     }
 
     @Override
-    public Company find(int id) throws TransactionFailedException {
+    public Company find(int id) {
         return companyDAO.find(id);
     }
 
     @Override
-    public List<Company> list() throws TransactionFailedException {
+    public List<Company> list() {
         return companyDAO.fetch();
     }
 

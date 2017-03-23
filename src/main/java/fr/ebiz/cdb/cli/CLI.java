@@ -8,7 +8,7 @@ import fr.ebiz.cdb.cli.frame.FrameComputer;
 import fr.ebiz.cdb.cli.frame.FrameComputerChange;
 import fr.ebiz.cdb.cli.frame.FrameComputers;
 import fr.ebiz.cdb.core.dto.ComputerDTO;
-import fr.ebiz.cdb.core.dto.ComputerPageDTO;
+import fr.ebiz.cdb.core.dto.ComputerPageRequest;
 import fr.ebiz.cdb.core.dto.ComputerDTOMapper;
 import fr.ebiz.cdb.core.model.Column;
 import fr.ebiz.cdb.core.model.Company;
@@ -17,7 +17,6 @@ import fr.ebiz.cdb.core.model.Order;
 import fr.ebiz.cdb.core.model.Page;
 import fr.ebiz.cdb.core.service.ICompanyService;
 import fr.ebiz.cdb.core.service.IComputerService;
-import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
 import fr.ebiz.cdb.core.validator.ComputerValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -141,35 +140,31 @@ public class CLI {
      * @param input user input
      */
     private void doComputers(String[] input) {
-        try {
-            if (CLIOptions.BACK.equals(input[0])) {
-                callIndex();
-            } else if (CLIOptions.SHOW.equals(input[0])) {
-                if (input.length < 2) {
-                    callErrorMissingParameter();
-                } else if (!StringUtils.isNumeric(input[1])) {
+        if (CLIOptions.BACK.equals(input[0])) {
+            callIndex();
+        } else if (CLIOptions.SHOW.equals(input[0])) {
+            if (input.length < 2) {
+                callErrorMissingParameter();
+            } else if (!StringUtils.isNumeric(input[1])) {
+                callErrorInvalidParameter();
+            } else {
+                int id = Integer.parseInt(input[1]);
+                Computer computer = getComputerById(id);
+
+                if (computer == null) {
                     callErrorInvalidParameter();
                 } else {
-                    int id = Integer.parseInt(input[1]);
-                    Computer computer = getComputerById(id);
-
-                    if (computer == null) {
-                        callErrorInvalidParameter();
-                    } else {
-                        callComputer(computer);
-                    }
+                    callComputer(computer);
                 }
-            } else if (CLIOptions.PREVIOUS_PAGE.equals(input[0])) {
-                FrameComputers frame = (FrameComputers) this.frame;
-                callComputers(frame.getPageNumber() - 1);
-            } else if (CLIOptions.NEXT_PAGE.equals(input[0])) {
-                FrameComputers frame = (FrameComputers) this.frame;
-                callComputers(frame.getPageNumber() + 1);
-            } else {
-                callErrorInvalidInput();
             }
-        } catch (TransactionFailedException e) {
-            callErrorInternalServerError(e);
+        } else if (CLIOptions.PREVIOUS_PAGE.equals(input[0])) {
+            FrameComputers frame = (FrameComputers) this.frame;
+            callComputers(frame.getPageNumber() - 1);
+        } else if (CLIOptions.NEXT_PAGE.equals(input[0])) {
+            FrameComputers frame = (FrameComputers) this.frame;
+            callComputers(frame.getPageNumber() + 1);
+        } else {
+            callErrorInvalidInput();
         }
     }
 
@@ -182,12 +177,8 @@ public class CLI {
         if (CLIOptions.BACK.equals(input[0])) {
             callComputers(1);
         } else if (CLIOptions.DELETE.equals(input[0])) {
-            try {
-                deleteComputer();
-                callComputers(1);
-            } catch (TransactionFailedException e) {
-                callErrorInternalServerError(e);
-            }
+            deleteComputer();
+            callComputers(1);
         } else if (CLIOptions.EDIT.equals(input[0])) {
             callComputerEdit();
         } else {
@@ -201,29 +192,25 @@ public class CLI {
      * @param input user input
      */
     private void doCompanies(String[] input) {
-        try {
-            if (CLIOptions.BACK.equals(input[0])) {
-                callIndex();
-            } else if (CLIOptions.SHOW.equals(input[0])) {
-                if (input.length < 2) {
-                    callErrorMissingParameter();
-                } else if (!StringUtils.isNumeric(input[1])) {
+        if (CLIOptions.BACK.equals(input[0])) {
+            callIndex();
+        } else if (CLIOptions.SHOW.equals(input[0])) {
+            if (input.length < 2) {
+                callErrorMissingParameter();
+            } else if (!StringUtils.isNumeric(input[1])) {
+                callErrorInvalidParameter();
+            } else {
+                int id = Integer.parseInt(input[1]);
+                Company company = getCompanyById(id);
+
+                if (company == null) {
                     callErrorInvalidParameter();
                 } else {
-                    int id = Integer.parseInt(input[1]);
-                    Company company = getCompanyById(id);
-
-                    if (company == null) {
-                        callErrorInvalidParameter();
-                    } else {
-                        callCompany(company);
-                    }
+                    callCompany(company);
                 }
-            } else {
-                callErrorInvalidInput();
             }
-        } catch (TransactionFailedException e) {
-            callErrorInternalServerError(e);
+        } else {
+            callErrorInvalidInput();
         }
     }
 
@@ -236,12 +223,9 @@ public class CLI {
         if (CLIOptions.BACK.equals(input[0])) {
             callCompanies();
         } else if (CLIOptions.DELETE.equals(input[0])) {
-            try {
-                deleteCompany();
-                callCompanies();
-            } catch (TransactionFailedException e) {
-                callErrorInternalServerError(e);
-            }
+            deleteCompany();
+            callCompanies();
+
         } else {
             callErrorInvalidInput();
         }
@@ -256,13 +240,10 @@ public class CLI {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callComputerBack();
         } else if (CLIOptions.SAVE.equals(input[0])) {
-            try {
-                Computer computer = getComputerFromPage();
-                computerService.update(computer);
-                callComputer(computer);
-            } catch (TransactionFailedException e) {
-                callErrorInternalServerError(e);
-            }
+
+            Computer computer = getComputerFromPage();
+            computerService.update(computer);
+            callComputer(computer);
         } else {
             doComputerChange(input);
         }
@@ -277,13 +258,10 @@ public class CLI {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callIndex();
         } else if (CLIOptions.SAVE.equals(input[0])) {
-            try {
-                Computer computer = getComputerFromPage();
-                computerService.create(computer);
-                callComputer(computer);
-            } catch (TransactionFailedException e) {
-                callErrorInternalServerError(e);
-            }
+            Computer computer = getComputerFromPage();
+            computerService.create(computer);
+            callComputer(computer);
+
         } else {
             doComputerChange(input);
         }
@@ -295,33 +273,29 @@ public class CLI {
      * @param input user input
      */
     private void doComputerChange(String[] input) {
-        try {
-            ComputerDTO computerDTO = getComputerDTOFromPage();
+        ComputerDTO computerDTO = getComputerDTOFromPage();
 
-            if (CLIOptions.NEW_NAME.equals(input[0])) {
-                computerDTO.setName(input[1]);
-            } else if (CLIOptions.NEW_INTRODUCED.equals(input[0])) {
-                computerDTO.setIntroduced(input[1]);
-            } else if (CLIOptions.NEW_DISCONTINUED.equals(input[0])) {
-                computerDTO.setDiscontinued(input[1]);
-            } else if (CLIOptions.NEW_MANUFACTURER.equals(input[0])) {
-                computerDTO.setCompanyId(Integer.parseInt(input[1]));
-            } else if (CLIOptions.SAVE.equals(input[0])) {
-                List<String> errors = ComputerValidator.validate(computerDTO);
+        if (CLIOptions.NEW_NAME.equals(input[0])) {
+            computerDTO.setName(input[1]);
+        } else if (CLIOptions.NEW_INTRODUCED.equals(input[0])) {
+            computerDTO.setIntroduced(input[1]);
+        } else if (CLIOptions.NEW_DISCONTINUED.equals(input[0])) {
+            computerDTO.setDiscontinued(input[1]);
+        } else if (CLIOptions.NEW_MANUFACTURER.equals(input[0])) {
+            computerDTO.setCompanyId(Integer.parseInt(input[1]));
+        } else if (CLIOptions.SAVE.equals(input[0])) {
+            List<String> errors = ComputerValidator.validate(computerDTO);
 
-                if (!errors.isEmpty()) {
-                    callErrorInvalidInput();
-                } else {
-                    Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-                    computerService.update(computer);
-                }
-            } else if (CLIOptions.BACK.equals(input[0])) {
-                callComputers(0);
-            } else {
+            if (!errors.isEmpty()) {
                 callErrorInvalidInput();
+            } else {
+                Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
+                computerService.update(computer);
             }
-        } catch (TransactionFailedException e) {
-            callErrorInternalServerError(e);
+        } else if (CLIOptions.BACK.equals(input[0])) {
+            callComputers(0);
+        } else {
+            callErrorInvalidInput();
         }
     }
 
@@ -339,21 +313,16 @@ public class CLI {
      * @param offset page offset
      */
     private void callComputers(int offset) {
-        try {
-            ComputerPageDTO dto = new ComputerPageDTO();
-            dto.setFilter("");
-            dto.setSort(Column.COMPUTER_NAME);
-            dto.setOrder(Order.ASC);
-            dto.setLimit(10);
-            dto.setNumber(offset);
+        ComputerPageRequest dto = new ComputerPageRequest();
+        dto.setFilter("");
+        dto.setSort(Column.COMPUTER_NAME);
+        dto.setOrder(Order.ASC);
+        dto.setLimit(10);
+        dto.setPage(offset);
 
-            Page<Computer> computers = computerService.page(dto);
-            frame = new FrameBuilder().buildComputers(computers);
-            status = CLIStatus.COMPUTERS;
-        } catch (TransactionFailedException e) {
-            callErrorInternalServerError(e);
-        }
-
+        Page<Computer> computers = computerService.page(dto);
+        frame = new FrameBuilder().buildComputers(computers);
+        status = CLIStatus.COMPUTERS;
     }
 
     /**
@@ -370,13 +339,9 @@ public class CLI {
      * Calls company list frame.
      */
     private void callCompanies() {
-        try {
-            List<Company> companies = companyService.list();
-            frame = new FrameBuilder().buildCompanies(companies);
-            status = CLIStatus.COMPANIES;
-        } catch (TransactionFailedException e) {
-            callErrorInternalServerError(e);
-        }
+        List<Company> companies = companyService.list();
+        frame = new FrameBuilder().buildCompanies(companies);
+        status = CLIStatus.COMPANIES;
     }
 
     /**
@@ -402,13 +367,9 @@ public class CLI {
      * Calls computer details frame back.
      */
     private void callComputerBack() {
-        try {
-            Computer computer = getComputerFromPage();
-            computer = getComputerById(computer.getId());
-            callComputer(computer);
-        } catch (TransactionFailedException e) {
-            callErrorInternalServerError(e);
-        }
+        Computer computer = getComputerFromPage();
+        computer = getComputerById(computer.getId());
+        callComputer(computer);
     }
 
     /**
@@ -454,20 +415,16 @@ public class CLI {
 
     /**
      * Deletes computer.
-     *
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    private void deleteComputer() throws TransactionFailedException {
+    private void deleteComputer() {
         Computer computer = getComputerFromPage();
         computerService.delete(computer);
     }
 
     /**
      * Deletes company.
-     *
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    private void deleteCompany() throws TransactionFailedException {
+    private void deleteCompany() {
         Company company = getCompanyFromPage();
         companyService.delete(company);
     }
@@ -477,9 +434,8 @@ public class CLI {
      *
      * @param id computer's id
      * @return object computer
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    private Computer getComputerById(int id) throws TransactionFailedException {
+    private Computer getComputerById(int id) {
         return computerService.find(id);
     }
 
@@ -488,9 +444,8 @@ public class CLI {
      *
      * @param id company's id
      * @return object company
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    private Company getCompanyById(int id) throws TransactionFailedException {
+    private Company getCompanyById(int id) {
         return companyService.find(id);
     }
 

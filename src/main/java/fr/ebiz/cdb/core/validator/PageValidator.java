@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.core.validator;
 
-import fr.ebiz.cdb.core.dto.ComputerPageDTO;
+import fr.ebiz.cdb.core.dto.ComputerPageRequest;
 import fr.ebiz.cdb.core.model.Column;
 import fr.ebiz.cdb.core.model.Order;
 
@@ -23,12 +23,12 @@ public class PageValidator {
      * @param page page request
      * @return errors
      */
-    public static List<String> validate(ComputerPageDTO page) {
+    public static List<String> validate(ComputerPageRequest page) {
         List<String> errors = new ArrayList<>();
 
-        if (page.getNumber() == null || page.getNumber() < NUMBER_MIN) {
+        if (page.getPage() == null || page.getPage() < NUMBER_MIN) {
             errors.add("Page number must be greater or equal to 1");
-            page.setNumber(NUMBER_MIN);
+            page.setPage(NUMBER_MIN);
         }
 
         if (page.getLimit() == null || page.getLimit() < LIMIT_MIN) {

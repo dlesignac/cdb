@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.core.validator;
 
-import fr.ebiz.cdb.core.dto.ComputerDeletionDTO;
+import fr.ebiz.cdb.core.dto.ComputerDeleteRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,14 +13,16 @@ import static org.junit.Assert.assertThat;
 
 public class TestComputerDeletionValidator {
 
-    private ComputerDeletionDTO computerDeletionDTO;
+    private ComputerDeleteRequest computerDeletionDTO;
 
     @Before
     public void init() {
         List<String> ids = new ArrayList<>();
         ids.add("1");
         ids.add("2");
-        computerDeletionDTO = new ComputerDeletionDTO(ids);
+
+        computerDeletionDTO = new ComputerDeleteRequest();
+        computerDeletionDTO.setSelection(ids);
     }
 
     @Test
@@ -31,7 +33,7 @@ public class TestComputerDeletionValidator {
 
     @Test
     public void testIdNotInt() {
-        computerDeletionDTO.getIds().add("a");
+        computerDeletionDTO.getSelection().add("a");
         boolean valid = ComputerDeletionValidator.validate(computerDeletionDTO).isEmpty();
         assertThat(valid, is(false));
     }

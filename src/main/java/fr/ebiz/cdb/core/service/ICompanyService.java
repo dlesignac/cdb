@@ -1,7 +1,6 @@
 package fr.ebiz.cdb.core.service;
 
 import fr.ebiz.cdb.core.model.Company;
-import fr.ebiz.cdb.core.service.exception.TransactionFailedException;
 
 import java.util.List;
 
@@ -11,25 +10,22 @@ public interface ICompanyService {
      * Deletes company into datasource.
      *
      * @param company company to be deleted
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    void delete(Company company) throws TransactionFailedException;
+    void delete(Company company);
 
     /**
      * Find company by id.
      *
      * @param id company's id
      * @return company
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    Company find(int id) throws TransactionFailedException;
+    Company find(int id);
 
     /**
      * Fetches companies.
      *
      * @return companies
-     * @throws TransactionFailedException an unexpected error occurred
      */
-    List<Company> list() throws TransactionFailedException;
+    List<Company> list();
 
 }

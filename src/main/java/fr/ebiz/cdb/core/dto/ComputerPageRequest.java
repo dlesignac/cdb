@@ -6,13 +6,13 @@ import fr.ebiz.cdb.core.model.Order;
 /**
  * Page request.
  */
-public class ComputerPageDTO {
+public class ComputerPageRequest {
 
     private String filter;
     private Column sort;
     private Order order;
     private Integer limit;
-    private Integer number;
+    private Integer page;
 
     public String getFilter() {
         return filter;
@@ -30,8 +30,8 @@ public class ComputerPageDTO {
         return limit;
     }
 
-    public Integer getNumber() {
-        return number;
+    public Integer getPage() {
+        return page;
     }
 
     public void setFilter(String filter) {
@@ -50,8 +50,8 @@ public class ComputerPageDTO {
         this.limit = limit;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setPage(Integer page) {
+        this.page = page;
     }
 
 }

@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.core.validator;
 
-import fr.ebiz.cdb.core.dto.ComputerPageDTO;
+import fr.ebiz.cdb.core.dto.ComputerPageRequest;
 import fr.ebiz.cdb.core.model.Column;
 import fr.ebiz.cdb.core.model.Order;
 import org.junit.Before;
@@ -11,16 +11,16 @@ import static org.junit.Assert.assertThat;
 
 public class TestPageValidator {
 
-    private ComputerPageDTO computerPageDTO;
+    private ComputerPageRequest computerPageDTO;
 
     @Before
     public void init() {
-        computerPageDTO = new ComputerPageDTO();
+        computerPageDTO = new ComputerPageRequest();
         computerPageDTO.setFilter("");
         computerPageDTO.setSort(Column.COMPUTER_NAME);
         computerPageDTO.setOrder(Order.ASC);
         computerPageDTO.setLimit(10);
-        computerPageDTO.setNumber(1);
+        computerPageDTO.setPage(1);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TestPageValidator {
 
     @Test
     public void testNumberLessThanMin() {
-        computerPageDTO.setNumber(0);
+        computerPageDTO.setPage(0);
         boolean valid = PageValidator.validate(computerPageDTO).isEmpty();
         assertThat(valid, is(false));
     }
