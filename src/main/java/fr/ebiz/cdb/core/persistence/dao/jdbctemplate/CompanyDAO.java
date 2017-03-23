@@ -1,6 +1,7 @@
-package fr.ebiz.cdb.core.persistence.dao;
+package fr.ebiz.cdb.core.persistence.dao.jdbctemplate;
 
 import fr.ebiz.cdb.core.model.Company;
+import fr.ebiz.cdb.core.persistence.dao.ICompanyDAO;
 import fr.ebiz.cdb.core.persistence.mapper.CompanyMapper;
 import fr.ebiz.cdb.core.persistence.util.QueryBuilder;
 import org.springframework.stereotype.Repository;

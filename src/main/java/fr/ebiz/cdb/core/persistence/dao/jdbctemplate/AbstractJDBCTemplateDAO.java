@@ -1,4 +1,4 @@
-package fr.ebiz.cdb.core.persistence.dao;
+package fr.ebiz.cdb.core.persistence.dao.jdbctemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

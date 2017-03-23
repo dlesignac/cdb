@@ -1,10 +1,11 @@
-package fr.ebiz.cdb.core.persistence.dao;
+package fr.ebiz.cdb.core.persistence.dao.jdbctemplate;
 
 import fr.ebiz.cdb.core.dto.ComputerPageRequest;
 import fr.ebiz.cdb.core.model.Column;
 import fr.ebiz.cdb.core.model.Company;
 import fr.ebiz.cdb.core.model.Computer;
 import fr.ebiz.cdb.core.model.Order;
+import fr.ebiz.cdb.core.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.core.persistence.mapper.ComputerMapper;
 import fr.ebiz.cdb.core.persistence.util.QueryBuilder;
 import org.springframework.stereotype.Repository;

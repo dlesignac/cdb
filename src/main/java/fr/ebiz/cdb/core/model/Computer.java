@@ -1,16 +1,29 @@
 package fr.ebiz.cdb.core.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
-/**
- * Computer bean. Describes a computer.
- */
+@Entity
 public class Computer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column
     private String name;
+
+    @Column
     private LocalDate introduced;
+
+    @Column
     private LocalDate discontinued;
+
+    @Column
     private Company manufacturer;
 
     public Integer getId() {

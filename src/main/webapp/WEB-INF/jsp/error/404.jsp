@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html>
 
-<jsp:include page="/WEB-INF/jsp/head.jsp" />
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<jsp:include page="/WEB-INF/jsp/common/head.jsp"/>
 
 <body>
-    <jsp:include page="/WEB-INF/jsp/header.jsp" />
+<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 
-    <section id="main">
-        <div class="container">
-            <div class="alert alert-danger">
-                <spring:message code="error404.error_404"/>
-            </div>
+<section id="main">
+    <div class="container">
+        <div class="alert alert-danger">
+            <spring:message code="error404.error_404"/>
         </div>
-    </section>
+    </div>
+</section>
 
-    <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
 
 </body>
 </html>

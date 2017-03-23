@@ -25,9 +25,11 @@
 
 <ul class="pagination">
     <c:if test="${page.number != 1}">
-        <li><a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='${page.limit}' page='${page.number - 1}'/>" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-        </a></li>
+        <li>
+            <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='${page.limit}' page='${page.number - 1}'/>"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a></li>
     </c:if>
     <c:forEach var="i" begin="${begin}" end="${end}">
         <li<c:if test="${i == page.number}"> class="active"</c:if>>
@@ -35,14 +37,19 @@
         </li>
     </c:forEach>
     <c:if test="${page.number != page.last}">
-        <li><a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='${page.limit}' page='${page.number + 1}'/>" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-        </a></li>
+        <li>
+            <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='${page.limit}' page='${page.number + 1}'/>"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a></li>
     </c:if>
 </ul>
 
 <div class="btn-group btn-group-sm pull-right" role="group">
-    <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='10' page='1'/>" class="btn btn-default" role="button">10</a>
-    <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='50' page='1'/>" class="btn btn-default" role="button">50</a>
-    <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='100' page='1'/>" class="btn btn-default" role="button">100</a>
+    <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='10' page='1'/>"
+       class="btn btn-default" role="button">10</a>
+    <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='50' page='1'/>"
+       class="btn btn-default" role="button">50</a>
+    <a href="<mylib:link target='${target}' filter='${page.filter}' sort='${page.sort}' order='ASC' limit='100' page='1'/>"
+       class="btn btn-default" role="button">100</a>
 </div>
