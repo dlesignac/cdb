@@ -42,7 +42,7 @@
                         </fieldset>
                         <div class="actions pull-right">
                             <input id="submit" type="submit" value="<spring:message code="addcomputer.add"/>" class="btn btn-primary">
-                            or
+                            <spring:message code="addcomputer.or"/>
                             <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-default"><spring:message code="addcomputer.cancel"/></a>
                         </div>
                     </form>

@@ -47,7 +47,7 @@
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="<spring:message code="editcomputer.edit"/>" class="btn btn-primary">
-                            or
+                            <spring:message code="editcomputer.or"/>
                             <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-default"><spring:message code="editcomputer.cancel"/></a>
                         </div>
                     </form>
