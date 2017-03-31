@@ -15,10 +15,10 @@
                         </a>
                     </span>
                 </th>
-                <th><spring:message code="dashboard.computer_name"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='computerName' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
-                <th><spring:message code="dashboard.introduced"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='introducedDate' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
-                <th><spring:message code="dashboard.discontinued"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='discontinuedDate' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
-                <th><spring:message code="dashboard.company"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='companyName' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+                <th><spring:message code="dashboard.computer_name"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='COMPUTER_NAME' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+                <th><spring:message code="dashboard.introduced"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='INTRODUCED' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+                <th><spring:message code="dashboard.discontinued"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='DISCONTINUED' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
+                <th><spring:message code="dashboard.company"/> <a href="<mylib:link target='dashboard' filter='${page.filter}' sort='COMPANY_NAME' order='ASC' limit='${page.limit}' page='1'/>"><span class="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></a></th>
             </tr>
         </thead>
         <!-- Browse attribute computers -->

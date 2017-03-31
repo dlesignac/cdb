@@ -71,8 +71,8 @@ public class ComputerService implements IComputerService {
         page.setCount(computersCount);
         page.setLimit(pageRequest.getLimit());
         page.setFilter(pageRequest.getFilter());
-        page.setSort(pageRequest.getSort().getName());
-        page.setOrder(pageRequest.getOrder().getName());
+        page.setSort(pageRequest.getSort().toString());
+        page.setOrder(pageRequest.getOrder().toString());
         page.setEntries(computers);
 
         return page;
