@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <artifactId>cdb</artifactId>
+        <groupId>fr.ebiz.cdb</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cdb-console</artifactId>
+
+    <properties>
+        <commons-lang3.version>3.5</commons-lang3.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- Service module -->
+        <dependency>
+            <groupId>fr.ebiz.cdb</groupId>
+            <artifactId>cdb-service</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <!-- String utils -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

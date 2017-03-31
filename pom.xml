@@ -1,197 +1,65 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>fr.ebiz.cdb</groupId>
-    <artifactId>training-java</artifactId>
-    <version>8.0.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <artifactId>cdb</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-    <name>cdb</name>
+    <modules>
+        <module>cdb-core</module>
+        <module>cdb-persistence</module>
+        <module>cdb-service</module>
+        <module>cdb-binding</module>
+        <module>cdb-webapp</module>
+        <module>cdb-console</module>
+    </modules>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
+        <plugin.compiler.version>3.6.1</plugin.compiler.version>
+        <plugin.surefire.version>2.19.1</plugin.surefire.version>
+        <plugin.failsafe.version>2.13</plugin.failsafe.version>
+        <plugin.checkstyle.version>2.17</plugin.checkstyle.version>
 
-        <validation-api.version>1.1.0.Final</validation-api.version>
-        <hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
-
-        <commons-dbcp.version>1.4</commons-dbcp.version>
-
-        <spring.version>4.3.7.RELEASE</spring.version>
-
-        <mysql-connector-java.version>6.0.5</mysql-connector-java.version>
-
-        <servlet-api.version>3.1.0</servlet-api.version>
-        <jsp-api.version>2.3.2-b02</jsp-api.version>
-        <jstl.version>1.2</jstl.version>
-
-        <selenium-java.version>3.2.0</selenium-java.version>
-        <powermock-mockito-release-full.version>1.6.4</powermock-mockito-release-full.version>
-        <mockito-all.version>1.10.19</mockito-all.version>
-        <junit.version>4.12</junit.version>
-
-        <commons-lang3.version>3.5</commons-lang3.version>
-
+        <java.version>1.8</java.version>
+        <logback.version>1.2.1</logback.version>
         <slf4j.version>1.7.24</slf4j.version>
-        <logback-classic.version>1.2.1</logback-classic.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
     </properties>
 
-    <dependencies>
-        <!-- ORM -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.2.9.Final</version>
-        </dependency>
-
-        <!-- Validation implementation -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-        </dependency>
-
-        <!-- Validation API -->
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>${validation-api.version}</version>
-        </dependency>
-
-        <!-- Connection pooling -->
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp.version}</version>
-        </dependency>
-
-        <!-- Spring JDBC -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Spring transaction manager -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Logging compatibility for Spring -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- Spring MVC -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Servlet API -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- JSP API -->
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>${jsp-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- JSTL -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>${jstl.version}</version>
-        </dependency>
-
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Integration tests -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium-java.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Mocking static methods -->
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-mockito-release-full</artifactId>
-            <version>${powermock-mockito-release-full.version}</version>
-            <classifier>full</classifier>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Mocking -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito-all.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Unit tests -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- String utils -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
-
-        <!-- Logging API -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- Logging implementation -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
-
     <build>
-        <finalName>cdb</finalName>
-
         <plugins>
-            <!--
-            IT tests plugin.
-             -->
+
+            <!-- Compiler plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${plugin.compiler.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Unit tests plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${plugin.surefire.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/IT*.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- IT tests plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.13</version>
+                <version>${plugin.failsafe.version}</version>
                 <configuration>
                     <includes>
                         <include>**/IT*.java</include>
@@ -209,27 +77,11 @@
                 </executions>
             </plugin>
 
-            <!--
-            Unit tests plugin.
-             -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/IT*.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <!--
-            Checkstyle plugin.
-            -->
+            <!-- Checkstyle plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>${plugin.checkstyle.version}</version>
                 <executions>
                     <execution>
                         <id>validate</id>
@@ -247,31 +99,26 @@
                 </executions>
             </plugin>
 
-            <!--
-            Packaging plugin.
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-
-            <!--
-            Compiler plugin.
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+
+        <!-- Logging API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- Logging implementation -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>

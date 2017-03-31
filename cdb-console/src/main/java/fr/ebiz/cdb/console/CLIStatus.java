@@ -1,0 +1,5 @@
+package fr.ebiz.cdb.console;
+
+enum CLIStatus {
+    EXIT, INDEX, COMPUTERS, COMPUTER, COMPANIES, COMPANY, COMPUTER_EDIT, COMPUTER_CREATE
+}

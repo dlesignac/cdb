@@ -1,9 +1,9 @@
-/build/
-/target/
+**/build/
+**/target/
 .classpath
 .project
 .tern-project
-/.settings/
+**/.settings/
 *.iml
-/.idea/
+**/.idea/
 *.log
