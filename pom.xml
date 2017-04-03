@@ -27,6 +27,7 @@
         <logback.version>1.2.1</logback.version>
         <slf4j.version>1.7.24</slf4j.version>
         <spring.version>4.3.7.RELEASE</spring.version>
+        <spring-security.version>4.2.2.RELEASE</spring-security.version>
     </properties>
 
     <build>
@@ -117,6 +118,18 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>1.5.2.RELEASE</version>
         </dependency>
 
     </dependencies>

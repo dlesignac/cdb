@@ -18,6 +18,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
         <!-- Binding module -->
         <dependency>
             <groupId>fr.ebiz.cdb</groupId>
