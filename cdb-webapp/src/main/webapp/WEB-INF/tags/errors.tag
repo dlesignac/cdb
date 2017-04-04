@@ -12,7 +12,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <strong>Oops !</strong> <spring:message code="${errorMessage}"/>.
+                    <spring:message code="${errorMessage}"/>
                 </div>
             </c:when>
             <c:otherwise>

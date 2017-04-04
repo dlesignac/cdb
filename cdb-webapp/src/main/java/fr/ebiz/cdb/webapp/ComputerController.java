@@ -72,6 +72,7 @@ public class ComputerController {
     ) {
         if (!bindingResult.hasErrors()) {
             Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
+            LOGGER.debug(computer.toString());
             computerService.create(computer);
             model.addAttribute(ATTRIBUTE_SUCCESS, true);
         } else {

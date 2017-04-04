@@ -4,7 +4,6 @@ import fr.ebiz.cdb.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +15,6 @@ import org.springframework.security.web.authentication.www.DigestAuthenticationF
 
 @Configuration
 @EnableWebSecurity
-@Import(AppConfig.class)
 public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -70,8 +68,8 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .permitAll()
                 .loginPage("/login")
-                .defaultSuccessUrl("/dashboard")
-                .failureUrl("/login?error")
+                .defaultSuccessUrl("/dashboard?loginSuccessful=true")
+                .failureUrl("/login?error=true")
                 .usernameParameter("username").passwordParameter("password")
                 .and()
                 .logout()

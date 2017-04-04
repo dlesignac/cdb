@@ -15,7 +15,7 @@ public class LoginController {
      */
     @GetMapping
     public String getLogin(ModelMap model) {
-        return "login";
+        return "common/login";
     }
 
 }

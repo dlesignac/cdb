@@ -1,10 +1,15 @@
 package fr.ebiz.cdb.core;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 public class Computer {
 
     private Integer id;
+
+    @NotNull
+    @Size(min = 1, max = 255)
     private String name;
     private LocalDate introduced;
     private LocalDate discontinued;

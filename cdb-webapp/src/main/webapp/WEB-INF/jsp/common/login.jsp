@@ -2,14 +2,24 @@
 <html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
-<jsp:include page="/WEB-INF/jsp/common/head.jsp" />
+<jsp:include page="/WEB-INF/jsp/common/head.jsp"/>
 
 <body>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 
 <section id="main">
+    <c:if test="${param.error == 'true'}">
+        <div class="container">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Login failed !
+            </div>
+        </div>
+    </c:if>
     <div class="container">
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 box">
@@ -18,15 +28,18 @@
                     <fieldset>
                         <div class="form-group">
                             <label for="username"><spring:message code="login.username"/></label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="<spring:message code="login.username"/>">
+                            <input type="text" class="form-control" id="username" name="username"
+                                   placeholder="<spring:message code="login.username"/>">
                         </div>
                         <div class="form-group">
                             <label for="password"><spring:message code="login.password"/></label>
-                            <input type="date" class="form-control" id="password" name="password" placeholder="<spring:message code="login.password"/>">
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="<spring:message code="login.password"/>">
                         </div>
                     </fieldset>
                     <div class="actions pull-right">
-                        <input id="submit" type="submit" value="<spring:message code="login.sign_in"/>" class="btn btn-primary">
+                        <input id="submit" type="submit" value="<spring:message code="login.sign_in"/>"
+                               class="btn btn-primary">
                     </div>
                 </form>
             </div>
