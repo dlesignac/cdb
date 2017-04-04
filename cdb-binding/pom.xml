@@ -11,12 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cdb-binding</artifactId>
 
-    <properties>
-        <validation-api.version>1.1.0.Final</validation-api.version>
-    </properties>
-
     <dependencies>
-
         <!-- Core module -->
         <dependency>
             <groupId>fr.ebiz.cdb</groupId>
@@ -30,7 +25,6 @@
             <artifactId>validation-api</artifactId>
             <version>${validation-api.version}</version>
         </dependency>
-
     </dependencies>
 
 </project>

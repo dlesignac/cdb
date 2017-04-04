@@ -12,12 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cdb-console</artifactId>
 
-    <properties>
-        <commons-lang3.version>3.5</commons-lang3.version>
-    </properties>
-
     <dependencies>
-
         <!-- Service module -->
         <dependency>
             <groupId>fr.ebiz.cdb</groupId>
@@ -31,8 +26,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
-
     </dependencies>
-
 
 </project>

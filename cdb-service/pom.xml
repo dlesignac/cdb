@@ -12,14 +12,12 @@
     <artifactId>cdb-service</artifactId>
 
     <dependencies>
-
         <!-- Persistence module -->
         <dependency>
             <groupId>fr.ebiz.cdb</groupId>
             <artifactId>cdb-persistence</artifactId>
             <version>${parent.version}</version>
         </dependency>
-
     </dependencies>
 
 </project>

@@ -11,13 +11,22 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cdb-persistence</artifactId>
 
-    <properties>
-        <dbcp.version>1.4</dbcp.version>
-        <mysql.version>6.0.5</mysql.version>
-    </properties>
-
     <dependencies>
+        <!-- Spring logging -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>${commons-logging.version}</version>
+        </dependency>
 
+        <!-- Bridge logback / Spring logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${jcl-over-slf4j.version}</version>
+        </dependency>
+
+        <!-- Spring security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
@@ -66,7 +75,6 @@
             <version>${mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
-
     </dependencies>
 
 </project>
