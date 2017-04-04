@@ -22,6 +22,9 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationService authenticationService;
 
+    /**
+     * @return DigestAuthenticationEntryPoint
+     */
     @Bean
     public DigestAuthenticationEntryPoint authenticationEntryPoint() {
         DigestAuthenticationEntryPoint authenticationEntryPoint = new DigestAuthenticationEntryPoint();
@@ -31,6 +34,10 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationEntryPoint;
     }
 
+    /**
+     * @param authenticationEntryPoint authenticationEntryPoint
+     * @return DigestAuthenticationFilter
+     */
     @Bean
     public DigestAuthenticationFilter authenticationFilter(
             DigestAuthenticationEntryPoint authenticationEntryPoint) {
@@ -40,6 +47,10 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationFilter;
     }
 
+    /**
+     * @param auth AuthenticationManagerBuilder
+     * @throws Exception Exception
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
