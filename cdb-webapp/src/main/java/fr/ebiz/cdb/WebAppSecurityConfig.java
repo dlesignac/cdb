@@ -2,6 +2,7 @@ package fr.ebiz.cdb;
 
 import fr.ebiz.cdb.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
@@ -9,6 +10,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -18,6 +22,24 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Bean
+    public DigestAuthenticationEntryPoint authenticationEntryPoint() {
+        DigestAuthenticationEntryPoint authenticationEntryPoint = new DigestAuthenticationEntryPoint();
+        authenticationEntryPoint.setRealmName("Digest Realm");
+        authenticationEntryPoint.setKey("acegi");
+        authenticationEntryPoint.setNonceValiditySeconds(10);
+        return authenticationEntryPoint;
+    }
+
+    @Bean
+    public DigestAuthenticationFilter authenticationFilter(
+            DigestAuthenticationEntryPoint authenticationEntryPoint) {
+        DigestAuthenticationFilter authenticationFilter = new DigestAuthenticationFilter();
+        authenticationFilter.setUserDetailsService(authenticationService);
+        authenticationFilter.setAuthenticationEntryPoint(authenticationEntryPoint);
+        return authenticationFilter;
+    }
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
@@ -26,15 +48,23 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf().disable()
+                .addFilterAfter(authenticationFilter(authenticationEntryPoint()), BasicAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/computer/**").access("hasRole('ADMIN')")
+                .antMatchers("/", "/static/**", "/dashboard").permitAll()
+                .antMatchers("/computer/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login")
+                .formLogin()
+                .permitAll()
+                .loginPage("/login")
                 .defaultSuccessUrl("/dashboard")
                 .failureUrl("/login?error")
                 .usernameParameter("username").passwordParameter("password")
                 .and()
-                .logout().logoutSuccessUrl("/login?logout");
+                .logout()
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/dashboard");
     }
 }
