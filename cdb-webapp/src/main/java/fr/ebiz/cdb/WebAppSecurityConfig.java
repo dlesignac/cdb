@@ -74,6 +74,6 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/dashboard");
+                .logoutSuccessUrl("/dashboard?logoutSuccessful=true");
     }
 }
