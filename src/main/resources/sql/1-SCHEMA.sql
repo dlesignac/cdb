@@ -20,11 +20,11 @@ CREATE TABLE computer (
   CONSTRAINT pk_computer PRIMARY KEY (id)
 );
 
-CREATE TABLE admin (
+CREATE TABLE user (
   id       BIGINT       NOT NULL AUTO_INCREMENT,
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  CONSTRAINT pk_admin PRIMARY KEY (id)
+  CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
 ALTER TABLE computer

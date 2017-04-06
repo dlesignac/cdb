@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CompanyService implements ICompanyService {
 
     private final PlatformTransactionManager platformTransactionManager;
@@ -30,7 +31,6 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(Company company) {
         computerDAO.delete(company);
         companyDAO.delete(company);

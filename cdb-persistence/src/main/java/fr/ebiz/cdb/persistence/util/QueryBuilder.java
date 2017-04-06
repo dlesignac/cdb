@@ -5,7 +5,7 @@ public class QueryBuilder {
     private StringBuilder query = new StringBuilder();
 
     /**
-     * Builds select query.
+     * Build select query.
      *
      * @param select select
      * @return QueryBuilder
@@ -16,7 +16,7 @@ public class QueryBuilder {
     }
 
     /**
-     * Builds from query.
+     * Build from query.
      *
      * @param from from
      * @return QueryBuilder
@@ -27,29 +27,7 @@ public class QueryBuilder {
     }
 
     /**
-     * Builds insert query.
-     *
-     * @param insert insert
-     * @return QueryBuilder
-     */
-    public QueryBuilder insertInto(String insert) {
-        query.append("INSERT INTO ").append(insert);
-        return this;
-    }
-
-    /**
-     * Builds values query.
-     *
-     * @param values values
-     * @return QueryBuilder
-     */
-    public QueryBuilder values(String values) {
-        query.append(" VALUES ").append(values);
-        return this;
-    }
-
-    /**
-     * Builds delete query.
+     * Build delete query.
      *
      * @param delete delete
      * @return QueryBuilder
@@ -60,29 +38,7 @@ public class QueryBuilder {
     }
 
     /**
-     * Builds update query.
-     *
-     * @param update update
-     * @return QueryBuilder
-     */
-    public QueryBuilder update(String update) {
-        query.append("UPDATE ").append(update);
-        return this;
-    }
-
-    /**
-     * Builds set query.
-     *
-     * @param set set
-     * @return QueryBuilder
-     */
-    public QueryBuilder set(String set) {
-        query.append(" SET ").append(set);
-        return this;
-    }
-
-    /**
-     * Builds where query.
+     * Build where query.
      *
      * @param where where
      * @return QueryBuilder
@@ -93,18 +49,7 @@ public class QueryBuilder {
     }
 
     /**
-     * Builds and query.
-     *
-     * @param and and
-     * @return QueryBuilder
-     */
-    public QueryBuilder and(String and) {
-        query.append(" AND ").append(and);
-        return this;
-    }
-
-    /**
-     * Builds or query.
+     * Build or query.
      *
      * @param or or
      * @return QueryBuilder
@@ -115,7 +60,7 @@ public class QueryBuilder {
     }
 
     /**
-     * Builds orderBy query.
+     * Build orderBy query.
      *
      * @param orderBy orderBy
      * @return QueryBuilder
@@ -126,29 +71,29 @@ public class QueryBuilder {
     }
 
     /**
-     * Builds limit query.
+     * Build innerJoin query.
      *
-     * @param limit limit
+     * @param innerJoin innerJoin
      * @return QueryBuilder
      */
-    public QueryBuilder limit(String limit) {
-        query.append(" LIMIT ").append(limit);
+    public QueryBuilder innerJoin(String innerJoin) {
+        query.append(" INNER JOIN ").append(innerJoin);
         return this;
     }
 
     /**
-     * Builds offset query.
+     * Build leftOuterJoin query.
      *
-     * @param offset offset
+     * @param leftOuterJoin leftOuterJoin
      * @return QueryBuilder
      */
-    public QueryBuilder offset(String offset) {
-        query.append(" OFFSET ").append(offset);
+    public QueryBuilder leftOuterJoin(String leftOuterJoin) {
+        query.append(" LEFT OUTER JOIN ").append(leftOuterJoin);
         return this;
     }
 
     /**
-     * Builds query.
+     * Build query.
      *
      * @return built query
      */

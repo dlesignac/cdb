@@ -13,7 +13,7 @@ import java.util.List;
 public class FrameBuilder {
 
     /**
-     * Builds index frame.
+     * Build index frame.
      *
      * @return index frame
      */
@@ -32,7 +32,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds computers frame.
+     * Build computers frame.
      *
      * @param page frame containing computers
      * @return computers frame
@@ -61,7 +61,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds computer frame.
+     * Build computer frame.
      *
      * @param computer computer to display
      * @return computer frame
@@ -81,7 +81,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds computer create frame.
+     * Build computer create frame.
      *
      * @param computer computer to create
      * @return computer create frame
@@ -104,7 +104,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds computer edit frame.
+     * Build computer edit frame.
      *
      * @param computer computer to edit
      * @return computer edit frame
@@ -127,7 +127,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds companies frame.
+     * Build companies frame.
      *
      * @param companies companies to display
      * @return companies frame
@@ -146,7 +146,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds company frame.
+     * Build company frame.
      *
      * @param company company to display
      * @return company frame
@@ -165,7 +165,7 @@ public class FrameBuilder {
     }
 
     /**
-     * Builds levels component.
+     * Build levels component.
      *
      * @param levels levels
      * @return levels component

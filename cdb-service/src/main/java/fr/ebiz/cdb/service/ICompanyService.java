@@ -7,7 +7,7 @@ import java.util.List;
 public interface ICompanyService {
 
     /**
-     * Deletes company into datasource.
+     * Delete company into datasource.
      *
      * @param company company to be deleted
      */
@@ -22,7 +22,7 @@ public interface ICompanyService {
     Company find(int id);
 
     /**
-     * Fetches companies.
+     * Fetch companies.
      *
      * @return companies
      */

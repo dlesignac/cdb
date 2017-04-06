@@ -33,7 +33,7 @@ public class Frame {
     }
 
     /**
-     * Displays header.
+     * Display header.
      */
     void displayHeader() {
         String display = levels.get(0);
@@ -50,7 +50,7 @@ public class Frame {
     }
 
     /**
-     * Displays options.
+     * Display options.
      */
     void displayOptions() {
         String display = "";
@@ -63,7 +63,7 @@ public class Frame {
     }
 
     /**
-     * Displays error.
+     * Display error.
      */
     void displayError() {
         String display = "";
@@ -76,7 +76,7 @@ public class Frame {
     }
 
     /**
-     * Displays frame.
+     * Display frame.
      */
     public void display() {
         displayHeader();

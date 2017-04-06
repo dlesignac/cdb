@@ -45,7 +45,6 @@ public class CLI {
     }
 
     private final ICompanyService companyService;
-
     private final IComputerService computerService;
 
     private Scanner in = new Scanner(System.in);
@@ -63,7 +62,7 @@ public class CLI {
     }
 
     /**
-     * Main loop. Prints pages and waits for user inputs.
+     * Main loop. Print pages and wait for user inputs.
      */
     private void loop() {
         while (status != CLIStatus.EXIT) {
@@ -81,7 +80,7 @@ public class CLI {
     }
 
     /**
-     * Waits for and manages user inputs.
+     * Wait for and manage user inputs.
      */
     private void listen() {
         String[] input = in.nextLine().split(" ");
@@ -292,7 +291,7 @@ public class CLI {
     }
 
     /**
-     * Calls index frame.
+     * Call index frame.
      */
     private void callIndex() {
         frame = new FrameBuilder().buildIndex();
@@ -300,7 +299,7 @@ public class CLI {
     }
 
     /**
-     * Calls computer list frame.
+     * Call computer list frame.
      *
      * @param offset page offset
      */
@@ -318,7 +317,7 @@ public class CLI {
     }
 
     /**
-     * Calls computer details frame.
+     * Call computer details frame.
      *
      * @param computer computer to be detailed.
      */
@@ -328,7 +327,7 @@ public class CLI {
     }
 
     /**
-     * Calls company list frame.
+     * Call company list frame.
      */
     private void callCompanies() {
         List<Company> companies = companyService.list();
@@ -337,7 +336,7 @@ public class CLI {
     }
 
     /**
-     * Calls company details frame.
+     * Call company details frame.
      *
      * @param company company to be detailed.
      */
@@ -347,7 +346,7 @@ public class CLI {
     }
 
     /**
-     * Calls computer editing frame.
+     * Call computer editing frame.
      */
     private void callComputerEdit() {
         Computer computer = getComputerFromPage();
@@ -356,7 +355,7 @@ public class CLI {
     }
 
     /**
-     * Calls computer details frame back.
+     * Call computer details frame back.
      */
     private void callComputerBack() {
         Computer computer = getComputerFromPage();
@@ -365,7 +364,7 @@ public class CLI {
     }
 
     /**
-     * Calls computer creation frame.
+     * Call computer creation frame.
      *
      * @param computer the computer to be created.
      */
@@ -375,28 +374,28 @@ public class CLI {
     }
 
     /**
-     * Calls invalid input frame component.
+     * Call invalid input frame component.
      */
     private void callErrorInvalidInput() {
         frame.setError("Invalid input");
     }
 
     /**
-     * Calls missing parameter frame component.
+     * Call missing parameter frame component.
      */
     private void callErrorMissingParameter() {
         frame.setError("Missing parameter");
     }
 
     /**
-     * Calls invalid parameter frame component.
+     * Call invalid parameter frame component.
      */
     private void callErrorInvalidParameter() {
         frame.setError("Invalid parameter");
     }
 
     /**
-     * Deletes computer.
+     * Delete computer.
      */
     private void deleteComputer() {
         Computer computer = getComputerFromPage();
@@ -404,7 +403,7 @@ public class CLI {
     }
 
     /**
-     * Deletes company.
+     * Delete company.
      */
     private void deleteCompany() {
         Company company = getCompanyFromPage();
@@ -412,7 +411,7 @@ public class CLI {
     }
 
     /**
-     * Gets computer by id.
+     * Get computer by id.
      *
      * @param id computer's id
      * @return object computer
@@ -422,7 +421,7 @@ public class CLI {
     }
 
     /**
-     * Gets company by id.
+     * Get company by id.
      *
      * @param id company's id
      * @return object company
@@ -432,17 +431,22 @@ public class CLI {
     }
 
     /**
-     * Gets computers held by last frame.
+     * Get computers held by last frame.
      *
      * @return object computer
      */
     private Computer getComputerFromPage() {
-        FrameComputer frame = (FrameComputer) this.frame;
-        return frame.getComputer();
+        if (this.frame instanceof FrameComputer) {
+            FrameComputer frame = (FrameComputer) this.frame;
+            return frame.getComputer();
+        }
+
+        FrameComputerChange frame = (FrameComputerChange) this.frame;
+        return ComputerDTOMapper.mapFromDTO(frame.getComputerDTO());
     }
 
     /**
-     * Gets computers held by last frame.
+     * Get computers held by last frame.
      *
      * @return object computerDTO
      */
@@ -452,7 +456,7 @@ public class CLI {
     }
 
     /**
-     * Gets company held by last frame.
+     * Get company held by last frame.
      *
      * @return object company
      */

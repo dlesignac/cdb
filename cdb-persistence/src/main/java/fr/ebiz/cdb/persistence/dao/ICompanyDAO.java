@@ -4,20 +4,17 @@ import fr.ebiz.cdb.core.Company;
 
 import java.util.List;
 
-/**
- * CompanyDAO interface.
- */
 public interface ICompanyDAO {
 
     /**
-     * Deletes company.
+     * Delete company.
      *
      * @param company to be deleted
      */
     void delete(Company company);
 
     /**
-     * Finds company by its id.
+     * Find company by its id.
      *
      * @param id company's id
      * @return company
@@ -25,7 +22,7 @@ public interface ICompanyDAO {
     Company find(int id);
 
     /**
-     * Fetches companies.
+     * Fetch companies.
      *
      * @return entries
      */

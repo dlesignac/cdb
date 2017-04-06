@@ -1,18 +1,38 @@
 package fr.ebiz.cdb.core;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Computer {
+@Entity(name = "computer")
+public class Computer implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
     @NotNull
     @Size(min = 1, max = 255)
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column
     private LocalDate introduced;
+
+    @Column
     private LocalDate discontinued;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
     private Company manufacturer;
 
     public Integer getId() {

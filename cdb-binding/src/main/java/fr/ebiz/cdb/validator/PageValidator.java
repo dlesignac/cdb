@@ -18,7 +18,7 @@ public class PageValidator {
     private static final int LIMIT_MAX = 100;
 
     /**
-     * Validates page request.
+     * Validate page request.
      *
      * @param page page request
      * @return errors

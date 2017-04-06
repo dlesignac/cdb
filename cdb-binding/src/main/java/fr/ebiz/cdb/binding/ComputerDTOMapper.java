@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public abstract class ComputerDTOMapper {
 
     /**
-     * Maps a DTO into a computer.
+     * Map a DTO into a computer.
      *
      * @param computerDTO computerDTO
      * @return computer
@@ -42,7 +42,7 @@ public abstract class ComputerDTOMapper {
     }
 
     /**
-     * Maps a computer into a DTO.
+     * Map a computer into a DTO.
      *
      * @param computer computer
      * @return computer

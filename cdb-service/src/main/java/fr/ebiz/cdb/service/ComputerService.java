@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ComputerService implements IComputerService {
 
     private final PlatformTransactionManager platformTransactionManager;
@@ -39,7 +40,6 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteMany(ComputerDeleteRequest computerDeletionDTO) {
         for (String id : computerDeletionDTO.getSelection()) {
             Computer computer = new Computer();
@@ -59,7 +59,6 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Page<Computer> page(ComputerPageRequest pageRequest) {
         int computersCount = computerDAO.count(pageRequest.getFilter());
         int pageCount = (computersCount + pageRequest.getLimit() - 1) / pageRequest.getLimit();

@@ -1,14 +1,16 @@
 package fr.ebiz.cdb.persistence.dao;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import fr.ebiz.cdb.core.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface IUserDAO {
 
     /**
+     * Find user by username.
+     *
      * @param username username
-     * @return UserDetails
+     * @return User
      * @throws UsernameNotFoundException UsernameNotFoundException
      */
-    UserDetails findByUsername(String username) throws UsernameNotFoundException;
+    User findByUsername(String username) throws UsernameNotFoundException;
 }

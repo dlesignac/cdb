@@ -9,35 +9,35 @@ import java.util.List;
 public interface IComputerDAO {
 
     /**
-     * Persists computer into data source.
+     * Persist computer into data source.
      *
      * @param computer computer to be persisted
      */
     void create(Computer computer);
 
     /**
-     * Deletes computer into data source.
+     * Delete computer into data source.
      *
      * @param computer computer to be deleted
      */
     void delete(Computer computer);
 
     /**
-     * Deletes all computers for a given manufacturer.
+     * Delete all computers for a given manufacturer.
      *
      * @param company manufacturer
      */
     void delete(Company company);
 
     /**
-     * Updates computer into data source.
+     * Update computer into data source.
      *
      * @param computer computer to be updated
      */
     void update(Computer computer);
 
     /**
-     * Finds computer by its id.
+     * Find computer by its id.
      *
      * @param id computer's id
      * @return computer
@@ -45,7 +45,7 @@ public interface IComputerDAO {
     Computer find(int id);
 
     /**
-     * Counts computers.
+     * Count computers.
      *
      * @param search search
      * @return computers' count
@@ -53,7 +53,7 @@ public interface IComputerDAO {
     int count(String search);
 
     /**
-     * Fetches computers for a given pagination.
+     * Fetch computers for a given pagination.
      *
      * @param pageRequest page request
      * @return entries
