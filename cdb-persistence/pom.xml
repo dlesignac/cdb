@@ -33,13 +33,6 @@
             <version>${hikaricp.version}</version>
         </dependency>
 
-        <!-- Spring logging -->
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>${commons-logging.version}</version>
-        </dependency>
-
         <!-- Bridge logback / Spring logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -80,6 +73,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Spring transaction manager -->

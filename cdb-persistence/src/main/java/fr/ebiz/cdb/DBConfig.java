@@ -26,7 +26,7 @@ public class DBConfig {
     private static final String PROP_DS_URL = "url";
     private static final String PROP_DS_USER = "user";
     private static final String PROP_DS_PASSWORD = "password";
-    private static final String PROP_DS_POOL_SIZE = "pool_size";
+    private static final String PROP_DS_POOL_SIZE = "pool-size";
     private static final String PROP_DS_JDBC_DRIVER = "driver";
 
     @Autowired
