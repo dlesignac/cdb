@@ -1,19 +1,25 @@
 package fr.ebiz.cdb.binding;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class ComputerDTO {
 
     private Integer id;
 
+    @NotNull
     @Size(min = 1, max = 255)
     private String name;
 
+    @UTCDate
     private String introduced;
 
+    @UTCDate
     private String discontinued;
 
     private Integer companyId;
+
+    private String companyName;
 
     public Integer getId() {
         return id;
@@ -33,6 +39,10 @@ public class ComputerDTO {
 
     public Integer getCompanyId() {
         return companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
     }
 
     public void setId(Integer id) {
@@ -55,4 +65,7 @@ public class ComputerDTO {
         this.companyId = companyId;
     }
 
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 }

@@ -1,7 +1,7 @@
 package fr.ebiz.cdb.validator;
 
-import fr.ebiz.cdb.binding.ComputerPageRequest;
-import fr.ebiz.cdb.core.Column;
+import fr.ebiz.cdb.binding.PageRequest;
+import fr.ebiz.cdb.core.Sort;
 import fr.ebiz.cdb.core.Order;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 public class PageValidator {
 
     private static final String DEFAULT_FILTER = "";
-    private static final Column DEFAULT_SORT = Column.COMPUTER_NAME;
+    private static final Sort DEFAULT_SORT = Sort.COMPUTER_NAME;
     private static final Order DEFAULT_ORDER = Order.ASC;
     private static final int NUMBER_MIN = 1;
     private static final int DEFAULT_LIMIT = 10;
@@ -23,7 +23,7 @@ public class PageValidator {
      * @param page page request
      * @return errors
      */
-    public static List<String> validate(ComputerPageRequest page) {
+    public static List<String> validate(PageRequest page) {
         List<String> errors = new ArrayList<>();
 
         if (page.getPage() == null || page.getPage() < NUMBER_MIN) {

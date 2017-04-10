@@ -1,7 +1,7 @@
 package fr.ebiz.cdb.validator;
 
-import fr.ebiz.cdb.binding.ComputerPageRequest;
-import fr.ebiz.cdb.core.Column;
+import fr.ebiz.cdb.binding.PageRequest;
+import fr.ebiz.cdb.core.Sort;
 import fr.ebiz.cdb.core.Order;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,13 +10,13 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class TestPageValidator {
-    private ComputerPageRequest computerPageDTO;
+    private PageRequest computerPageDTO;
 
     @Before
     public void init() {
-        computerPageDTO = new ComputerPageRequest();
+        computerPageDTO = new PageRequest();
         computerPageDTO.setFilter("");
-        computerPageDTO.setSort(Column.COMPUTER_NAME);
+        computerPageDTO.setSort(Sort.COMPUTER_NAME);
         computerPageDTO.setOrder(Order.ASC);
         computerPageDTO.setLimit(10);
         computerPageDTO.setPage(1);

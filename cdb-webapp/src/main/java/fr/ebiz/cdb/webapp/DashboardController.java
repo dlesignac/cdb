@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.webapp;
 
-import fr.ebiz.cdb.binding.ComputerPageRequest;
+import fr.ebiz.cdb.binding.PageRequest;
 import fr.ebiz.cdb.service.IComputerService;
 import fr.ebiz.cdb.validator.PageValidator;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class DashboardController {
      */
     @GetMapping({"", "dashboard"})
     public String getDashboard(
-            @Valid ComputerPageRequest computerPageRequest,
+            @Valid PageRequest computerPageRequest,
             BindingResult bindingResult,
             ModelMap model
     ) {

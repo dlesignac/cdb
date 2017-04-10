@@ -1,10 +1,9 @@
 package fr.ebiz.cdb.persistence.dao.hibernate;
 
-import fr.ebiz.cdb.binding.ComputerPageRequest;
-import fr.ebiz.cdb.core.Column;
-import fr.ebiz.cdb.core.Company;
+import fr.ebiz.cdb.binding.PageRequest;
 import fr.ebiz.cdb.core.Computer;
 import fr.ebiz.cdb.core.Order;
+import fr.ebiz.cdb.core.Sort;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.persistence.util.QueryBuilder;
 import org.slf4j.Logger;
@@ -25,12 +24,20 @@ public class ComputerDAO extends AbstractHibernateDAO implements IComputerDAO {
     }
 
     @Override
-    public void delete(Computer computer) {
-        getSession().delete(computer);
+    public void delete(int id) {
+        String query = new QueryBuilder()
+                .deleteFrom("computer as c")
+                .where("c.id = :id")
+                .build();
+
+        getSession()
+                .createQuery(query)
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
     @Override
-    public void delete(Company company) {
+    public void deleteByCompany(int id) {
         String query = new QueryBuilder()
                 .deleteFrom("computer as c")
                 .innerJoin("c.manufacturer as m")
@@ -39,7 +46,7 @@ public class ComputerDAO extends AbstractHibernateDAO implements IComputerDAO {
 
         getSession()
                 .createQuery(query)
-                .setParameter("id", company.getId())
+                .setParameter("id", id)
                 .executeUpdate();
     }
 
@@ -70,7 +77,7 @@ public class ComputerDAO extends AbstractHibernateDAO implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> fetch(ComputerPageRequest pageRequest) {
+    public List<Computer> fetch(PageRequest pageRequest) {
         String query = new QueryBuilder()
                 .from("computer as c")
                 .leftOuterJoin("c.manufacturer as m")
@@ -101,7 +108,7 @@ public class ComputerDAO extends AbstractHibernateDAO implements IComputerDAO {
      * @param column column
      * @return column name
      */
-    private static String getColumnName(Column column) {
+    private static String getColumnName(Sort column) {
         switch (column) {
             case COMPUTER_NAME:
                 return "c.name";

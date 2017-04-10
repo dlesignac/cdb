@@ -9,9 +9,9 @@ public interface ICompanyService {
     /**
      * Delete company into datasource.
      *
-     * @param company company to be deleted
+     * @param id company to be deleted
      */
-    void delete(Company company);
+    void delete(int id);
 
     /**
      * Find company by id.

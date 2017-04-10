@@ -12,8 +12,16 @@ import java.util.List;
 public class CompanyDAO extends AbstractHibernateDAO implements ICompanyDAO {
 
     @Override
-    public void delete(Company company) {
-        getSession().delete(company);
+    public void delete(int id) {
+        String query = new QueryBuilder()
+                .deleteFrom("company as c")
+                .where("c.id = :id")
+                .build();
+
+        getSession()
+                .createQuery(query)
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
     @Override

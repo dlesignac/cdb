@@ -1,8 +1,8 @@
 package fr.ebiz.cdb.service;
 
+import fr.ebiz.cdb.binding.ComputerDTO;
 import fr.ebiz.cdb.binding.ComputerDeleteRequest;
-import fr.ebiz.cdb.binding.ComputerPageRequest;
-import fr.ebiz.cdb.core.Computer;
+import fr.ebiz.cdb.binding.PageRequest;
 import fr.ebiz.cdb.core.Page;
 
 public interface IComputerService {
@@ -10,16 +10,16 @@ public interface IComputerService {
     /**
      * Insert new computer into datasource.
      *
-     * @param computer computer to be inserted
+     * @param computerDTO to be inserted
      */
-    void create(Computer computer);
+    void create(ComputerDTO computerDTO);
 
     /**
      * Delete computer into datasource.
      *
-     * @param computer computer to be deleted
+     * @param id to be deleted
      */
-    void delete(Computer computer);
+    void delete(int id);
 
     /**
      * Delete computers into datasource.
@@ -31,9 +31,9 @@ public interface IComputerService {
     /**
      * Update computer into datasource.
      *
-     * @param computer computer to be updated
+     * @param computerDTO to be updated
      */
-    void update(Computer computer);
+    void update(ComputerDTO computerDTO);
 
     /**
      * Find computer by id.
@@ -41,7 +41,7 @@ public interface IComputerService {
      * @param id computer's id
      * @return computer
      */
-    Computer find(int id);
+    ComputerDTO find(int id);
 
     /**
      * Get a frame of computers.
@@ -49,6 +49,6 @@ public interface IComputerService {
      * @param pageRequest computerPageDTO
      * @return frame of computers
      */
-    Page<Computer> page(ComputerPageRequest pageRequest);
+    Page<ComputerDTO> page(PageRequest pageRequest);
 
 }

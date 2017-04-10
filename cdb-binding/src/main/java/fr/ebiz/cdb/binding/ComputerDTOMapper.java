@@ -48,10 +48,14 @@ public abstract class ComputerDTOMapper {
      * @return computer
      */
     public static ComputerDTO mapToDTO(Computer computer) {
+        if (computer == null) {
+            return null;
+        }
+
         Integer id = computer.getId();
         String name = computer.getName();
-        String introduced = computer.getIntroduced() == null ? "" : computer.getIntroduced().toString();
-        String discontinued = computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString();
+        String introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
+        String discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
         Integer companyId = computer.getManufacturer() == null ? null : computer.getManufacturer().getId();
 
         ComputerDTO computerDTO = new ComputerDTO();

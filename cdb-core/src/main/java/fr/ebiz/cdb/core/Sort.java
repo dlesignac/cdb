@@ -1,6 +1,6 @@
 package fr.ebiz.cdb.core;
 
-public enum Column {
+public enum Sort {
 
     COMPUTER_NAME,
     INTRODUCED,

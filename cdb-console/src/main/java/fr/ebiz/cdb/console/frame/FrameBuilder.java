@@ -1,9 +1,8 @@
 package fr.ebiz.cdb.console.frame;
 
-import fr.ebiz.cdb.binding.ComputerDTOMapper;
+import fr.ebiz.cdb.binding.ComputerDTO;
 import fr.ebiz.cdb.console.CLIOptions;
 import fr.ebiz.cdb.core.Company;
-import fr.ebiz.cdb.core.Computer;
 import fr.ebiz.cdb.core.Page;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class FrameBuilder {
      * @param page frame containing computers
      * @return computers frame
      */
-    public Frame buildComputers(Page<Computer> page) {
+    public Frame buildComputers(Page<ComputerDTO> page) {
         FrameComputers frame = new FrameComputers();
         frame.setLevels(buildLevels("CDB", "computers"));
         frame.setPageNumber(page.getNumber());
@@ -63,13 +62,13 @@ public class FrameBuilder {
     /**
      * Build computer frame.
      *
-     * @param computer computer to display
+     * @param computerDTO computer to display
      * @return computer frame
      */
-    public Frame buildComputer(Computer computer) {
+    public Frame buildComputer(ComputerDTO computerDTO) {
         FrameComputer frame = new FrameComputer();
-        frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computer.getId())));
-        frame.setComputer(computer);
+        frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computerDTO.getId())));
+        frame.setComputer(computerDTO);
 
         List<Option> options = new ArrayList<>();
         options.add(new Option(CLIOptions.EDIT, "edit computer"));
@@ -83,13 +82,13 @@ public class FrameBuilder {
     /**
      * Build computer create frame.
      *
-     * @param computer computer to create
+     * @param computerDTO computer to create
      * @return computer create frame
      */
-    public Frame buildComputerCreate(Computer computer) {
+    public Frame buildComputerCreate(ComputerDTO computerDTO) {
         FrameComputerChange frame = new FrameComputerChange();
         frame.setLevels(buildLevels("CDB", "computer", "new"));
-        frame.setComputerDTO(ComputerDTOMapper.mapToDTO(computer));
+        frame.setComputerDTO(computerDTO);
 
         List<Option> options = new ArrayList<>();
         options.add(new Option(CLIOptions.NEW_NAME, "new name"));
@@ -106,13 +105,13 @@ public class FrameBuilder {
     /**
      * Build computer edit frame.
      *
-     * @param computer computer to edit
+     * @param computerDTO computer to edit
      * @return computer edit frame
      */
-    public Frame buildComputerEdit(Computer computer) {
+    public Frame buildComputerEdit(ComputerDTO computerDTO) {
         FrameComputerChange frame = new FrameComputerChange();
-        frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computer.getId()), "edit"));
-        frame.setComputerDTO(ComputerDTOMapper.mapToDTO(computer));
+        frame.setLevels(buildLevels("CDB", "computer", String.valueOf(computerDTO.getId()), "edit"));
+        frame.setComputerDTO(computerDTO);
 
         List<Option> options = new ArrayList<>();
         options.add(new Option(CLIOptions.NEW_NAME, "new name"));

@@ -2,19 +2,17 @@ package fr.ebiz.cdb.console;
 
 import fr.ebiz.cdb.CLIConfig;
 import fr.ebiz.cdb.binding.ComputerDTO;
-import fr.ebiz.cdb.binding.ComputerDTOMapper;
-import fr.ebiz.cdb.binding.ComputerPageRequest;
+import fr.ebiz.cdb.binding.PageRequest;
 import fr.ebiz.cdb.console.frame.Frame;
 import fr.ebiz.cdb.console.frame.FrameBuilder;
 import fr.ebiz.cdb.console.frame.FrameCompany;
 import fr.ebiz.cdb.console.frame.FrameComputer;
 import fr.ebiz.cdb.console.frame.FrameComputerChange;
 import fr.ebiz.cdb.console.frame.FrameComputers;
-import fr.ebiz.cdb.core.Column;
 import fr.ebiz.cdb.core.Company;
-import fr.ebiz.cdb.core.Computer;
 import fr.ebiz.cdb.core.Order;
 import fr.ebiz.cdb.core.Page;
+import fr.ebiz.cdb.core.Sort;
 import fr.ebiz.cdb.service.ICompanyService;
 import fr.ebiz.cdb.service.IComputerService;
 import org.apache.commons.lang3.StringUtils;
@@ -125,7 +123,7 @@ public class CLI {
         } else if (CLIOptions.LIST_COMPANIES.equals(input[0])) {
             callCompanies();
         } else if (CLIOptions.CREATE_COMPUTER.equals(input[0])) {
-            callComputerCreate(new Computer());
+            callComputerCreate(new ComputerDTO());
         } else {
             callErrorInvalidInput();
         }
@@ -146,12 +144,12 @@ public class CLI {
                 callErrorInvalidParameter();
             } else {
                 int id = Integer.parseInt(input[1]);
-                Computer computer = getComputerById(id);
+                ComputerDTO computerDTO = getComputerById(id);
 
-                if (computer == null) {
+                if (computerDTO == null) {
                     callErrorInvalidParameter();
                 } else {
-                    callComputer(computer);
+                    callComputer(computerDTO);
                 }
             }
         } else if (CLIOptions.PREVIOUS_PAGE.equals(input[0])) {
@@ -237,10 +235,9 @@ public class CLI {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callComputerBack();
         } else if (CLIOptions.SAVE.equals(input[0])) {
-
-            Computer computer = getComputerFromPage();
-            computerService.update(computer);
-            callComputer(computer);
+            ComputerDTO computerDTO = getComputerFromPage();
+            computerService.update(computerDTO);
+            callComputer(computerDTO);
         } else {
             doComputerChange(input);
         }
@@ -255,9 +252,9 @@ public class CLI {
         if (CLIOptions.CANCEL.equals(input[0])) {
             callIndex();
         } else if (CLIOptions.SAVE.equals(input[0])) {
-            Computer computer = getComputerFromPage();
-            computerService.create(computer);
-            callComputer(computer);
+            ComputerDTO computerDTO = getComputerFromPage();
+            computerService.create(computerDTO);
+            callComputer(computerDTO);
 
         } else {
             doComputerChange(input);
@@ -281,8 +278,7 @@ public class CLI {
         } else if (CLIOptions.NEW_MANUFACTURER.equals(input[0])) {
             computerDTO.setCompanyId(Integer.parseInt(input[1]));
         } else if (CLIOptions.SAVE.equals(input[0])) {
-            Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-            computerService.update(computer);
+            computerService.update(computerDTO);
         } else if (CLIOptions.BACK.equals(input[0])) {
             callComputers(0);
         } else {
@@ -304,14 +300,14 @@ public class CLI {
      * @param offset page offset
      */
     private void callComputers(int offset) {
-        ComputerPageRequest dto = new ComputerPageRequest();
-        dto.setFilter("");
-        dto.setSort(Column.COMPUTER_NAME);
-        dto.setOrder(Order.ASC);
-        dto.setLimit(10);
-        dto.setPage(offset);
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setFilter("");
+        pageRequest.setSort(Sort.COMPUTER_NAME);
+        pageRequest.setOrder(Order.ASC);
+        pageRequest.setLimit(10);
+        pageRequest.setPage(offset);
 
-        Page<Computer> computers = computerService.page(dto);
+        Page<ComputerDTO> computers = computerService.page(pageRequest);
         frame = new FrameBuilder().buildComputers(computers);
         status = CLIStatus.COMPUTERS;
     }
@@ -319,10 +315,10 @@ public class CLI {
     /**
      * Call computer details frame.
      *
-     * @param computer computer to be detailed.
+     * @param computerDTO computer to be detailed.
      */
-    private void callComputer(Computer computer) {
-        frame = new FrameBuilder().buildComputer(computer);
+    private void callComputer(ComputerDTO computerDTO) {
+        frame = new FrameBuilder().buildComputer(computerDTO);
         status = CLIStatus.COMPUTER;
     }
 
@@ -349,8 +345,8 @@ public class CLI {
      * Call computer editing frame.
      */
     private void callComputerEdit() {
-        Computer computer = getComputerFromPage();
-        frame = new FrameBuilder().buildComputerEdit(computer);
+        ComputerDTO computerDTO = getComputerFromPage();
+        frame = new FrameBuilder().buildComputerEdit(computerDTO);
         status = CLIStatus.COMPUTER_EDIT;
     }
 
@@ -358,18 +354,18 @@ public class CLI {
      * Call computer details frame back.
      */
     private void callComputerBack() {
-        Computer computer = getComputerFromPage();
-        computer = getComputerById(computer.getId());
-        callComputer(computer);
+        ComputerDTO computerDTO = getComputerFromPage();
+        computerDTO = getComputerById(computerDTO.getId());
+        callComputer(computerDTO);
     }
 
     /**
      * Call computer creation frame.
      *
-     * @param computer the computer to be created.
+     * @param computerDTO the computer to be created.
      */
-    private void callComputerCreate(Computer computer) {
-        frame = new FrameBuilder().buildComputerCreate(computer);
+    private void callComputerCreate(ComputerDTO computerDTO) {
+        frame = new FrameBuilder().buildComputerCreate(computerDTO);
         status = CLIStatus.COMPUTER_CREATE;
     }
 
@@ -398,8 +394,8 @@ public class CLI {
      * Delete computer.
      */
     private void deleteComputer() {
-        Computer computer = getComputerFromPage();
-        computerService.delete(computer);
+        ComputerDTO computerDTO = getComputerFromPage();
+        computerService.delete(computerDTO.getId());
     }
 
     /**
@@ -407,7 +403,7 @@ public class CLI {
      */
     private void deleteCompany() {
         Company company = getCompanyFromPage();
-        companyService.delete(company);
+        companyService.delete(company.getId());
     }
 
     /**
@@ -416,7 +412,7 @@ public class CLI {
      * @param id computer's id
      * @return object computer
      */
-    private Computer getComputerById(int id) {
+    private ComputerDTO getComputerById(int id) {
         return computerService.find(id);
     }
 
@@ -435,14 +431,14 @@ public class CLI {
      *
      * @return object computer
      */
-    private Computer getComputerFromPage() {
+    private ComputerDTO getComputerFromPage() {
         if (this.frame instanceof FrameComputer) {
             FrameComputer frame = (FrameComputer) this.frame;
-            return frame.getComputer();
+            return frame.getComputerDTO();
         }
 
         FrameComputerChange frame = (FrameComputerChange) this.frame;
-        return ComputerDTOMapper.mapFromDTO(frame.getComputerDTO());
+        return frame.getComputerDTO();
     }
 
     /**

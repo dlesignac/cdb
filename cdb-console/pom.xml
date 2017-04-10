@@ -17,7 +17,7 @@
         <dependency>
             <groupId>fr.ebiz.cdb</groupId>
             <artifactId>cdb-service</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- String utils -->

@@ -15,9 +15,12 @@
         <module>cdb-binding</module>
         <module>cdb-webapp</module>
         <module>cdb-console</module>
+        <module>cdb-api</module>
     </modules>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <plugin.versions.version>2.3</plugin.versions.version>
         <plugin.compiler.version>3.6.1</plugin.compiler.version>
         <plugin.surefire.version>2.19.1</plugin.surefire.version>
@@ -43,6 +46,7 @@
         <hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
         <hibernate.version>5.2.9.Final</hibernate.version>
         <hikaricp.version>2.6.1</hikaricp.version>
+        <jackson.version>2.8.7</jackson.version>
     </properties>
 
     <build>

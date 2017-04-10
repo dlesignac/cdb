@@ -20,8 +20,8 @@ public class CompanyService implements ICompanyService {
 
     /**
      * @param platformTransactionManager platformTransactionManager
-     * @param companyDAO companyDAO
-     * @param computerDAO computerDAO
+     * @param companyDAO                 companyDAO
+     * @param computerDAO                computerDAO
      */
     @Autowired
     public CompanyService(PlatformTransactionManager platformTransactionManager, ICompanyDAO companyDAO, IComputerDAO computerDAO) {
@@ -31,9 +31,9 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public void delete(Company company) {
-        computerDAO.delete(company);
-        companyDAO.delete(company);
+    public void delete(int id) {
+        computerDAO.deleteByCompany(id);
+        companyDAO.delete(id);
     }
 
     @Override

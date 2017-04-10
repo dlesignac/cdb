@@ -1,9 +1,7 @@
 package fr.ebiz.cdb.webapp;
 
 import fr.ebiz.cdb.binding.ComputerDTO;
-import fr.ebiz.cdb.binding.ComputerDTOMapper;
 import fr.ebiz.cdb.binding.ComputerDeleteRequest;
-import fr.ebiz.cdb.core.Computer;
 import fr.ebiz.cdb.service.ICompanyService;
 import fr.ebiz.cdb.service.IComputerService;
 import org.slf4j.Logger;
@@ -30,19 +28,12 @@ public class ComputerController {
     private static final String ATTRIBUTE_COMPUTER = "computer";
     private static final String ATTRIBUTE_SUCCESS = "success";
 
-    private final IComputerService computerService;
-
-    private final ICompanyService companyService;
-
-    /**
-     * @param computerService computerService
-     * @param companyService  companyService
-     */
     @Autowired
-    public ComputerController(IComputerService computerService, ICompanyService companyService) {
-        this.computerService = computerService;
-        this.companyService = companyService;
-    }
+    private IComputerService computerService;
+
+    @Autowired
+    private ICompanyService companyService;
+
 
     /**
      * Get add.
@@ -71,9 +62,7 @@ public class ComputerController {
             ModelMap model
     ) {
         if (!bindingResult.hasErrors()) {
-            Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-            LOGGER.debug(computer.toString());
-            computerService.create(computer);
+            computerService.create(computerDTO);
             model.addAttribute(ATTRIBUTE_SUCCESS, true);
         } else {
             model.addAttribute(ATTRIBUTE_SUCCESS, false);
@@ -113,8 +102,7 @@ public class ComputerController {
             ModelMap model
     ) {
         if (!bindingResult.hasErrors()) {
-            Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-            computerService.update(computer);
+            computerService.update(computerDTO);
             model.addAttribute(ATTRIBUTE_SUCCESS, true);
         } else {
             model.addAttribute(ATTRIBUTE_SUCCESS, false);

@@ -1,27 +1,27 @@
 package fr.ebiz.cdb.console.frame;
 
-import fr.ebiz.cdb.core.Computer;
+import fr.ebiz.cdb.binding.ComputerDTO;
 
 public class FrameComputer extends Frame {
 
-    private Computer computer;
+    private ComputerDTO computerDTO;
 
-    public Computer getComputer() {
-        return computer;
+    public ComputerDTO getComputerDTO() {
+        return computerDTO;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    void setComputer(ComputerDTO computerDTO) {
+        this.computerDTO = computerDTO;
     }
 
     @Override
     public void display() {
         displayHeader();
 
-        String name = computer.getName();
-        String introduced = computer.getIntroduced() == null ? "UNKNOWN" : computer.getIntroduced().toString();
-        String discontinued = computer.getDiscontinued() == null ? "UNKNOWN" : computer.getDiscontinued().toString();
-        String manufacturer = computer.getManufacturer() == null ? "UNKNOWN" : computer.getManufacturer().getName();
+        String name = computerDTO.getName();
+        String introduced = computerDTO.getIntroduced() == null ? "UNKNOWN" : computerDTO.getIntroduced();
+        String discontinued = computerDTO.getDiscontinued() == null ? "UNKNOWN" : computerDTO.getDiscontinued();
+        String manufacturer = computerDTO.getCompanyName() == null ? "UNKNOWN" : computerDTO.getCompanyName();
 
         String display = "Name         : " + name + "\n" +
                 "Introduced   : " + introduced + "\n" +
