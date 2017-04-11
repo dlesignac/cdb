@@ -9,7 +9,6 @@ import fr.ebiz.cdb.core.Page;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,27 +19,28 @@ import java.util.stream.Collectors;
 public class ComputerService implements IComputerService {
 
     @Autowired
-    private PlatformTransactionManager transactionManager;
-
-    @Autowired
     private IComputerDAO computerDAO;
 
     @Override
-    public void create(ComputerDTO computerDTO) {
+    public int create(ComputerDTO computerDTO) {
         Computer computer = ComputerDTOMapper.mapFromDTO(computerDTO);
-        computerDAO.create(computer);
+        return computerDAO.create(computer);
     }
 
     @Override
-    public void delete(int id) {
-        computerDAO.delete(id);
+    public int delete(int id) {
+        return computerDAO.delete(id);
     }
 
     @Override
-    public void deleteMany(ComputerDeleteRequest computerDeletionDTO) {
+    public int deleteMany(ComputerDeleteRequest computerDeletionDTO) {
+        int i = 0;
+
         for (String id : computerDeletionDTO.getSelection()) {
-            computerDAO.delete(Integer.parseInt(id));
+            i += computerDAO.delete(Integer.parseInt(id));
         }
+
+        return i;
     }
 
     @Override

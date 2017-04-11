@@ -11,7 +11,7 @@ public interface ICompanyService {
      *
      * @param id company to be deleted
      */
-    void delete(int id);
+    int delete(int id);
 
     /**
      * Find company by id.

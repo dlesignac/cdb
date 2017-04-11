@@ -16,35 +16,33 @@ import java.util.List;
 @Repository
 public class ComputerDAO extends AbstractHibernateDAO implements IComputerDAO {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
-
     @Override
-    public void create(Computer computer) {
-        getSession().save(computer);
+    public int create(Computer computer) {
+        return (Integer) getSession().save(computer);
     }
 
     @Override
-    public void delete(int id) {
+    public int delete(int id) {
         String query = new QueryBuilder()
                 .deleteFrom("computer as c")
                 .where("c.id = :id")
                 .build();
 
-        getSession()
+        return getSession()
                 .createQuery(query)
                 .setParameter("id", id)
                 .executeUpdate();
     }
 
     @Override
-    public void deleteByCompany(int id) {
+    public int deleteByCompany(int id) {
         String query = new QueryBuilder()
                 .deleteFrom("computer as c")
                 .innerJoin("c.manufacturer as m")
                 .where("m.id = :id")
                 .build();
 
-        getSession()
+        return getSession()
                 .createQuery(query)
                 .setParameter("id", id)
                 .executeUpdate();

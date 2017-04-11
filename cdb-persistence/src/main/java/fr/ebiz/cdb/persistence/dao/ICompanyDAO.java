@@ -11,7 +11,7 @@ public interface ICompanyDAO {
      *
      * @param id to be deleted
      */
-    void delete(int id);
+    int delete(int id);
 
     /**
      * Find company by its id.

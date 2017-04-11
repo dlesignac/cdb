@@ -12,21 +12,21 @@ public interface IComputerDAO {
      *
      * @param computer computer to be persisted
      */
-    void create(Computer computer);
+    int create(Computer computer);
 
     /**
      * Delete computer into data source.
      *
      * @param id to be deleted
      */
-    void delete(int id);
+    int delete(int id);
 
     /**
      * Delete all computers for a given manufacturer.
      *
      * @param id manufacturer
      */
-    void deleteByCompany(int id);
+    int deleteByCompany(int id);
 
     /**
      * Update computer into data source.

@@ -1,10 +1,11 @@
-package fr.ebiz.cdb.api;
+package fr.ebiz.cdb.api.controller;
 
 import fr.ebiz.cdb.api.exception.InvalidParameterException;
-import fr.ebiz.cdb.binding.error.Error;
-import fr.ebiz.cdb.binding.error.Errors;
+import fr.ebiz.cdb.api.exception.ResourceNotFoundException;
 import fr.ebiz.cdb.binding.ComputerDTO;
 import fr.ebiz.cdb.binding.PageRequest;
+import fr.ebiz.cdb.binding.error.Error;
+import fr.ebiz.cdb.binding.error.Errors;
 import fr.ebiz.cdb.core.Page;
 import fr.ebiz.cdb.service.IComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -68,7 +64,13 @@ public class ComputerRestController {
     @RequestMapping(method = RequestMethod.GET, value = "/computer/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ComputerDTO read(@PathVariable int id) {
-        return computerService.find(id);
+        ComputerDTO computerDTO = computerService.find(id);
+
+        if (computerDTO == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return computerDTO;
     }
 
     /**
@@ -78,10 +80,16 @@ public class ComputerRestController {
      * @param bindingResult bindingResult
      * @return ComputerDTO
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/computer")
+    @RequestMapping(method = RequestMethod.PUT, value = "/computer/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ComputerDTO update(@RequestBody @Valid ComputerDTO computerDTO, BindingResult bindingResult) {
+    public ComputerDTO update(@PathVariable int id, @RequestBody @Valid ComputerDTO computerDTO, BindingResult bindingResult) {
         manageErrors(bindingResult);
+        computerDTO.setId(id);
+
+        if (computerService.find(id) == null) {
+            throw new ResourceNotFoundException();
+        }
+
         computerService.update(computerDTO);
         return computerDTO;
     }
@@ -90,13 +98,13 @@ public class ComputerRestController {
      * Delete computer by id.
      *
      * @param id id
-     * @return success
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/computer/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean delete(@PathVariable int id) {
-        computerService.delete(id);
-        return true;
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable int id) {
+        if (computerService.delete(id) == 0) {
+            throw new ResourceNotFoundException();
+        }
     }
 
     /**

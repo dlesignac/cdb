@@ -12,21 +12,21 @@ public interface IComputerService {
      *
      * @param computerDTO to be inserted
      */
-    void create(ComputerDTO computerDTO);
+    int create(ComputerDTO computerDTO);
 
     /**
      * Delete computer into datasource.
      *
      * @param id to be deleted
      */
-    void delete(int id);
+    int delete(int id);
 
     /**
      * Delete computers into datasource.
      *
      * @param computerDeletionDTO computerDeletionDTO
      */
-    void deleteMany(ComputerDeleteRequest computerDeletionDTO);
+    int deleteMany(ComputerDeleteRequest computerDeletionDTO);
 
     /**
      * Update computer into datasource.
