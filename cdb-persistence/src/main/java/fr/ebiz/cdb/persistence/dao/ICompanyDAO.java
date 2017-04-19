@@ -10,6 +10,7 @@ public interface ICompanyDAO {
      * Delete company.
      *
      * @param id to be deleted
+     * @return status
      */
     int delete(int id);
 

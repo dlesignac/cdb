@@ -6,8 +6,6 @@ import fr.ebiz.cdb.core.Order;
 import fr.ebiz.cdb.core.Sort;
 import fr.ebiz.cdb.persistence.dao.IComputerDAO;
 import fr.ebiz.cdb.persistence.util.QueryBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -108,6 +106,8 @@ public class ComputerDAO extends AbstractHibernateDAO implements IComputerDAO {
      */
     private static String getColumnName(Sort column) {
         switch (column) {
+            case ID:
+                return "c.id";
             case COMPUTER_NAME:
                 return "c.name";
             case INTRODUCED:

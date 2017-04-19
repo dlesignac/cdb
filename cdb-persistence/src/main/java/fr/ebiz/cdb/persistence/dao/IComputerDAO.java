@@ -11,6 +11,7 @@ public interface IComputerDAO {
      * Persist computer into data source.
      *
      * @param computer computer to be persisted
+     * @return status
      */
     int create(Computer computer);
 
@@ -18,6 +19,7 @@ public interface IComputerDAO {
      * Delete computer into data source.
      *
      * @param id to be deleted
+     * @return status
      */
     int delete(int id);
 
@@ -25,6 +27,7 @@ public interface IComputerDAO {
      * Delete all computers for a given manufacturer.
      *
      * @param id manufacturer
+     * @return status
      */
     int deleteByCompany(int id);
 

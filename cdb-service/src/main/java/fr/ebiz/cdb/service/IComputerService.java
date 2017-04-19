@@ -11,6 +11,7 @@ public interface IComputerService {
      * Insert new computer into datasource.
      *
      * @param computerDTO to be inserted
+     * @return status
      */
     int create(ComputerDTO computerDTO);
 
@@ -18,6 +19,7 @@ public interface IComputerService {
      * Delete computer into datasource.
      *
      * @param id to be deleted
+     * @return status
      */
     int delete(int id);
 
@@ -25,6 +27,7 @@ public interface IComputerService {
      * Delete computers into datasource.
      *
      * @param computerDeletionDTO computerDeletionDTO
+     * @return status
      */
     int deleteMany(ComputerDeleteRequest computerDeletionDTO);
 

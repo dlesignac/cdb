@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 public class PageRequest {
 
     private static final String DEFAULT_FILTER = "";
-    private static final Sort DEFAULT_SORT = Sort.COMPUTER_NAME;
+    private static final Sort DEFAULT_SORT = Sort.ID;
     private static final Order DEFAULT_ORDER = Order.ASC;
     private static final Integer DEFAULT_LIMIT = 10;
     private static final Integer DEFAULT_PAGE = 1;

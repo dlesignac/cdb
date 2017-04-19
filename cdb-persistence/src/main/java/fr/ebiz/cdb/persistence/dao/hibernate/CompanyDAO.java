@@ -42,7 +42,7 @@ public class CompanyDAO extends AbstractHibernateDAO implements ICompanyDAO {
         List<Company> companies = new ArrayList<>();
 
         for (Object o : list) {
-            companies.add((Company) ((Object[]) o)[0]);
+            companies.add((Company)  o);
         }
 
         return companies;

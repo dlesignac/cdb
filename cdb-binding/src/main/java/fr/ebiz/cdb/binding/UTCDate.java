@@ -17,9 +17,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface UTCDate {
 
+    /**
+     * @return message
+     */
     String message() default "{}";
 
+    /**
+     * @return groups
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * @return payload
+     */
     Class<? extends Payload>[] payload() default {};
 }

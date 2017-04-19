@@ -10,6 +10,7 @@ public interface ICompanyService {
      * Delete company into datasource.
      *
      * @param id company to be deleted
+     * @return status
      */
     int delete(int id);
 

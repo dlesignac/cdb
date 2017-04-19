@@ -1,7 +1,6 @@
 package fr.ebiz.cdb.api.controller;
 
 import fr.ebiz.cdb.api.exception.InvalidParameterException;
-import fr.ebiz.cdb.api.exception.ResourceNotFoundException;
 import fr.ebiz.cdb.binding.error.Error;
 import fr.ebiz.cdb.binding.error.Errors;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
@@ -28,25 +28,27 @@ public class ExceptionHandlerController {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = InvalidParameterException.class)
-    public Errors InvalidParametersHandler(InvalidParameterException e) {
+    public Errors invalidParametersHandler(InvalidParameterException e) {
         return e.getErrors();
     }
 
     /**
-     * Handle resource not found exception.
+     * Handle NoSuchElementException.
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = ResourceNotFoundException.class)
-    public void ResourceNotFoundHandler() {
+    @ExceptionHandler(value = NoSuchElementException.class)
+    public void resourceNotFoundHandler() {
 
     }
 
     /**
      * Handle method not allowed exception.
+     *
+     * @return Errors
      */
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
-    public Errors HttpRequestNotSupportedHandler() {
+    public Errors httpRequestNotSupportedHandler() {
         Error error = new Error();
         error.setCause("HTTP method not supported");
         error.setMessage("You are trying to reach a resource the wrong way");
@@ -62,6 +64,9 @@ public class ExceptionHandlerController {
 
     /**
      * Handle other exceptions.
+     *
+     * @param e exception
+     * @return Errors
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
